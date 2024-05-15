@@ -20,15 +20,16 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   int pageIndex = 0;
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
-        systemStatusBarContrastEnforced: false,
-        systemNavigationBarColor: Colors.white,
-        systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarContrastEnforced: false,
-        systemNavigationBarDividerColor: Colors.white));
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //     statusBarColor: Colors.transparent,
+    //     statusBarIconBrightness: Brightness.light,
+    //     statusBarBrightness: Brightness.light,
+    //     systemStatusBarContrastEnforced: false,
+    //     systemNavigationBarColor: Colors.white,
+    //     systemNavigationBarIconBrightness: Brightness.light,
+    //     systemNavigationBarContrastEnforced: false,
+    //     systemNavigationBarDividerColor: Colors.white));
     super.initState();
   }
 

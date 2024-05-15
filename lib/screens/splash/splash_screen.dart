@@ -34,15 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: appColors.opacity0,
-        statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.light,
-        systemStatusBarContrastEnforced: false,
-        systemNavigationBarColor: appColors.blueFav,
-        systemNavigationBarIconBrightness: Brightness.light,
-        systemNavigationBarContrastEnforced: false,
-        systemNavigationBarDividerColor: appColors.blueFav));
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     super.initState();
     checkConnection();
   }
@@ -122,20 +114,19 @@ class _SplashScreenState extends State<SplashScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: width,
             alignment: Alignment.center,
             child: SimpleShadow(
               color: Colors.black,
-              offset: Offset(width * 0.03, width * 0.03),
+              offset: const Offset(-25, 15),
               child: Image.asset(
-                "assets/images/icon_computer_shop.png",
+                "assets/images/logos/application_logo.png",
                 fit: BoxFit.contain,
-                scale: width * 0.005,
+                scale: width * 0.009,
               ),
             ),
           ),
+          const SizedBox(height: 20),
           Container(
-            width: width,
             alignment: Alignment.bottomCenter,
             child: AnimatedTextKit(
               isRepeatingAnimation: false,
@@ -181,8 +172,10 @@ class _SplashScreenState extends State<SplashScreen> {
                     "مشکل در اتصال\n"
                     "لطفا فیلترشکن را خاموش کرده و وضعیت اینترنت را بررسی کنید",
                     textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.errorText1,
+                    style: Theme.of(context).textTheme.errorText1.copyWith(height: 1.5),
+                    maxLines: 3,
                   ),
+                  const SizedBox(height: 10),
                   Container(
                     margin: EdgeInsets.only(top: width * 0.02),
                     width: width * 0.3,
