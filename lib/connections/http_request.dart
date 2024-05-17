@@ -35,34 +35,31 @@ class HttpRequest {
   get urlOrders => "https://$urlMain/wp-json/wc/v3/orders/";
 
   getRequest({required String url, String id = "", String details = ""}) async {
-    Logger log = Logger();
     try {
       final getRequest = await http.get(Uri.parse(url + id + key + secret + details));
-      log.i("Get Request >>>> ${getRequest.request}");
-      dynamic json;
+      if (kDebugMode) {
+        print("Get Request >>>> ${getRequest.request}");
+      }
+      dynamic json = jsonDecode(getRequest.body);
       if (getRequest.statusCode == 200) {
-        json = jsonDecode(getRequest.body);
-        log.d("JSON >>>> $json");
+        if (kDebugMode) {
+          print("JSON >>>> $json");
+        }
         return json;
       } else {
         if (kDebugMode) {
           print("Request ERROR >>>: ${getRequest.request}");
           print("Status Code >>>:  ${getRequest.statusCode}");
-          json = jsonDecode(getRequest.body);
           print("Json ERROR >>>:  $json");
         }
-        // ignore: use_build_context_synchronously
-        return appDialogs.requestFalse(context: context);
+        return false;
       }
     } catch (e) {
       if (kDebugMode) {
         print("ERROR >>>> $e");
       }
-      Get.off(
-        const ConnectionError(),
-        transition: Transition.fade,
-        duration: const Duration(seconds: 1),
-      );
+      // Get.offAll(const ConnectionError(), transition: Transition.fade, duration: const Duration(seconds: 1));
+      return false;
     }
   }
 

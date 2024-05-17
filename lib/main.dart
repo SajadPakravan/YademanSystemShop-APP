@@ -1,18 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';
-import 'package:yad_sys/themes/light_theme.dart';
+import 'package:yad_sys/themes/theme.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 
 void main() {
-  runApp(YademanSystemShop());
+  runApp(const YademanSystemShop());
 }
 
-class YademanSystemShop extends StatelessWidget {
-  YademanSystemShop({super.key});
+class YademanSystemShop extends StatefulWidget {
+  const YademanSystemShop({super.key});
 
+  @override
+  State<YademanSystemShop> createState() => _YademanSystemShop();
+}
+
+class _YademanSystemShop extends State<YademanSystemShop> {
   @override
   Widget build(BuildContext context) {
     AppTexts appTextStrings = AppTexts();
@@ -29,6 +35,7 @@ class YademanSystemShop extends StatelessWidget {
   }
 
   final Map<String, Widget Function(BuildContext)> routes = {
+    'ConnectionError': (context) => const ConnectionError(),
     'SplashScreen': (context) => const SplashScreen(),
     'MainScreen': (context) => const MainScreen(),
   };

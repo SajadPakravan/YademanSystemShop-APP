@@ -9,6 +9,7 @@ import 'package:yad_sys/screens/main/main_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -69,23 +70,22 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   urlCheckConnection() async {
-    try {
-      await httpRequest.getProducts();
+    dynamic result = await httpRequest.getProducts();
+    if (result != false) {
       setState(() {
         confirm = true;
       });
       Timer(
         const Duration(seconds: 2),
         () {
-          Get.off(
+          Get.offAll(
             const MainScreen(),
             transition: Transition.fade,
             duration: const Duration(seconds: 1),
           );
         },
       );
-    } catch (e) {
-      print("Request ERROR >>>> $e");
+    } else {
       setState(() {
         connectionStatus = false;
         confirm = false;
@@ -109,49 +109,51 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
       bottomNavigationBar: connectionStatus
-          ? Container(
-              height: width * 0.25,
-              alignment: Alignment.bottomCenter,
-              padding: EdgeInsets.only(bottom: width * 0.04),
-              child: confirm ? const Icon(Icons.check_circle_outline, color: Colors.white, size: 50) : const Loading(color: Colors.white),
+          ? IntrinsicHeight(
+              child: Container(
+                alignment: Alignment.bottomCenter,
+                padding: EdgeInsets.symmetric(vertical: width * 0.04),
+                child: confirm ? const Icon(Icons.check_circle_outline, color: Colors.white, size: 50) : const Loading(color: Colors.white),
+              ),
             )
-          : Container(
-              height: width * 0.25,
-              padding: EdgeInsets.only(bottom: width * 0.04),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  const TextBodyMediumView(
-                    "مشکل در اتصال\n"
-                    "لطفا فیلترشکن را خاموش کرده و وضعیت اینترنت را بررسی کنید",
-                    textAlign: TextAlign.center,
-                    maxLines: 3,
-                    height: 1.5,
-                  ),
-                  const SizedBox(height: 10),
-                  Container(
-                    margin: EdgeInsets.only(top: width * 0.02),
-                    width: width * 0.3,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white, width: 1),
+          : IntrinsicHeight(
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: width * 0.04),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    const TextBodyLargeView(
+                      "مشکل در اتصال\n"
+                      "لطفا فیلترشکن را خاموش کرده و وضعیت اینترنت را بررسی کنید",
+                      color: Colors.white,
+                      height: 1.7,
                     ),
-                    child: InkWell(
-                      onTap: () {
-                        setState(() {
-                          tryAgain = true;
-                        });
-                        checkConnection();
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(Icons.autorenew_rounded, color: Colors.white),
-                          TextBodyMediumView("تلاش مجدد", color: Colors.white)
-                        ],
+                    const SizedBox(height: 10),
+                    Container(
+                      margin: EdgeInsets.only(top: width * 0.02),
+                      width: width * 0.3,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 1),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            tryAgain = true;
+                          });
+                          checkConnection();
+                        },
+                        child: const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            Icon(Icons.autorenew_rounded, color: Colors.white),
+                            TextBodyMediumView("تلاش مجدد", color: Colors.white)
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
     );
