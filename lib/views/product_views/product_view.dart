@@ -4,7 +4,6 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/product_reviews_model.dart';
-import 'package:yad_sys/tools/app_colors.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/view_models/product_view_model.dart';
@@ -31,7 +30,6 @@ class ProductView extends StatelessWidget {
   dynamic onRefresh;
   AppTexts appTextStrings = AppTexts();
   AppDimension appDimension = AppDimension();
-  AppColors appColors = AppColors();
   AppTexts appTexts = AppTexts();
   ProductViewModel productDetailViewModel = ProductViewModel();
   String name;

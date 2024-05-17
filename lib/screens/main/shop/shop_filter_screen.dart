@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/tools/app_themes.dart';
@@ -22,7 +22,6 @@ class ShopFilterScreen extends StatefulWidget {
 class _ShopFilterScreenState extends State<ShopFilterScreen> {
   AppTexts appTexts = AppTexts();
   AppDimension appDimension = AppDimension();
-  AppColors appColors = AppColors();
   List<String> optionSelectName = [];
   List<String> categoriesNameId = [];
   bool allSelect = false;
@@ -281,7 +280,7 @@ class _ShopFilterScreenState extends State<ShopFilterScreen> {
     return PreferredSize(
       preferredSize: const Size.fromHeight(50),
       child: Container(
-        color: appColors.blueFav,
+        color: ColorStyle.blueFav,
         child: SafeArea(
           child: optionSelectName.isEmpty
               ? Container(

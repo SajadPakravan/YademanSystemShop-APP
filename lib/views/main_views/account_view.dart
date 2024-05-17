@@ -2,12 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/screens/main/profile/sign_in_screen.dart';
 import 'package:yad_sys/screens/main/profile/sign_up_screen.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_themes.dart';
-import 'package:yad_sys/widgets/tree_button/tree_button.dart';
-import 'package:yad_sys/widgets/tree_button/tree_button_list.dart';
 
-// ignore: must_be_immutable
 class AccountView extends StatelessWidget {
   AccountView({
     required this.context,
@@ -28,7 +25,6 @@ class AccountView extends StatelessWidget {
   String email;
   Function logOut;
   PageController pageCtrl;
-  AppColors appColors = AppColors();
   Function onTapButton;
   double subAccHeight;
   double subAddHeight;
@@ -44,37 +40,7 @@ class AccountView extends StatelessWidget {
   }
 
   loggedContent() {
-    return NestedScrollView(
-      headerSliverBuilder: (context, innerBoxIsScrolled) => [
-        appBar(),
-      ],
-      body: TreeButtonList(
-        onTapButton: onTapButton,
-        buttons: [
-          TreeButton(
-            title: "اطلاعات حساب کاربری",
-            subButtons: [
-              TreeButton(title: "gfergug55"),
-              TreeButton(title: "tr3h74ihgeg5gg"),
-              TreeButton(title: "44tt3itjif34", subButtons: [TreeButton(title: "788ff")],subHeight: subAddHeight),
-              TreeButton(title: "t34t439guf9ujg0"),
-            ],
-            subHeight: subAccHeight,
-          ),
-          TreeButton(title: "سبد خرید"),
-          TreeButton(
-            title: "آدرس‌ها",
-            subButtons: [TreeButton(title: "آدرس صورتحساب"), TreeButton(title: "آدرس ارسال بار")],
-            subHeight: subAddHeight,
-          ),
-          TreeButton(title: "سفارش‌ها"),
-          TreeButton(title: "پیگیری سفارش"),
-          TreeButton(title: "دیدگاه‌ها"),
-          TreeButton(title: "علاقه‌مندی‌ها"),
-          TreeButton(title: "خروج از حساب کاربری"),
-        ],
-      ),
-    );
+    return ;
   }
 
   appBar() {
@@ -86,7 +52,7 @@ class AccountView extends StatelessWidget {
       elevation: 5,
       toolbarHeight: 150,
       flexibleSpace: Container(
-        color: appColors.blueFav,
+        color: ColorStyle.blueFav,
         padding: EdgeInsets.all(width * 0.03),
         child: SafeArea(
           child: Row(
@@ -129,7 +95,7 @@ class AccountView extends StatelessWidget {
     return Container(
         width: width,
         height: height * 0.3,
-        color: appColors.blueFav,
+        color: ColorStyle.blueFav,
         child: Icon(Icons.account_circle_rounded, color: Colors.white, size: width * 0.2));
   }
 }

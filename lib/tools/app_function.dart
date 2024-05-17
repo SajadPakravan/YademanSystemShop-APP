@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:yad_sys/screens/main/categories/see_all_screen.dart';
-import 'package:yad_sys/screens/product_screens/product_screen.dart';
+import 'package:yad_sys/screens/product/product_screen.dart';
 
 class AppFunction {
   onTapProduct({required int id}) async {

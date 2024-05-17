@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/view_models/product_view_model.dart';
 
 // ignore: must_be_immutable
@@ -16,7 +16,6 @@ class ProductSlide extends StatelessWidget {
   }) : super(key: key);
 
   HttpRequest httpRequest = HttpRequest(context: Get.context!);
-  AppColors appColors = AppColors();
   PageController pageCtrl = PageController();
   int slideIndex;
   Function onSlideChange;
@@ -49,11 +48,7 @@ class ProductSlide extends StatelessWidget {
             child: SmoothPageIndicator(
               controller: pageCtrl,
               count: imgLst.length,
-              effect: ScrollingDotsEffect(
-                dotHeight: 10,
-                dotWidth: 10,
-                activeDotColor: appColors.blueFav
-              ),
+              effect: const ScrollingDotsEffect(dotHeight: 10, dotWidth: 10, activeDotColor: ColorStyle.blueFav),
             ),
           ),
         ],

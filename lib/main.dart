@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';
+import 'package:yad_sys/themes/light_theme.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 
 void main() {
@@ -15,16 +16,13 @@ class YademanSystemShop extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AppTexts appTextStrings = AppTexts();
-
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: appTextStrings.appTitle,
       useInheritedMediaQuery: true,
+      theme: appTheme,
       routes: routes,
       home: const SplashScreen(),
     );

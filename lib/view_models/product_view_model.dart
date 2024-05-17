@@ -1,7 +1,6 @@
-
 import 'package:get/get.dart';
-import 'package:yad_sys/screens/product_screens/product_images_screen.dart';
-import 'package:yad_sys/screens/product_screens/product_info_screen.dart';
+import 'package:yad_sys/screens/product/product_images_screen.dart';
+import 'package:yad_sys/screens/product/product_info_screen.dart';
 
 class ProductViewModel {
   onTapProductInfo({required int content, required String description, required List attributes}) async {

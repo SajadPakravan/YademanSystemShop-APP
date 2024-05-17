@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_function.dart';
 import 'package:yad_sys/tools/app_themes.dart';
 import 'package:yad_sys/widgets/cards/home_menu.dart';
@@ -40,7 +40,6 @@ class HomeView extends StatelessWidget {
   });
 
   AppFunction appFun = AppFunction();
-  AppColors appColors = AppColors();
   BuildContext context;
   bool showContent;
   int slideIndex;
@@ -117,8 +116,7 @@ class HomeView extends StatelessWidget {
               margin: EdgeInsets.only(bottom: height * 0.03),
               child: InkWell(
                 onTap: () {},
-                child: ImageBanner(
-                    image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.jpg"),
+                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.jpg"),
               ),
             ),
             productsOfCategoryImage(
@@ -138,8 +136,7 @@ class HomeView extends StatelessWidget {
               margin: EdgeInsets.only(bottom: height * 0.03),
               child: InkWell(
                 onTap: () {},
-                child: ImageBanner(
-                    image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.jpg"),
+                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.jpg"),
               ),
             ),
           ],
@@ -331,11 +328,7 @@ class HomeView extends StatelessWidget {
                   children: [
                     Padding(
                       padding: EdgeInsets.only(left: width * 0.02),
-                      child: Icon(
-                        Icons.pix_rounded,
-                        color: appColors.blueFav,
-                        size: 20,
-                      ),
+                      child: const Icon(Icons.pix_rounded, color: ColorStyle.blueFav, size: 20),
                     ),
                     Text(
                       titleCatalog,

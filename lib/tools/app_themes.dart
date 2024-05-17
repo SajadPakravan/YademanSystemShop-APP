@@ -1,4 +1,4 @@
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:flutter/foundation.dart';
@@ -7,7 +7,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 
 class AppThemes {
-  AppColors appColors = AppColors();
   AppDimension appDimension = AppDimension();
   AppTexts appTexts = AppTexts();
 
@@ -24,8 +23,8 @@ class AppThemes {
 
     WidgetsFlutterBinding.ensureInitialized();
     SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(
-        statusBarColor: appColors.opacity0,
+      const SystemUiOverlayStyle(
+        statusBarColor: ColorStyle.opacity0,
         statusBarBrightness: Brightness.light,
         systemNavigationBarColor: Colors.white,
         systemNavigationBarDividerColor: Colors.white,
@@ -37,7 +36,7 @@ class AppThemes {
   blueTheme() {
     return ThemeData(
       scaffoldBackgroundColor: Colors.white,
-      primarySwatch: appColors.blueFav,
+      primarySwatch: ColorStyle.blueFav,
       textTheme: TextTheme(
         titleMedium: TextStyle(
           color: Colors.black87,
@@ -63,8 +62,6 @@ class AppThemes {
 }
 
 extension CustomStyles on TextTheme {
-  get appColors => AppColors();
-
   get appDimension => AppDimension();
 
   get appTexts => AppTexts();
@@ -90,7 +87,7 @@ extension CustomStyles on TextTheme {
 
   TextStyle get txtBtnBlue {
     return TextStyle(
-      color: appColors.blueFav,
+      color: ColorStyle.blueFav,
       fontFamily: appTexts.appFont,
       fontWeight: FontWeight.normal,
       fontSize: appDimension.textNormal,

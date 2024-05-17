@@ -1,8 +1,8 @@
-import 'package:yad_sys/tools/app_colors.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_themes.dart';
 
 class ConnectionError extends StatefulWidget {
@@ -13,12 +13,11 @@ class ConnectionError extends StatefulWidget {
 }
 
 class _ConnectionErrorState extends State<ConnectionError> {
-  AppColors appColors = AppColors();
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return Scaffold(
-      backgroundColor: appColors.blueFav,
+      backgroundColor: ColorStyle.blueFav,
       body: Padding(
         padding: EdgeInsets.all(width * 0.02),
         child: Column(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:yad_sys/views/text_views/text_title_medium_view.dart';
+import 'package:yad_sys/widgets/text_views/text_title_medium_view.dart';
 
 class AppBarView extends StatelessWidget implements PreferredSizeWidget {
   const AppBarView({super.key, required this.title});

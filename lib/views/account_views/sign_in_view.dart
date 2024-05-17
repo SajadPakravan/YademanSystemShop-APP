@@ -1,7 +1,7 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/tools/app_themes.dart';
 
@@ -24,7 +24,6 @@ class SignInView extends StatelessWidget {
   });
 
   BuildContext context;
-  AppColors appColors = AppColors();
   AppTexts appTexts = AppTexts();
   TextEditingController emailCtrl;
   TextEditingController passCtrl;
@@ -101,7 +100,7 @@ class SignInView extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.only(bottom: 50),
                   child: EasyButton(
-                    idleStateWidget: Text("ورود",style: Theme.of(context).textTheme.buttonText1),
+                    idleStateWidget: Text("ورود", style: Theme.of(context).textTheme.buttonText1),
                     loadingStateWidget: Padding(
                       padding: const EdgeInsets.all(10),
                       child: LoadingAnimationWidget.threeArchedCircle(
@@ -109,7 +108,7 @@ class SignInView extends StatelessWidget {
                         size: width * 0.1,
                       ),
                     ),
-                    buttonColor: appColors.blueFav,
+                    buttonColor: ColorStyle.blueFav,
                     width: width,
                     height: 50,
                     borderRadius: width,
@@ -182,10 +181,7 @@ class SignInView extends StatelessWidget {
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.all(Radius.circular(width)),
-                borderSide: BorderSide(
-                  color: appColors.blueFav,
-                  width: 2,
-                ),
+                borderSide: const BorderSide(color: ColorStyle.blueFav, width: 2),
               ),
             ),
           ),

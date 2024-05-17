@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:yad_sys/themes/theme_provider.dart';
-import 'package:provider/provider.dart';
 
 class ColorStyle {
+  static const Color gray12 = Color.fromRGBO(225, 229, 232, 1);
+  static const Color opacity0 = Color.fromRGBO(225, 229, 232, 0.01);
+  static const Gradient gradientBlue = LinearGradient(
+    colors: [
+      Colors.deepPurple,
+      Colors.indigo,
+      Colors.blue,
+    ],
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+  );
+  static const Color progressColor = Colors.black45;
+  static const MaterialColor blueFav = MaterialColor(
+    0xff3366cc,
+    <int, Color>{
+      50: Color(0xff3366cc),
+      100: Color(0xff3366cc),
+      200: Color(0xff3366cc),
+      300: Color(0xff3366cc),
+      400: Color(0xff3366cc),
+      500: Color(0xff3366cc),
+      600: Color(0xff3366cc),
+      700: Color(0xff3366cc),
+      800: Color(0xff3366cc),
+      900: Color(0xff3366cc),
+    },
+  );
   static const Color darkBlue = Color(0xff03045e);
   static const Color colorPurple = Color.fromARGB(255, 65, 96, 245);
   static const Color colorPurple2 = Color.fromARGB(255, 46, 67, 169);
@@ -35,19 +60,4 @@ class ColorStyle {
   static const Color colorPinkBack = Color(0xffff7be6);
   static const Color backgroundItemColorDashboardUnSelected = Color.fromRGBO(196, 196, 196, 1.0);
   static const Color backgroundColorDashboard = Color.fromRGBO(249, 249, 249, 1.0);
-
-  static changer({required BuildContext context, required Color lightColor, required Color darkColor}) {
-    switch(Provider.of<ThemeProvider>(context, listen: false).themeMode) {
-      case ThemeMode.system: {
-        final brightness = MediaQuery.of(context).platformBrightness;
-        return brightness == Brightness.light ? lightColor : darkColor;
-      }
-      case ThemeMode.light: {
-        return lightColor;
-      }
-      case ThemeMode.dark: {
-        return darkColor;
-      }
-    }
-  }
 }

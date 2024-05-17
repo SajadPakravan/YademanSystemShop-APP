@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 
 class GradientMaskViewModel extends StatefulWidget {
-  const GradientMaskViewModel({Key? key, required this.child}) : super(key: key);
+  const GradientMaskViewModel({super.key, required this.child});
   final Widget child;
 
   @override
@@ -10,12 +10,11 @@ class GradientMaskViewModel extends StatefulWidget {
 }
 
 class _GradientMaskViewModelState extends State<GradientMaskViewModel> {
-  AppColors appColors = AppColors();
 
   @override
   Widget build(BuildContext context) {
     return ShaderMask(
-      shaderCallback: (bounds) => appColors.gradientBlue.createShader(bounds),
+      shaderCallback: (bounds) => ColorStyle.gradientBlue.createShader(bounds),
       child: widget.child,
     );
   }

@@ -1,6 +1,6 @@
 class AppTexts {
   String appTitle = "فروشگاه یادمان سیستم";
-  String appFont = "iranYekan";
+  String appFont = "IranYekan";
   String errorGetInfo = "خطا در دریافت اطلاعات";
   String productAttributes = "مشخصات محصول";
   String productDescription = "معرفی محصول";

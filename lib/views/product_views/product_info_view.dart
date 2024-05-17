@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/tools/app_colors.dart';
 
 // ignore: must_be_immutable
 class ProductInfoView extends StatelessWidget {
@@ -21,7 +20,6 @@ class ProductInfoView extends StatelessWidget {
   String description;
   List<Attributes> attributesNameLst;
   List<String> attributesOptionLst;
-  AppColors appColors = AppColors();
 
   @override
   Widget build(BuildContext context) {

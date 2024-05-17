@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/yademan_db.dart';
 import 'package:yad_sys/models/user_model.dart';
-import 'package:yad_sys/tools/app_colors.dart';
 import 'package:yad_sys/views/main_views/account_view.dart';
 import 'package:yad_sys/widgets/app_dialogs.dart';
 
@@ -18,7 +17,6 @@ class _AccountScreenState extends State<AccountScreen> with TickerProviderStateM
   HttpRequest httpRequest = HttpRequest(context: Get.context!);
   User user = const User();
   final pageCtrl = PageController(initialPage: 0);
-  AppColors appColors = AppColors();
   AppDialogs appDialogs = AppDialogs();
   bool progress = false;
   dynamic logged = "";

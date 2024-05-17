@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/tools/app_colors.dart';
 
 class ProductImagesScreen extends StatefulWidget {
   const ProductImagesScreen({Key? key}) : super(key: key);
@@ -14,7 +13,6 @@ class ProductImagesScreen extends StatefulWidget {
 
 class _ProductImagesScreenState extends State<ProductImagesScreen> {
   HttpRequest httpRequest = HttpRequest(context: Get.context!);
-  AppColors appColors = AppColors();
   CarouselController slideCtrl = CarouselController();
   int currentSlide = 0;
   bool getCurrentSlide = true;

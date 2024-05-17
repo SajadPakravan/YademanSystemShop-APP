@@ -53,6 +53,6 @@ flutter:
     - assets/images/logos/
 
   fonts:
-    - family: iranYekan
+    - family: IranYekan
       fonts:
         - asset: assets/fonts/iranyekan.ttf

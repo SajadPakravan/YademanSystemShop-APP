@@ -6,7 +6,7 @@ import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/screens/main/shop/shop_filter_screen.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_themes.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
@@ -37,7 +37,6 @@ class ShopView extends StatelessWidget {
 
   BuildContext context;
   AppDimension appDimension = AppDimension();
-  AppColors appColors = AppColors();
   dynamic onRefresh;
   bool visibleReloadCover;
   ScrollController scrollController;
@@ -149,7 +148,7 @@ class ShopView extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: appColors.blueFav,
+                color: ColorStyle.blueFav,
                 borderRadius: BorderRadius.all(Radius.circular(width)),
               ),
               child: AutoSizeText(
@@ -278,7 +277,7 @@ class ShopView extends StatelessWidget {
           child: Container(
             padding: EdgeInsets.zero,
             decoration: BoxDecoration(
-              color: appColors.blueFav,
+              color: ColorStyle.blueFav,
               borderRadius: BorderRadius.all(Radius.circular(width)),
             ),
             child: AnimatedRotation(

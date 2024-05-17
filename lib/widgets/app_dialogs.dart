@@ -1,11 +1,10 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:yad_sys/tools/app_colors.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_themes.dart';
 
 class AppDialogs {
-  AppColors appColors = AppColors();
   AppDimension appDimension = AppDimension();
 
   requestFalse({required BuildContext context}) {
@@ -76,7 +75,7 @@ class AppDialogs {
                         ElevatedButton(
                           onPressed: () {},
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(appColors.blueFav),
+                            backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,

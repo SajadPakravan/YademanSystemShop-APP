@@ -2,9 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import 'package:yad_sys/tools/app_colors.dart';
 
-// ignore: must_be_immutable
 class HomeSlide extends StatelessWidget {
   HomeSlide({
     Key? key,
@@ -12,7 +10,6 @@ class HomeSlide extends StatelessWidget {
     required this.onSlideChange,
   }) : super(key: key);
 
-  AppColors appColors = AppColors();
   final PageController _pageCtrl = PageController();
   int slideIndex;
   Function onSlideChange;
