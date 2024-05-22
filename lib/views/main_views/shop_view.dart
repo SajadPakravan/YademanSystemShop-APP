@@ -10,7 +10,7 @@ import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/themes/app_themes.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
-import 'package:yad_sys/widgets/search_bar.dart';
+import 'package:yad_sys/widgets/search.dart';
 
 // ignore: must_be_immutable
 class ShopView extends StatelessWidget {
@@ -66,7 +66,7 @@ class ShopView extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             headerSliverBuilder: (context, innerBoxIsScrolled) => [
               const SliverAppBar(
-                title: SearchNav(),
+                title: Search(),
                 floating: true,
                 snap: true,
                 backgroundColor: Colors.white,

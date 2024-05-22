@@ -14,12 +14,7 @@ class TextBodyLargeView extends StatelessWidget {
     return Text(
       data,
       textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-            color: color,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            height: height,
-          ),
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(color: color, fontSize: fontSize, fontWeight: fontWeight, height: height),
     );
   }
 }

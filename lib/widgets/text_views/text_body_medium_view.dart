@@ -26,12 +26,7 @@ class TextBodyMediumView extends StatelessWidget {
       data,
       maxLines: maxLines,
       textAlign: textAlign,
-      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-            color: color,
-            fontSize: fontSize,
-            fontWeight: fontWeight,
-            height: height,
-          ),
+      style: Theme.of(context).textTheme.bodyMedium!.copyWith(color: color, fontSize: fontSize, fontWeight: fontWeight, height: height),
     );
   }
 }

@@ -1,8 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
@@ -14,11 +14,13 @@ import 'package:yad_sys/widgets/cards/product_image_card.dart';
 import 'package:yad_sys/widgets/image_slides/home_slide.dart';
 import 'package:yad_sys/widgets/image_slides/image_banner.dart';
 import 'package:yad_sys/widgets/loading.dart';
-import 'package:yad_sys/widgets/search_bar.dart';
+import 'package:yad_sys/widgets/search.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
+import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
-// ignore: must_be_immutable
 class HomeView extends StatelessWidget {
   HomeView({
+    super.key,
     required this.context,
     required this.onRefresh,
     required this.visibleReloadCover,
@@ -37,28 +39,27 @@ class HomeView extends StatelessWidget {
     required this.internalImgLst,
     required this.storageDetLst,
     required this.storageImgLst,
-    super.key,
   });
 
-  AppFunction appFun = AppFunction();
-  BuildContext context;
-  bool showContent;
-  int slideIndex;
-  Function onSlideChange;
-  dynamic onRefresh;
-  bool visibleReloadCover;
-  List<ProductModel> offDetLst;
-  List<Images> offImgLst;
-  List<ProductCategoryModel> categoriesLst;
-  List<ProductCategoryImage> categoriesImgLst;
-  List<ProductModel> laptopDetLst;
-  List<Images> laptopImgLst;
-  List<ProductModel> speakerDetLst;
-  List<Images> speakerImgLst;
-  List<ProductModel> internalDetLst;
-  List<Images> internalImgLst;
-  List<ProductModel> storageDetLst;
-  List<Images> storageImgLst;
+  final AppFunction appFun = AppFunction();
+  final BuildContext context;
+  final bool showContent;
+  final int slideIndex;
+  final Function onSlideChange;
+  final Function onRefresh;
+  final bool visibleReloadCover;
+  final List<ProductModel> offDetLst;
+  final List<Images> offImgLst;
+  final List<ProductCategoryModel> categoriesLst;
+  final List<ProductCategoryImage> categoriesImgLst;
+  final List<ProductModel> laptopDetLst;
+  final List<Images> laptopImgLst;
+  final List<ProductModel> speakerDetLst;
+  final List<Images> speakerImgLst;
+  final List<ProductModel> internalDetLst;
+  final List<Images> internalImgLst;
+  final List<ProductModel> storageDetLst;
+  final List<Images> storageImgLst;
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +75,7 @@ class HomeView extends StatelessWidget {
               backgroundColor: Colors.white,
               elevation: 3,
               titleSpacing: 10,
-              title: SearchNav(),
+              title: Search(),
             ),
           ],
           body: RefreshIndicator(
@@ -97,12 +98,12 @@ class HomeView extends StatelessWidget {
         child: Column(
           children: [
             HomeSlide(slideIndex: slideIndex, onSlideChange: onSlideChange),
-            Container(margin: EdgeInsets.only(bottom: height * 0.03), child: HomeMenu(context: context)),
-            offProducts(
-              listDetails: offDetLst,
-              listImage: offImgLst,
-            ),
+            const SizedBox(height: 20),
+            HomeMenu(context: context),
+            const SizedBox(height: 20),
+            offProducts(listDetails: offDetLst, listImage: offImgLst),
             parentCategories(),
+            const SizedBox(height: 20),
             Container(
               padding: EdgeInsets.symmetric(horizontal: width * 0.03),
               margin: EdgeInsets.only(bottom: height * 0.03),
@@ -137,16 +138,12 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  offProducts({
-    required List listDetails,
-    required List listImage,
-  }) {
+  offProducts({required List listDetails, required List listImage}) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
     return Visibility(
       visible: listDetails.isEmpty ? false : true,
       child: Container(
-        margin: EdgeInsets.only(bottom: height * 0.03),
+        margin: const EdgeInsets.only(bottom: 20),
         padding: EdgeInsets.symmetric(vertical: width * 0.03),
         color: const Color.fromRGBO(49, 123, 218, 1),
         child: SingleChildScrollView(
@@ -230,70 +227,52 @@ class HomeView extends StatelessWidget {
 
   parentCategories() {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      margin: EdgeInsets.only(bottom: height * 0.03),
-      child: Column(
-        children: [
-          Text(
-            "خرید بر اساس دسته‌بندی",
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          Container(
-            margin: EdgeInsets.only(top: width * 0.02),
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
-              primary: false,
-              padding: EdgeInsets.all(width * 0.03),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                childAspectRatio: width * 0.0025,
-                crossAxisSpacing: width * 0.02,
-                mainAxisSpacing: width * 0.04,
-              ),
-              itemCount: categoriesLst.length,
-              itemBuilder: (BuildContext context, int index) {
-                ProductCategoryModel categoryModel = categoriesLst[index];
-                ProductCategoryImage categoryImg = categoriesImgLst[index];
-                return InkWell(
-                  onTap: () {
-                    appFun.onTapShowAll(
-                      title: categoryModel.name.toString(),
-                      category: categoryModel.id.toString(),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      FittedBox(
-                        child: CachedNetworkImage(
-                          imageUrl: categoryImg.src.toString(),
-                          height: 65,
-                          width: 65,
-                          errorWidget: (context, str, dyn) {
-                            return const Icon(Icons.image, color: Colors.black26, size: 100);
-                          },
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.only(top: 10),
-                        width: width * 0.2,
-                        child: AutoSizeText(
-                          categoryModel.name.toString(),
-                          style: Theme.of(context).textTheme.homeMenu,
-                          textAlign: TextAlign.center,
-                          minFontSize: 12,
-                          maxLines: 2,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
+    return Column(
+      children: [
+        const TextBodyLargeView("خرید بر اساس دسته‌بندی"),
+        Container(
+          margin: const EdgeInsets.only(top: 10),
+          child: GridView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            padding: EdgeInsets.zero,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              childAspectRatio: width * 0.0025,
+              crossAxisSpacing: width * 0.02,
+              mainAxisSpacing: width * 0.04,
             ),
+            itemCount: categoriesLst.length,
+            itemBuilder: (BuildContext context, int index) {
+              ProductCategoryModel categoryModel = categoriesLst[index];
+              ProductCategoryImage categoryImg = categoriesImgLst[index];
+              return InkWell(
+                onTap: () {
+                  appFun.onTapShowAll(title: categoryModel.name.toString(), category: categoryModel.id.toString());
+                },
+                child: Column(
+                  children: [
+                    FittedBox(
+                      child: CachedNetworkImage(
+                        imageUrl: categoryImg.src.toString(),
+                        height: 65,
+                        width: 65,
+                        errorWidget: (context, str, dyn) {
+                          return const Icon(Icons.image, color: Colors.black26, size: 100);
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: TextBodyMediumView(categoryModel.name.toString(), textAlign: TextAlign.center, maxLines: 2),
+                    ),
+                  ],
+                ),
+              );
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
