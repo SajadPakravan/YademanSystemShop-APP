@@ -2,12 +2,9 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class HomeMenu extends StatelessWidget {
-  HomeMenu({
-    required this.context,
-    super.key,
-  });
+  const HomeMenu({required this.context, super.key});
 
-  BuildContext context;
+  final BuildContext context;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +47,7 @@ class HomeMenu extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(width * 0.02),
               decoration: const BoxDecoration(
-                color: Color.fromRGBO(39, 60, 117,1.0),
+                color: Color.fromRGBO(39, 60, 117, 1.0),
                 borderRadius: BorderRadius.all(Radius.circular(10)),
               ),
               child: Icon(

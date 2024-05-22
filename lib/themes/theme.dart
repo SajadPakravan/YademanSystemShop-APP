@@ -40,10 +40,11 @@ colorScheme() {
 
 bottomNavigationBarTheme() {
   return const BottomNavigationBarThemeData(
-    backgroundColor: ColorStyle.whiteF5,
-    selectedItemColor: Color.fromARGB(255, 111, 148, 243),
-    selectedIconTheme: IconThemeData(color: Colors.black87),
-    unselectedIconTheme: IconThemeData(color: Colors.indigo),
+    type: BottomNavigationBarType.fixed,
+    backgroundColor: Colors.white,
+    unselectedLabelStyle: TextStylesLight.blackF14,
     selectedLabelStyle: TextStylesLight.blackF14,
+    unselectedItemColor: Colors.grey,
+    selectedItemColor: Colors.black87,
   );
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 // ignore: must_be_immutable
 class CategoriesView extends StatelessWidget {

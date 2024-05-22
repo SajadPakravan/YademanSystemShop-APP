@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:yad_sys/connections/http_request.dart';
@@ -18,7 +17,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class AddProductScreenState extends State<AddProductScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   TextEditingController name = TextEditingController();
   TextEditingController attributeName = TextEditingController();
   TextEditingController attributeDescription = TextEditingController();

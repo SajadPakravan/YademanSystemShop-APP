@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/yademan_db.dart';
 import 'package:yad_sys/models/user_model.dart';
@@ -14,7 +13,7 @@ class AccountScreen extends StatefulWidget {
 }
 
 class _AccountScreenState extends State<AccountScreen> with TickerProviderStateMixin {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   User user = const User();
   final pageCtrl = PageController(initialPage: 0);
   AppDialogs appDialogs = AppDialogs();

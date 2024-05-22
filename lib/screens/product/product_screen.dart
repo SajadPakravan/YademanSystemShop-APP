@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yad_sys/connections/http_request.dart';
@@ -17,7 +16,7 @@ class ProductScreen extends StatefulWidget {
 }
 
 class _ProductScreenState extends State<ProductScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   dynamic jsonProduct = "";
   dynamic jsonGetProductReviews = "";
   List<ProductModel> productsDetLst = [];

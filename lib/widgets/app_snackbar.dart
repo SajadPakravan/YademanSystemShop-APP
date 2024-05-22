@@ -1,7 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 class AppSnackBar {
   error({required BuildContext context, required String message}) {

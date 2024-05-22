@@ -1,18 +1,14 @@
 import 'dart:convert';
-import 'package:logger/logger.dart';
 import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/app_snackbar.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpRequest {
-  HttpRequest({required this.context});
-
-  BuildContext context;
+  HttpRequest();
   AppDialogs appDialogs = AppDialogs();
   AppSnackBar appSnackBar = AppSnackBar();
 
@@ -88,7 +84,7 @@ class HttpRequest {
           print("Json ERROR >>>:  $json");
         }
         // ignore: use_build_context_synchronously
-        appSnackBar.error(context: context, message: error);
+        // appSnackBar.error(context: context, message: error);
         return false;
       }
     } catch (e) {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yad_sys/connections/http_request.dart';
@@ -15,7 +14,7 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   bool progress = true;
   int id = 0;
   String token = "";

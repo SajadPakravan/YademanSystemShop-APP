@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:yad_sys/main.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
-import 'package:yad_sys/screens/splash/splash_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
-import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class ConnectionError extends StatefulWidget {
   const ConnectionError({super.key});

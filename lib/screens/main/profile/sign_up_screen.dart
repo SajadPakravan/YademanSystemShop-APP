@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/yademan_db.dart';
 import 'package:yad_sys/models/user_model.dart';
@@ -20,7 +19,7 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passCtrl = TextEditingController();
   TextEditingController rePassCtrl = TextEditingController();

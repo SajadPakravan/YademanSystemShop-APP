@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/themes/color_style.dart';
@@ -15,7 +14,7 @@ class ProductSlide extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   PageController pageCtrl = PageController();
   int slideIndex;
   Function onSlideChange;

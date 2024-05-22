@@ -39,6 +39,7 @@ dependencies:
   flutter_widget_from_html: ^0.15.0
   another_flushbar: ^1.12.30
   logger: ^2.2.0
+  flutter_staggered_animations: ^1.1.1
 
 dev_dependencies:
   flutter_test:

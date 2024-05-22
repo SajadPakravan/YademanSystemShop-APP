@@ -4,33 +4,34 @@ import 'package:yad_sys/screens/main/categories/categories_screen.dart';
 import 'package:yad_sys/screens/main/home/home_screen.dart';
 import 'package:yad_sys/screens/main/profile/account_screen.dart';
 import 'package:yad_sys/screens/main/shop/shop_screen.dart';
-import 'package:yad_sys/tools/app_themes.dart';
-import 'package:yad_sys/view_models/main_view_model.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({super.key});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
-  MainViewModel mainScrModel = MainViewModel();
   PageController pageCtrl = PageController();
   int pageIndex = 0;
+  IconData icnHome = Icons.home;
+  IconData icnShop = Icons.store_outlined;
+  IconData icnCategory = Icons.category_outlined;
+  IconData icnAccount = Icons.person_outlined;
+
   @override
   void initState() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
-    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    //     statusBarColor: Colors.transparent,
-    //     statusBarIconBrightness: Brightness.light,
-    //     statusBarBrightness: Brightness.light,
-    //     systemStatusBarContrastEnforced: false,
-    //     systemNavigationBarColor: Colors.white,
-    //     systemNavigationBarIconBrightness: Brightness.light,
-    //     systemNavigationBarContrastEnforced: false,
-    //     systemNavigationBarDividerColor: Colors.white));
     super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: SystemUiOverlay.values);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemStatusBarContrastEnforced: false,
+      systemNavigationBarColor: Colors.white,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarContrastEnforced: false,
+      systemNavigationBarDividerColor: Colors.black,
+    ));
   }
 
   @override
@@ -38,8 +39,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: IndexedStack(
-          index: pageIndex,
+        body: PageView(
+          controller: pageCtrl,
+          physics: const NeverScrollableScrollPhysics(),
           children: const [
             HomeScreen(),
             ShopScreen(),
@@ -54,47 +56,70 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   bottomNavigationBar() {
     return Container(
-      decoration: const BoxDecoration(
-        border: Border(
-          top: BorderSide(
-            color: Colors.black12,
-            width: 1,
-          ),
-        ),
-      ),
+      decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 3))),
       child: BottomNavigationBar(
         currentIndex: pageIndex,
-        type: BottomNavigationBarType.fixed,
-        backgroundColor: Colors.white,
-        unselectedLabelStyle: Theme.of(context).textTheme.menu,
-        selectedLabelStyle: Theme.of(context).textTheme.menu,
-        unselectedItemColor: Colors.grey,
-        selectedItemColor: Colors.black87,
-        onTap: (index) => setState(() {
-          mainScrModel.onTapMenu(index: index);
-          setState(() {
-            pageIndex = index;
-          });
-        }),
+        onTap: (index) {
+          onTapMenu(index: index);
+          setState(() => pageCtrl.jumpToPage(index));
+        },
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(mainScrModel.icnHome),
-            label: "خانه",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(mainScrModel.icnShop),
-            label: "فروشگاه",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(mainScrModel.icnCategory),
-            label: "دسته‌بندی‌ها",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(mainScrModel.icnAccount),
-            label: "حساب من",
-          ),
+          BottomNavigationBarItem(icon: Icon(icnHome), label: "خانه"),
+          BottomNavigationBarItem(icon: Icon(icnShop), label: "فروشگاه"),
+          BottomNavigationBarItem(icon: Icon(icnCategory), label: "دسته‌بندی‌ها"),
+          BottomNavigationBarItem(icon: Icon(icnAccount), label: "حساب من"),
         ],
       ),
     );
+  }
+
+  onTapMenu({required int index}) {
+    switch (index) {
+      case 0:
+        {
+          menuUnSelected();
+          setState(() {
+            pageIndex = index;
+            icnHome = Icons.home;
+          });
+          break;
+        }
+      case 1:
+        {
+          menuUnSelected();
+          setState(() {
+            pageIndex = index;
+            icnShop = Icons.store;
+          });
+          break;
+        }
+      case 2:
+        {
+          menuUnSelected();
+          setState(() {
+            pageIndex = index;
+            icnCategory = Icons.category;
+          });
+          break;
+        }
+      case 3:
+        {
+          menuUnSelected();
+          setState(() {
+            pageIndex = index;
+            icnAccount = Icons.person;
+          });
+          break;
+        }
+    }
+  }
+
+  menuUnSelected() {
+    setState(() {
+      icnHome = Icons.home_outlined;
+      icnShop = Icons.store_outlined;
+      icnCategory = Icons.category_outlined;
+      icnAccount = Icons.person_outlined;
+    });
   }
 }

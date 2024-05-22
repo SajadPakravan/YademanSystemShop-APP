@@ -12,7 +12,7 @@ class ProductImagesScreen extends StatefulWidget {
 }
 
 class _ProductImagesScreenState extends State<ProductImagesScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   CarouselController slideCtrl = CarouselController();
   int currentSlide = 0;
   bool getCurrentSlide = true;

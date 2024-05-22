@@ -7,12 +7,13 @@ import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_function.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 import 'package:yad_sys/widgets/cards/home_menu.dart';
 import 'package:yad_sys/widgets/cards/product_card_horizontal.dart';
 import 'package:yad_sys/widgets/cards/product_image_card.dart';
 import 'package:yad_sys/widgets/image_slides/home_slide.dart';
 import 'package:yad_sys/widgets/image_slides/image_banner.dart';
+import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/search_bar.dart';
 
 // ignore: must_be_immutable
@@ -61,7 +62,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -78,18 +78,10 @@ class HomeView extends StatelessWidget {
             ),
           ],
           body: RefreshIndicator(
-            onRefresh: () {
-              return onRefresh();
-            },
-            child: showContent
-                ? homeContent()
-                : Center(
-                    child: LoadingAnimationWidget.threeArchedCircle(
-                      color: Colors.black54,
-                      size: width * 0.1,
-                    ),
-                  ),
-          ),
+              onRefresh: () {
+                return onRefresh();
+              },
+              child: showContent ? homeContent() : const Loading()),
         ),
       ),
     );
@@ -330,10 +322,7 @@ class HomeView extends StatelessWidget {
                       padding: EdgeInsets.only(left: width * 0.02),
                       child: const Icon(Icons.pix_rounded, color: ColorStyle.blueFav, size: 20),
                     ),
-                    Text(
-                      titleCatalog,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    Text(titleCatalog, style: Theme.of(context).textTheme.bodyMedium),
                   ],
                 ),
                 InkWell(

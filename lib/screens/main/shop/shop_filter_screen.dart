@@ -6,7 +6,7 @@ import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_texts.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 // ignore: must_be_immutable
 class ShopFilterScreen extends StatefulWidget {

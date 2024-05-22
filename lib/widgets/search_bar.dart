@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/screens/search/search_screen.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 class SearchNav extends StatelessWidget {
   const SearchNav({super.key});

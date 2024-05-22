@@ -1,6 +1,5 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/yademan_db.dart';
 import 'package:yad_sys/models/user_model.dart';
@@ -20,7 +19,7 @@ class SignInScreen extends StatefulWidget {
 }
 
 class SignInScreenState extends State<SignInScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   TextEditingController emailCtrl = TextEditingController();
   TextEditingController passCtrl = TextEditingController();
   bool obscureText = true;

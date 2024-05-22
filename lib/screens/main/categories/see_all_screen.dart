@@ -12,7 +12,7 @@ class ShowAllScreen extends StatefulWidget {
 }
 
 class _ShowAllScreenState extends State<ShowAllScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   String category = Get.arguments[1];
   String onSale = Get.arguments[2];
   ScrollController scrollController = ScrollController();

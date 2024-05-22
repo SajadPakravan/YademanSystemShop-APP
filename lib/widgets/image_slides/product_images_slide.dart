@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 
 // ignore: must_be_immutable
@@ -21,7 +20,7 @@ class ProductImagesSlide extends StatelessWidget {
   Color circleSlideColor = Colors.black;
   List<Widget> itemSlider = [];
   List<String> imageList = [];
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   dynamic json;
 
   @override

@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
@@ -19,7 +18,7 @@ class ShopScreen extends StatefulWidget {
 
 class ShopScreenState extends State<ShopScreen> {
   MainScreen mainScreen = const MainScreen();
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   AppDialogs appDialogs = AppDialogs();
   AppTexts appTexts = AppTexts();
   bool visibleReloadCover = true;

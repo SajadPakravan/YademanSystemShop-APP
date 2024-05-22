@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 // ignore: must_be_immutable
 class SignInView extends StatelessWidget {

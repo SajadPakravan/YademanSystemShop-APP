@@ -5,10 +5,10 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeSlide extends StatelessWidget {
   HomeSlide({
-    Key? key,
+    super.key,
     required this.slideIndex,
     required this.onSlideChange,
-  }) : super(key: key);
+  });
 
   final PageController _pageCtrl = PageController();
   int slideIndex;

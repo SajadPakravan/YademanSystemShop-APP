@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/views/main_views/categories_view.dart';
@@ -13,7 +12,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  HttpRequest httpRequest = HttpRequest(context: Get.context!);
+  HttpRequest httpRequest = HttpRequest();
   List<ProductCategoryModel> parentCategoriesLst = [];
   List<ProductCategoryImage> parentCategoriesImgLst = [];
   List<ProductCategoryModel> speakerSubCategoriesLst = [];

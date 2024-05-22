@@ -3,7 +3,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/screens/main/profile/sign_in_screen.dart';
 import 'package:yad_sys/screens/main/profile/sign_up_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
-import 'package:yad_sys/tools/app_themes.dart';
+import 'package:yad_sys/themes/app_themes.dart';
 
 class AccountView extends StatelessWidget {
   AccountView({
