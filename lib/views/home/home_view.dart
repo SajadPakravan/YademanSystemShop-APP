@@ -1,7 +1,5 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
@@ -99,8 +97,8 @@ class HomeView extends StatelessWidget {
           children: [
             HomeSlide(slideIndex: slideIndex, onSlideChange: onSlideChange),
             const SizedBox(height: 20),
-            HomeMenu(context: context),
-            const SizedBox(height: 20),
+            const HomeMenu(),
+            const SizedBox(height: 10),
             offProducts(listDetails: offDetLst, listImage: offImgLst),
             parentCategories(),
             const SizedBox(height: 20),
@@ -144,79 +142,40 @@ class HomeView extends StatelessWidget {
       visible: listDetails.isEmpty ? false : true,
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
-        padding: EdgeInsets.symmetric(vertical: width * 0.03),
+        padding: const EdgeInsets.symmetric(vertical: 10),
         color: const Color.fromRGBO(49, 123, 218, 1),
         child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
           scrollDirection: Axis.horizontal,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               Container(
-                margin: EdgeInsets.symmetric(horizontal: width * 0.03),
+                margin: const EdgeInsets.symmetric(horizontal: 10),
                 height: 290,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SvgPicture.asset(
-                      "assets/images/amazings.svg",
-                      fit: BoxFit.contain,
-                      width: width * 0.25,
-                    ),
-                    Image.asset(
-                      "assets/images/box.webp",
-                      fit: BoxFit.contain,
-                      width: width * 0.3,
-                    ),
-                    InkWell(
-                      child: Row(
-                        children: [
-                          Text(
-                            "مشاهده همه",
-                            style: Theme.of(context).textTheme.buttonText1,
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(right: width * 0.03),
-                            child: const Icon(
-                              Icons.arrow_forward_ios,
-                              color: Colors.white,
-                              size: 15,
-                            ),
-                          ),
-                        ],
+                    SvgPicture.asset("assets/images/amazings.svg", fit: BoxFit.contain, width: width * 0.25),
+                    Image.asset("assets/images/box.webp", fit: BoxFit.contain, width: width * 0.3),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
+                        elevation: MaterialStateProperty.all(10),
                       ),
-                      onTap: () {
-                        appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true");
-                      },
-                    )
+                      child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
+                      onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
+                    ),
                   ],
                 ),
               ),
-              ProductCardHorizontal(
-                listDetails: listDetails,
-                listImage: listImage,
-                physics: const NeverScrollableScrollPhysics(),
-              ),
-              InkWell(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: width * 0.03),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "مشاهده همه",
-                        style: Theme.of(context).textTheme.buttonText1,
-                      ),
-                      const Icon(
-                        Icons.arrow_circle_left_outlined,
-                        color: Colors.white,
-                      ),
-                    ],
-                  ),
+              ProductCardHorizontal(listDetails: listDetails, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
+                  elevation: MaterialStateProperty.all(10),
                 ),
-                onTap: () {
-                  appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true");
-                },
+                child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
+                onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
               ),
             ],
           ),
@@ -247,14 +206,12 @@ class HomeView extends StatelessWidget {
               ProductCategoryModel categoryModel = categoriesLst[index];
               ProductCategoryImage categoryImg = categoriesImgLst[index];
               return InkWell(
-                onTap: () {
-                  appFun.onTapShowAll(title: categoryModel.name.toString(), category: categoryModel.id.toString());
-                },
+                onTap: () => appFun.onTapShowAll(title: categoryModel.name!, category: categoryModel.id.toString()),
                 child: Column(
                   children: [
                     FittedBox(
                       child: CachedNetworkImage(
-                        imageUrl: categoryImg.src.toString(),
+                        imageUrl: categoryImg.src!,
                         height: 65,
                         width: 65,
                         errorWidget: (context, str, dyn) {

@@ -4,11 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeSlide extends StatelessWidget {
-  HomeSlide({
-    super.key,
-    required this.slideIndex,
-    required this.onSlideChange,
-  });
+  HomeSlide({super.key, required this.slideIndex, required this.onSlideChange});
 
   final PageController _pageCtrl = PageController();
   final int slideIndex;
@@ -16,39 +12,31 @@ class HomeSlide extends StatelessWidget {
   final bool forwardSlide = true;
 
   final List<String> imgLst = [
-    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.jpg",
-    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.jpg",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.png",
+    "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.png",
   ];
 
   @override
   Widget build(BuildContext context) {
     List<Widget> itemSlider = imgLst
-        .map(
-          (item) => InkWell(
-            child: Container(
-                margin: const EdgeInsets.symmetric(horizontal: 5),
-                child:
-                    ClipRRect(borderRadius: BorderRadius.circular(30), child: CachedNetworkImage(imageUrl: item, fit: BoxFit.fitHeight))),
-            onTap: () {},
-          ),
-        )
+        .map((item) =>
+            InkWell(child: AspectRatio(aspectRatio: 16 / 9, child: CachedNetworkImage(imageUrl: item, fit: BoxFit.cover)), onTap: () {}))
         .toList();
 
     return Stack(
       alignment: Alignment.center,
       children: [
-        SizedBox(
-          height: 0,
-          child: PageView(
-            controller: _pageCtrl,
-            children: itemSlider,
-          ),
-        ),
+        SizedBox(height: 0, child: PageView(controller: _pageCtrl, children: itemSlider)),
         CarouselSlider(
           items: itemSlider,
           options: CarouselOptions(
-            height: 180,
-            viewportFraction: 0.9,
+            viewportFraction: 1,
             autoPlay: true,
             autoPlayAnimationDuration: const Duration(milliseconds: 300),
             autoPlayInterval: const Duration(seconds: 5),
@@ -59,14 +47,14 @@ class HomeSlide extends StatelessWidget {
           ),
         ),
         Transform.translate(
-          offset: const Offset(30, 70),
+          offset: const Offset(10, 100),
           child: Container(
             alignment: Alignment.centerLeft,
             margin: const EdgeInsets.only(left: 5),
             child: SmoothPageIndicator(
               controller: _pageCtrl,
               count: imgLst.length,
-              effect: const ScrollingDotsEffect(dotHeight: 8, dotWidth: 8, activeDotColor: Colors.black87),
+              effect: const ScrollingDotsEffect(dotHeight: 8, dotWidth: 8, activeDotColor: Colors.black87, dotColor: Colors.red),
             ),
           ),
         ),

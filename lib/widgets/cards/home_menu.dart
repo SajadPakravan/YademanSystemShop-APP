@@ -1,75 +1,73 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class HomeMenu extends StatelessWidget {
-  const HomeMenu({required this.context, super.key});
-
-  final BuildContext context;
+  const HomeMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return GridView.count(
       crossAxisCount: 4,
       shrinkWrap: true,
       primary: false,
       physics: const NeverScrollableScrollPhysics(),
-      mainAxisSpacing: 10,
-      crossAxisSpacing: 10,
-      padding: EdgeInsets.symmetric(horizontal: width * 0.03),
+      childAspectRatio: 0.9,
+      padding: EdgeInsets.zero,
       children: [
-        menu(icon: Icons.info_outlined, title: "درباره ما", onTap: () {}),
-        menu(icon: Icons.call_rounded, title: "تماس با ما", onTap: () {}),
-        menu(icon: Icons.question_mark_rounded, title: "پرسش‌های متداول", onTap: () {}),
-        menu(icon: Icons.gpp_maybe_outlined, title: "مشاوره خرید", onTap: () {}),
-        menu(icon: Icons.leaderboard_rounded, title: "نحوه ثبت سفارش", onTap: () {}),
-        menu(icon: Icons.assignment_returned, title: "سفارش مونتاژ و اسمبل", onTap: () {}),
-        menu(icon: Icons.assignment_returned, title: "سفارش قطعات کامپیوتر", onTap: () {}),
-        menu(icon: Icons.assignment_returned, title: "سفارش اجناس استوک", onTap: () {}),
+        HomeMenuItem(icon: Icons.info_rounded, title: "درباره ما", onTap: () {}),
+        HomeMenuItem(icon: Icons.phone, title: "تماس با ما", onTap: () {}),
+        HomeMenuItem(icon: Icons.question_mark_rounded, title: "پرسش‌های متداول", onTap: () {}),
+        HomeMenuItem(icon: Icons.shopping_bag, title: "سفارش خاص", onTap: () {}),
       ],
     );
   }
+}
 
-  menu({
-    required String title,
-    required IconData icon,
-    Color iconColor = Colors.white,
-    void Function()? onTap,
-  }) {
-    double width = MediaQuery.of(context).size.width;
-    return Transform.scale(
-      scale: 1,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              padding: EdgeInsets.all(width * 0.02),
-              decoration: const BoxDecoration(
-                color: Color.fromRGBO(39, 60, 117, 1.0),
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-              ),
-              child: Icon(
-                icon,
-                color: Colors.white,
-                size: width * 0.08,
-              ),
+class HomeMenuItem extends StatefulWidget {
+  const HomeMenuItem({super.key, required this.title, required this.icon, this.onTap});
+
+  final String title;
+  final IconData icon;
+  final void Function()? onTap;
+
+  @override
+  State<HomeMenuItem> createState() => _HomeMenuItemState();
+}
+
+class _HomeMenuItemState extends State<HomeMenuItem> {
+  bool _isTapped = false;
+
+  void _handleTap() {
+    setState(() => _isTapped = true);
+    Future.delayed(const Duration(milliseconds: 100), () => setState(() => _isTapped = false));
+    widget.onTap!();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: _handleTap,
+      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              color: _isTapped ? Colors.black26 : const Color(0xff0353a4),
+              borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            SizedBox(
-              height: width * 0.015,
+            child: Icon(widget.icon, color: const Color(0xffcaf0f8), size: 40),
+          ),
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+              child: TextBodyMediumView(widget.title, textAlign: TextAlign.center, maxLines: 2),
             ),
-            AutoSizeText(
-              title,
-              textAlign: TextAlign.center,
-              maxLines: 1,
-              style: Theme.of(context).textTheme.bodyMedium,
-              maxFontSize: 12,
-              minFontSize: 12,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
