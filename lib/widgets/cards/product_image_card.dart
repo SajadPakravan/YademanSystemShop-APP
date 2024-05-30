@@ -3,101 +3,90 @@ import 'package:flutter/material.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
 
-// ignore: must_be_immutable
 class ProductImageCard extends StatelessWidget {
   ProductImageCard({
+    super.key,
     required this.listImage,
     required this.listDet,
     this.physics = const AlwaysScrollableScrollPhysics(),
-    super.key,
   });
 
-  AppFunction appFun = AppFunction();
-  List<dynamic> listImage;
-  List<dynamic> listDet;
-  ScrollPhysics physics;
+  final AppFunction appFun = AppFunction();
+  final List<dynamic> listImage;
+  final List<dynamic> listDet;
+  final ScrollPhysics physics;
   BorderSide borderSideTop = BorderSide.none;
   BorderSide borderSideBottom = BorderSide.none;
   BorderSide borderSideLeft = BorderSide.none;
   BorderSide borderSideRight = BorderSide.none;
-  Color color1 = Colors.white;
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-        ),
-        itemCount: 9,
-        scrollDirection: Axis.vertical,
-        physics: physics,
-        shrinkWrap: true,
-        primary: false,
-        itemBuilder: (BuildContext context, int index) {
-          ProductModel productModel = listDet[index];
-          Images productImage = listImage[index];
-          switch (index) {
-            case 0:
-            case 2:
-            case 3:
-            case 5:
-              {
-                border(borderSideBottom: const BorderSide(color: Colors.black26));
-                break;
-              }
-            case 1:
-            case 4:
-              {
-                border(
-                  borderSideBottom: const BorderSide(color: Colors.black26),
-                  borderSideLeft: const BorderSide(color: Colors.black26),
-                  borderSideRight: const BorderSide(color: Colors.black26),
-                );
-                break;
-              }
-            case 7:
-              {
-                border(
-                  borderSideLeft: const BorderSide(color: Colors.black26),
-                  borderSideRight: const BorderSide(color: Colors.black26),
-                );
-                break;
-              }
-            case 6:
-            case 8:
-              {
-                border();
-                break;
-              }
-          }
-          return InkWell(
-            child: Container(
-              padding: EdgeInsets.all(width * 0.02),
-              decoration: BoxDecoration(
-                border: Border(
-                  top: borderSideTop,
-                  bottom: borderSideBottom,
-                  left: borderSideLeft,
-                  right: borderSideRight,
-                ),
-              ),
-              child: CachedNetworkImage(
-                imageUrl: productImage.src.toString(),
-                fit: BoxFit.contain,
-                errorWidget: (context, str, dyn) {
-                  return const Icon(Icons.image, color: Colors.black26, size: 100);
-                },
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+      itemCount: 9,
+      scrollDirection: Axis.vertical,
+      physics: physics,
+      shrinkWrap: true,
+      primary: false,
+      padding: EdgeInsets.zero,
+      itemBuilder: (BuildContext context, int index) {
+        ProductModel productModel = listDet[index];
+        Images productImage = listImage[index];
+        switch (index) {
+          case 0:
+          case 2:
+          case 3:
+          case 5:
+            {
+              border(borderSideBottom: const BorderSide(color: Colors.black38));
+              break;
+            }
+          case 1:
+          case 4:
+            {
+              border(
+                borderSideBottom: const BorderSide(color: Colors.black38),
+                borderSideLeft: const BorderSide(color: Colors.black38),
+                borderSideRight: const BorderSide(color: Colors.black38),
+              );
+              break;
+            }
+          case 7:
+            {
+              border(
+                borderSideLeft: const BorderSide(color: Colors.black38),
+                borderSideRight: const BorderSide(color: Colors.black38),
+              );
+              break;
+            }
+          case 6:
+          case 8:
+            {
+              border();
+              break;
+            }
+        }
+        return InkWell(
+          child: Container(
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border(
+                top: borderSideTop,
+                bottom: borderSideBottom,
+                left: borderSideLeft,
+                right: borderSideRight,
               ),
             ),
-            onTap: () {
-              appFun.onTapProduct(id: productModel.id!);
-            },
-          );
-        },
-      ),
+            child: CachedNetworkImage(
+              imageUrl: productImage.src!,
+              fit: BoxFit.contain,
+              errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
+            ),
+          ),
+          onTap: () => appFun.onTapProduct(id: productModel.id!),
+        );
+      },
     );
   }
 

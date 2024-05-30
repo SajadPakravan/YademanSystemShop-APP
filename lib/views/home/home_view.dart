@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yad_sys/models/product_categories_model.dart';
 import 'package:yad_sys/models/product_model.dart';
@@ -103,33 +105,25 @@ class HomeView extends StatelessWidget {
             parentCategories(),
             const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-              margin: EdgeInsets.only(bottom: height * 0.03),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: InkWell(
                 onTap: () {},
-                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.jpg"),
+                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_laptop.png"),
               ),
             ),
-            productsOfCategoryImage(
-              titleCatalog: "لپ‌تاپ",
-              listDet: laptopDetLst,
-              listImage: laptopImgLst,
-              categoryId: 57,
-            ),
-            productsOfCategoryImage(
-              titleCatalog: "اسپیکر",
-              listDet: speakerDetLst,
-              listImage: speakerImgLst,
-              categoryId: 153,
-            ),
+            const SizedBox(height: 20),
+            productsOfCategoryImage(titleCatalog: "لپ‌تاپ", listDet: laptopDetLst, listImage: laptopImgLst, categoryId: 57),
+            const SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-              margin: EdgeInsets.only(bottom: height * 0.03),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: InkWell(
                 onTap: () {},
-                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.jpg"),
+                child: ImageBanner(image: "https://yademansystem.ir/assets/images/banners/YademanSystem_banner_speaker.png"),
               ),
             ),
+            const SizedBox(height: 20),
+            productsOfCategoryImage(titleCatalog: "اسپیکر", listDet: speakerDetLst, listImage: speakerImgLst, categoryId: 153),
+            const SizedBox(height: 20),
           ],
         ),
       ),
@@ -144,84 +138,70 @@ class HomeView extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.symmetric(vertical: 10),
         color: const Color.fromRGBO(49, 123, 218, 1),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                height: 290,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SvgPicture.asset("assets/images/amazings.svg", fit: BoxFit.contain, width: width * 0.25),
-                    Image.asset("assets/images/box.webp", fit: BoxFit.contain, width: width * 0.3),
-                    ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
-                        elevation: MaterialStateProperty.all(10),
-                      ),
-                      child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
-                      onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
+        child: Stack(
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              height: 290,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset("assets/images/amazings.svg", fit: BoxFit.contain, width: width * 0.25),
+                  Image.asset("assets/images/box.webp", fit: BoxFit.contain, width: width * 0.3),
+                ],
+              ),
+            ),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: width * 0.33),
+                  ProductCardHorizontal(listDetails: listDetails, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
+                      elevation: MaterialStateProperty.all(10),
                     ),
-                  ],
-                ),
+                    child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
+                    onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
+                  ),
+                ],
               ),
-              ProductCardHorizontal(listDetails: listDetails, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
-                  elevation: MaterialStateProperty.all(10),
-                ),
-                child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
-                onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   parentCategories() {
-    double width = MediaQuery.of(context).size.width;
     return Column(
       children: [
         const TextBodyLargeView("خرید بر اساس دسته‌بندی"),
         Container(
           margin: const EdgeInsets.only(top: 10),
           child: GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,childAspectRatio: 0.9),
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             padding: EdgeInsets.zero,
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: width * 0.0025,
-              crossAxisSpacing: width * 0.02,
-              mainAxisSpacing: width * 0.04,
-            ),
             itemCount: categoriesLst.length,
             itemBuilder: (BuildContext context, int index) {
-              ProductCategoryModel categoryModel = categoriesLst[index];
+              ProductCategoryModel category = categoriesLst[index];
               ProductCategoryImage categoryImg = categoriesImgLst[index];
               return InkWell(
-                onTap: () => appFun.onTapShowAll(title: categoryModel.name!, category: categoryModel.id.toString()),
+                onTap: () => appFun.onTapShowAll(title: category.name!, category: category.id.toString()),
                 child: Column(
                   children: [
-                    FittedBox(
-                      child: CachedNetworkImage(
-                        imageUrl: categoryImg.src!,
-                        height: 65,
-                        width: 65,
-                        errorWidget: (context, str, dyn) {
-                          return const Icon(Icons.image, color: Colors.black26, size: 100);
-                        },
-                      ),
+                    CachedNetworkImage(
+                      imageUrl: categoryImg.src!,
+                      width: 80,
+                      errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10),
-                      child: TextBodyMediumView(categoryModel.name.toString(), textAlign: TextAlign.center, maxLines: 2),
+                      child: TextBodyMediumView(category.name.toString(), textAlign: TextAlign.center, maxLines: 2),
                     ),
                   ],
                 ),
@@ -233,50 +213,42 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  productsOfCategoryImage({
-    required String titleCatalog,
-    required List listDet,
-    required List listImage,
-    required int categoryId,
-  }) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-      margin: EdgeInsets.only(bottom: height * 0.03),
-      padding: EdgeInsets.symmetric(vertical: width * 0.02),
-      child: Column(
+  productsOfCategoryImage({required String titleCatalog, required List listDet, required List listImage, required int categoryId}) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+      minVerticalPadding: 0,
+      title: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(
+          color: ColorStyle.blueFav,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
+        ),
+        child: TextBodyLargeView(titleCatalog, color: Colors.white),
+      ),
+      subtitle: Column(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-            margin: EdgeInsets.only(bottom: width * 0.04),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(left: width * 0.02),
-                      child: const Icon(Icons.pix_rounded, color: ColorStyle.blueFav, size: 20),
-                    ),
-                    Text(titleCatalog, style: Theme.of(context).textTheme.bodyMedium),
-                  ],
-                ),
-                InkWell(
-                  child: Text(
-                    "مشاهده همه",
-                    style: Theme.of(context).textTheme.txtBtnBlue,
-                  ),
-                  onTap: () {
-                    appFun.onTapShowAll(title: titleCatalog, category: categoryId.toString());
-                  },
-                ),
-              ],
-            ),
+            decoration: BoxDecoration(border: Border.all(color: Colors.black38)),
+            child: ProductImageCard(listDet: listDet, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
           ),
-          ProductImageCard(
-            listDet: listDet,
-            listImage: listImage,
-            physics: const NeverScrollableScrollPhysics(),
+          InkWell(
+            child: Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(10),
+              decoration: const BoxDecoration(
+                color: Colors.teal,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
+                ),
+                boxShadow: [BoxShadow(color: Colors.black54, blurRadius: 2, offset: Offset(0, 5))],
+              ),
+              child: const TextBodyMediumView('مشاهده همه', color: Colors.white, textAlign: TextAlign.center),
+            ),
+            onTap: () => appFun.onTapShowAll(title: titleCatalog, category: categoryId.toString()),
           ),
         ],
       ),
