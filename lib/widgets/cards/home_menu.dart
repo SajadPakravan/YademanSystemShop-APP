@@ -54,12 +54,12 @@ class _HomeMenuItemState extends State<HomeMenuItem> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: _isTapped ? Colors.black26 : const Color(0xff0353a4),
               borderRadius: const BorderRadius.all(Radius.circular(10)),
             ),
-            child: Icon(widget.icon, color: const Color(0xffcaf0f8), size: 40),
+            child: Icon(widget.icon, color: Colors.white, size: 40),
           ),
           Flexible(
             child: Padding(
