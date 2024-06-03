@@ -58,7 +58,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   id: p['id'],
                   name: p['name'],
                   regularPrice: p['regular_price'],
-                  salePrice: p['sale_price'],
+                  price: p['sale_price'],
                 ),
               );
             });

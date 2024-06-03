@@ -9,38 +9,42 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HttpRequest {
   HttpRequest();
+
   AppDialogs appDialogs = AppDialogs();
   AppSnackBar appSnackBar = AppSnackBar();
 
-  String urlMain = "yademansystem.ir";
-  String key = "?consumer_key=ck_87e5e9071398235f51b9302d4d092254927b7d78";
-  String secret = "&consumer_secret=cs_fb67b105c68da2be1592e8dd6dc1b56d29d67e84";
+  String urlMain = 'yademansystem.ir';
+  String key = '?consumer_key=ck_87e5e9071398235f51b9302d4d092254927b7d78';
+  String secret = '&consumer_secret=cs_fb67b105c68da2be1592e8dd6dc1b56d29d67e84';
 
-  get urlProducts => "https://$urlMain/wp-json/wc/v3/products/";
+  get urlProducts => 'https://$urlMain/wp-json/wc/v3/products/';
 
-  get urlCategories => "https://$urlMain/wp-json/wc/v3/products/categories/";
+  get urlCategories => 'https://$urlMain/wp-json/wc/v3/products/categories/';
 
-  get urlProductReviews => "https://$urlMain/wp-json/wc/v3/products/reviews/";
+  get urlProductReviews => 'https://$urlMain/wp-json/wc/v3/products/reviews/';
 
-  get urlSignIn => "https://$urlMain/wp-json/jwt-auth/v1/token/";
+  get urlSignIn => 'https://$urlMain/wp-json/jwt-auth/v1/token/';
 
-  get urlSignUp => "https://yademansystem.ir/wp-json/wp/v2/users/register";
+  get urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register';
 
-  get urlUsers => "https://$urlMain/wp-json/wc/v3/customers/";
+  get urlUsers => 'https://$urlMain/wp-json/wc/v3/customers/';
 
-  get urlOrders => "https://$urlMain/wp-json/wc/v3/orders/";
+  get urlOrders => 'https://$urlMain/wp-json/wc/v3/orders/';
 
-  getRequest({required String url, String id = "", String details = ""}) async {
+  getRequest({required String url, String id = '', String details = ''}) async {
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
     try {
-      final getRequest = await http.get(Uri.parse(url + id + key + secret + details));
-      if (kDebugMode) {
-        print("Get Request >>>> ${getRequest.request}");
-      }
+      final getRequest = await http.get(Uri.parse(url + id + key + secret + details), headers: headers);
+      if (kDebugMode) print("Get Request >>>> ${getRequest.request}");
+
       dynamic json = jsonDecode(getRequest.body);
+
       if (getRequest.statusCode == 200) {
-        if (kDebugMode) {
-          print("JSON >>>> $json");
-        }
+        if (kDebugMode) print("JSON >>>> $json");
         return json;
       } else {
         if (kDebugMode) {
@@ -51,9 +55,7 @@ class HttpRequest {
         return false;
       }
     } catch (e) {
-      if (kDebugMode) {
-        print("ERROR >>>> $e");
-      }
+      if (kDebugMode) print("ERROR >>>> $e");
       // Get.offAll(const ConnectionError(), transition: Transition.fade, duration: const Duration(seconds: 1));
       return false;
     }
@@ -102,28 +104,22 @@ class HttpRequest {
   getProducts({
     int perPage = 10,
     int page = 1,
-    String order = "desc",
-    String orderby = "date",
-    String category = "",
-    String onSale = "",
+    String order = 'desc',
+    String orderBy = 'date',
+    String category = '',
+    String onSale = '',
   }) async {
-    String addCategory = "";
-    String addOnSale = "";
-    if (category.isNotEmpty) {
-      addCategory = "&category=$category";
-    }
-    if (onSale.isNotEmpty) {
-      addOnSale = "&on_sale=$onSale";
-    }
-    String details = "&per_page=$perPage&page=$page&order=$order&orderby=$orderby$addCategory$addOnSale";
+    String addCategory = '';
+    String addOnSale = '';
+    if (category.isNotEmpty) addCategory = '&category=$category';
+    if (onSale.isNotEmpty) addOnSale = '&on_sale=$onSale';
+    String details = "&per_page=$perPage&page=$page&order=$order&orderby=$orderBy$addCategory$addOnSale";
     return getRequest(url: urlProducts, details: details);
   }
 
   getProduct() async {
-    int id = Get.arguments["id"];
-    if (kDebugMode) {
-      print("product id >>>> $id");
-    }
+    int id = Get.arguments['id'];
+    if (kDebugMode) print("Product id >>>> $id");
     return getRequest(url: urlProducts, id: id.toString());
   }
 

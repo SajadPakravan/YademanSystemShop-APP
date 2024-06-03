@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
 
-class ProductImageCard extends StatelessWidget {
-  ProductImageCard({
-    super.key,
-    required this.listImage,
-    required this.listDet,
-    this.physics = const AlwaysScrollableScrollPhysics(),
-  });
+class ProductImageCard extends StatefulWidget {
+  const ProductImageCard({super.key, required this.list, this.physics = const AlwaysScrollableScrollPhysics()});
 
-  final AppFunction appFun = AppFunction();
-  final List<dynamic> listImage;
-  final List<dynamic> listDet;
   final ScrollPhysics physics;
+  final List<ProductModel> list;
+
+  @override
+  State<ProductImageCard> createState() => _ProductImageCardState();
+}
+
+class _ProductImageCardState extends State<ProductImageCard> {
+  final AppFunction appFun = AppFunction();
   BorderSide borderSideTop = BorderSide.none;
   BorderSide borderSideBottom = BorderSide.none;
   BorderSide borderSideLeft = BorderSide.none;
@@ -26,13 +26,13 @@ class ProductImageCard extends StatelessWidget {
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
       itemCount: 9,
       scrollDirection: Axis.vertical,
-      physics: physics,
+      physics: widget.physics,
       shrinkWrap: true,
       primary: false,
       padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
-        ProductModel productModel = listDet[index];
-        Images productImage = listImage[index];
+        ProductModel product = widget.list[index];
+        Images img = product.images![0];
         switch (index) {
           case 0:
           case 2:
@@ -79,12 +79,12 @@ class ProductImageCard extends StatelessWidget {
               ),
             ),
             child: CachedNetworkImage(
-              imageUrl: productImage.src!,
+              imageUrl: img.src!,
               fit: BoxFit.contain,
               errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
             ),
           ),
-          onTap: () => appFun.onTapProduct(id: productModel.id!),
+          onTap: () => appFun.onTapProduct(id: product.id!),
         );
       },
     );

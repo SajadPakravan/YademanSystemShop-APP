@@ -28,7 +28,7 @@ class _ShowAllScreenState extends State<ShowAllScreen> {
       page: page,
       category: category,
       order: order,
-      orderby: orderby,
+      orderBy: orderby,
       onSale: onSale,
     );
 
@@ -48,7 +48,7 @@ class _ShowAllScreenState extends State<ShowAllScreen> {
             id: p['id'],
             name: p['name'],
             regularPrice: p['regular_price'],
-            salePrice: p['sale_price'],
+            price: p['sale_price'],
           ),
         );
       });

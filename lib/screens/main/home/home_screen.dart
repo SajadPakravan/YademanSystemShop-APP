@@ -1,4 +1,3 @@
-import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yad_sys/view_models/home/home_view_model.dart';
@@ -12,32 +11,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  bool visibleReloadCover = true;
+  bool visibleContent = true;
   int slideIndex = 0;
 
-  onSlideChange(index) {
-    setState(() {
-      slideIndex = index;
-    });
-  }
+  onSlideChange(index) => setState(() => slideIndex = index);
 
   @override
   void initState() {
     super.initState();
     final homeModel = Provider.of<HomeViewModel>(context, listen: false);
-    if (homeModel.laptopDetLst.isEmpty) {
-      homeModel.loadData();
-    }
+    if (homeModel.laptopLst.isEmpty) homeModel.loadData();
   }
 
   onRefresh() async {
     final homeModel = Provider.of<HomeViewModel>(context, listen: false);
     homeModel.dataNumber = 1;
     homeModel.loadData();
-    await Future<void>.delayed(const Duration(seconds: 10));
-    setState(() => visibleReloadCover = false);
+    await Future<void>.delayed(const Duration(seconds: 15));
+    setState(() => visibleContent = false);
     await Future<void>.delayed(const Duration(milliseconds: 200));
-    setState(() => visibleReloadCover = true);
+    setState(() => visibleContent = true);
   }
 
   @override
@@ -46,22 +39,16 @@ class HomeScreenState extends State<HomeScreen> {
       return HomeView(
         context: context,
         onRefresh: onRefresh,
-        visibleReloadCover: visibleReloadCover,
+        visibleContent: visibleContent,
         showContent: homeModel.showContent,
         slideIndex: slideIndex,
         onSlideChange: onSlideChange,
-        offDetLst: homeModel.offDetLst,
-        offImgLst: homeModel.offImgLst,
+        discountLst: homeModel.discountLst,
         categoriesLst: homeModel.categoriesLst,
-        categoriesImgLst: homeModel.categoriesImgLst,
-        laptopDetLst: homeModel.laptopDetLst,
-        laptopImgLst: homeModel.laptopImgLst,
-        speakerDetLst: homeModel.speakerDetLst,
-        speakerImgLst: homeModel.speakerImgLst,
+        laptopLst: homeModel.laptopLst,
+        speakerLst: homeModel.speakerLst,
         internalDetLst: const [],
-        internalImgLst: const [],
         storageDetLst: const [],
-        storageImgLst: const [],
       );
     });
   }

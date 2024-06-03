@@ -53,8 +53,7 @@ class ShowAllView extends StatelessWidget {
                     child: Column(
                       children: [
                         ProductCardGrid(
-                          listDetails: productsDetLst,
-                          listImage: productsImgLst,
+                          list: productsDetLst,
                           physics: const NeverScrollableScrollPhysics(),
                         ),
                         moreProduct

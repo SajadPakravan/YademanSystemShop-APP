@@ -10,6 +10,7 @@ import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/themes/app_themes.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
+import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/search.dart';
 
 // ignore: must_be_immutable
@@ -20,8 +21,7 @@ class ShopView extends StatelessWidget {
     required this.onRefresh,
     required this.visibleReloadCover,
     required this.scrollController,
-    required this.productsDetLst,
-    required this.productsImgLst,
+    required this.productsLst,
     required this.moreProduct,
     required this.categoriesLst,
     required this.filtersLst,
@@ -40,8 +40,7 @@ class ShopView extends StatelessWidget {
   dynamic onRefresh;
   bool visibleReloadCover;
   ScrollController scrollController;
-  List<ProductModel> productsDetLst;
-  List<Images> productsImgLst;
+  List<ProductModel> productsLst;
   bool moreProduct;
   List<ProductCategoryModel> categoriesLst;
   List<Map<String, dynamic>> filtersLst;
@@ -75,30 +74,21 @@ class ShopView extends StatelessWidget {
               ),
             ],
             body: Center(
-              child: productsDetLst.isEmpty
-                  ? LoadingAnimationWidget.threeArchedCircle(
-                      color: Colors.black54,
-                      size: width * 0.1,
-                    )
+              child: productsLst.isEmpty
+                  ? const Loading()
                   : Visibility(
                       visible: visibleReloadCover,
                       child: Scaffold(
                         appBar: filterBtn(),
                         body: RefreshIndicator(
-                          onRefresh: () {
-                            return onRefresh();
-                          },
+                          onRefresh: () => onRefresh(),
                           child: SingleChildScrollView(
                             physics: const BouncingScrollPhysics(),
                             child: Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.only(top: 20),
-                                  child: ProductCardGrid(
-                                    listDetails: productsDetLst,
-                                    listImage: productsImgLst,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                  ),
+                                  child: ProductCardGrid(physics: const NeverScrollableScrollPhysics(), list: productsLst),
                                 ),
                                 moreProduct
                                     ? Padding(

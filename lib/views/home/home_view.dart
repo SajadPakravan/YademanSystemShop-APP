@@ -21,22 +21,16 @@ class HomeView extends StatelessWidget {
     super.key,
     required this.context,
     required this.onRefresh,
-    required this.visibleReloadCover,
+    required this.visibleContent,
     required this.showContent,
     required this.slideIndex,
     required this.onSlideChange,
-    required this.offDetLst,
-    required this.offImgLst,
+    required this.discountLst,
     required this.categoriesLst,
-    required this.categoriesImgLst,
-    required this.laptopDetLst,
-    required this.laptopImgLst,
-    required this.speakerDetLst,
-    required this.speakerImgLst,
+    required this.laptopLst,
+    required this.speakerLst,
     required this.internalDetLst,
-    required this.internalImgLst,
     required this.storageDetLst,
-    required this.storageImgLst,
   });
 
   final AppFunction appFun = AppFunction();
@@ -45,19 +39,13 @@ class HomeView extends StatelessWidget {
   final int slideIndex;
   final Function onSlideChange;
   final Function onRefresh;
-  final bool visibleReloadCover;
-  final List<ProductModel> offDetLst;
-  final List<Images> offImgLst;
+  final bool visibleContent;
+  final List<ProductModel> discountLst;
   final List<ProductCategoryModel> categoriesLst;
-  final List<ProductCategoryImage> categoriesImgLst;
-  final List<ProductModel> laptopDetLst;
-  final List<Images> laptopImgLst;
-  final List<ProductModel> speakerDetLst;
-  final List<Images> speakerImgLst;
+  final List<ProductModel> laptopLst;
+  final List<ProductModel> speakerLst;
   final List<ProductModel> internalDetLst;
-  final List<Images> internalImgLst;
   final List<ProductModel> storageDetLst;
-  final List<Images> storageImgLst;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +72,7 @@ class HomeView extends StatelessWidget {
 
   homeContent() {
     return Visibility(
-      visible: visibleReloadCover,
+      visible: visibleContent,
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
@@ -93,7 +81,7 @@ class HomeView extends StatelessWidget {
             const SizedBox(height: 20),
             const HomeMenu(),
             const SizedBox(height: 10),
-            offProducts(listDetails: offDetLst, listImage: offImgLst),
+            discountProducts(list: discountLst),
             parentCategories(),
             const SizedBox(height: 10),
             Container(
@@ -104,7 +92,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            productsOfCategoryImage(titleCatalog: "لپ‌تاپ", listDet: laptopDetLst, listImage: laptopImgLst, categoryId: 57),
+            productsOfCategoryImage(titleCategory: "لپ‌تاپ", list: laptopLst, categoryId: 57),
             const SizedBox(height: 20),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -114,7 +102,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            productsOfCategoryImage(titleCatalog: "اسپیکر", listDet: speakerDetLst, listImage: speakerImgLst, categoryId: 153),
+            productsOfCategoryImage(titleCategory: "اسپیکر", list: speakerLst, categoryId: 153),
             const SizedBox(height: 20),
           ],
         ),
@@ -122,10 +110,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  offProducts({required List listDetails, required List listImage}) {
+  discountProducts({required List list}) {
     double width = MediaQuery.of(context).size.width;
     return Visibility(
-      visible: listDetails.isEmpty ? false : true,
+      visible: list.isEmpty ? false : true,
       child: Container(
         margin: const EdgeInsets.only(bottom: 20),
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -149,7 +137,7 @@ class HomeView extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(width: width * 0.33),
-                  ProductCardHorizontal(listDetails: listDetails, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
+                  ProductCardHorizontal(physics: const NeverScrollableScrollPhysics(), list: discountLst),
                   ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
@@ -181,13 +169,13 @@ class HomeView extends StatelessWidget {
             itemCount: categoriesLst.length,
             itemBuilder: (BuildContext context, int index) {
               ProductCategoryModel category = categoriesLst[index];
-              ProductCategoryImage categoryImg = categoriesImgLst[index];
+              ProductCategoryImage img = category.image!;
               return InkWell(
                 onTap: () => appFun.onTapShowAll(title: category.name!, category: category.id.toString()),
                 child: Column(
                   children: [
                     CachedNetworkImage(
-                      imageUrl: categoryImg.src!,
+                      imageUrl: img.src!,
                       width: 80,
                       errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
                     ),
@@ -205,7 +193,7 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  productsOfCategoryImage({required String titleCatalog, required List listDet, required List listImage, required int categoryId}) {
+  productsOfCategoryImage({required String titleCategory, required List<ProductModel> list, required int categoryId}) {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       minVerticalPadding: 0,
@@ -215,13 +203,13 @@ class HomeView extends StatelessWidget {
           color: ColorStyle.blueFav,
           borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
         ),
-        child: TextBodyLargeView(titleCatalog, color: Colors.white),
+        child: TextBodyLargeView(titleCategory, color: Colors.white),
       ),
       subtitle: Column(
         children: [
           Container(
             decoration: BoxDecoration(border: Border.all(color: Colors.black38)),
-            child: ProductImageCard(listDet: listDet, listImage: listImage, physics: const NeverScrollableScrollPhysics()),
+            child: ProductImageCard(physics: const NeverScrollableScrollPhysics(), list: list),
           ),
           InkWell(
             child: Container(
@@ -239,63 +227,10 @@ class HomeView extends StatelessWidget {
                 ],
               ),
             ),
-            onTap: () => appFun.onTapShowAll(title: titleCatalog, category: categoryId.toString()),
+            onTap: () => appFun.onTapShowAll(title: titleCategory, category: categoryId.toString()),
           ),
         ],
       ),
     );
   }
-
-// productsOfCategory({
-//   required String titleCategory,
-//   required List listDetails,
-//   required List listImage,
-//   required int categoryId,
-// }) {
-//   double width = MediaQuery.of(context).size.width;
-//   double height = MediaQuery.of(context).size.height;
-//   return Container(
-//     margin: EdgeInsets.only(bottom: height * 0.03),
-//     padding: EdgeInsets.symmetric(vertical: width * 0.02),
-//     child: Column(
-//       children: [
-//         Container(
-//           padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-//           margin: EdgeInsets.only(bottom: width * 0.04),
-//           child: Row(
-//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//             children: [
-//               Row(
-//                 children: [
-//                   Padding(
-//                     padding: EdgeInsets.only(left: width * 0.02),
-//                     child: const Icon(
-//                       Icons.pix_rounded,
-//                       color: Color.fromRGBO(6, 82, 221, 1.0),
-//                       size: 20,
-//                     ),
-//                   ),
-//                   Text(
-//                     titleCategory,
-//                     style: Theme.of(context).textTheme.bodyMedium,
-//                   ),
-//                 ],
-//               ),
-//               InkWell(
-//                 child: Text(
-//                   "مشاهده همه",
-//                   style: Theme.of(context).textTheme.txtBtnBlue,
-//                 ),
-//                 onTap: () {
-//                   appFun.onTapShowAll(title: titleCategory, id: categoryId.toString());
-//                 },
-//               ),
-//             ],
-//           ),
-//         ),
-//         ProductCard(listDetails: listDetails, listImage: listImage),
-//       ],
-//     ),
-//   );
-// }
 }
