@@ -105,7 +105,7 @@ class ShopScreenState extends State<ShopScreen> {
       filtersLst.add({'name': appTexts.newest, 'order': order, 'orderby': orderBy, 'select': true});
       filtersLst.add({'name': appTexts.oldest, 'order': 'asc', 'orderby': 'date', 'select': false});
       filtersLst.add({'name': appTexts.off, 'order': 'desc', 'orderby': 'date', 'onSale': true, 'select': false});
-      filtersLst.add({"name": appTexts.expensive, "order": "desc", "orderby": "price", "select": false});
+      filtersLst.add({"name": appTexts.expensive, "order": "desc", 'orderby': "price", "select": false});
       filtersLst.add({"name": appTexts.cheapest, "order": "asc", "orderby": "price", "select": false});
       filtersLst.add({"name": appTexts.popular, "order": "desc", "orderby": "popularity", "select": false});
       filtersLst.add({"name": appTexts.score, "order": "desc", "orderby": "rating", "select": false});
