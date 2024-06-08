@@ -59,7 +59,6 @@ class HomeView extends StatelessWidget {
               floating: true,
               snap: true,
               backgroundColor: Colors.white,
-              elevation: 3,
               titleSpacing: 10,
               title: Search(),
             ),

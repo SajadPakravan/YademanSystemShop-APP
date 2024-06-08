@@ -121,7 +121,7 @@ class ShopScreenState extends State<ShopScreen> {
     });
   }
 
-  onMoreBtn() {
+  onMoreBtn() async {
     if (!moreProduct) {
       setState(() {
         moreProduct = true;
@@ -129,6 +129,7 @@ class ShopScreenState extends State<ShopScreen> {
       });
       getProducts();
     }
+    await Future<void>.delayed(const Duration(seconds: 5));
   }
 
   @override

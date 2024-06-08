@@ -106,7 +106,7 @@ class ProductCardGrid extends StatelessWidget {
                                             textAlign: TextAlign.left,
                                             fontWeight: FontWeight.bold,
                                           ),
-                                          const TextBodyMediumView("تومان", fontWeight: FontWeight.bold),
+                                          const TextBodyMediumView('تومان', fontWeight: FontWeight.bold),
                                         ],
                                       ),
                                     ),
