@@ -1,4 +1,6 @@
-class ProductCategoryModel {
+import 'package:flutter/material.dart';
+
+class ProductCategoryModel with ChangeNotifier {
   ProductCategoryModel({
     int? id,
     String? name,
@@ -12,7 +14,7 @@ class ProductCategoryModel {
     _parent = parent;
     _image = image;
     _count = count;
-    _select = select;
+    _select = select ?? false;
   }
 
   int? _id;
@@ -34,7 +36,10 @@ class ProductCategoryModel {
 
   bool? get getSelect => _select;
 
-  set setSelect(bool value) => _select = value;
+  set setSelect(bool value) {
+    _select = value;
+    notifyListeners();
+  }
 
   ProductCategoryModel.fromJson(dynamic json) {
     _id = json['id'];

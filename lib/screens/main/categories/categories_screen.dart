@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/models/product_categories_model.dart';
+import 'package:yad_sys/models/product_category_model.dart';
 import 'package:yad_sys/views/main_views/categories_view.dart';
 
 // ignore: must_be_immutable
