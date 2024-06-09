@@ -6,12 +6,7 @@ import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 bool all = true;
 
-selectCategories({
-  required BuildContext context,
-  required List<ProductCategoryModel> categoriesLst,
-  required List<int> id,
-  required Function() onPressed,
-}) async {
+selectFilter({required BuildContext context, required List<ProductCategoryModel> categoriesLst, required List<int> id, required Function() onPressed}) async {
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.red,

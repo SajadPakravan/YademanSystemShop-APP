@@ -12,29 +12,28 @@ class ShopScreen extends StatefulWidget {
   State<ShopScreen> createState() => ShopScreenState();
 }
 
-class ShopScreenState extends State<ShopScreen> {
+class ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
   HttpRequest httpRequest = HttpRequest();
+  List<ProductModel> productsLst = [];
+  List<ProductCategoryModel> categoriesLst = [];
+  List<int> categoriesId = [];
   bool visibleReloadCover = true;
   int page = 1;
   bool moreProduct = false;
-  List<ProductModel> productsLst = [];
-  List<ProductCategoryModel> categoriesLst = [];
-  List<String> categoriesName = [];
-  List<int> categoriesId = [];
   Map<String, List<String>> categoriesSave = {};
   List<Map<String, dynamic>> filtersLst = [];
   String order = 'desc';
   String orderBy = 'date';
   String onSale = '';
   List<Map<String, dynamic>> filterSave = [];
+  int productCount = 0;
 
-  loadCategories(categories) {
+  getCategories(categories) {
     if (categories != null && !categories.toString().contains(categoriesSave.toString())) {
       if (kDebugMode) {
         print("Different categories >>>> \ncategories >> $categories \ncategoriesSave >> $categoriesSave");
       }
       setState(() {
-        categoriesName = categories["categoriesName"];
         categoriesId = categories["categoriesId"];
         categoriesSave = categories;
         page = 1;
@@ -73,14 +72,24 @@ class ShopScreenState extends State<ShopScreen> {
   }
 
   getProducts() async {
+    if (!moreProduct) {
+      setState(() {
+        productsLst.clear();
+        page = 1;
+      });
+    }
     dynamic jsonProducts = await httpRequest.getProducts(
       page: page,
-      category: categoriesId.toString().replaceAll(RegExp(r'[^0-9,]'), ''),
+      category: categoriesId.isEmpty ? '' : categoriesId.toString().replaceAll(RegExp(r'[^0-9,]'), ''),
       order: order,
       orderBy: orderBy,
       onSale: onSale,
     );
-    jsonProducts.forEach((p) => productsLst.add(ProductModel.fromJson(p)));
+    setState(() => productCount = 0);
+    jsonProducts.forEach((p) {
+      productsLst.add(ProductModel.fromJson(p));
+      setState(() => productCount++);
+    });
     setState(() => moreProduct = false);
   }
 
@@ -124,7 +133,6 @@ class ShopScreenState extends State<ShopScreen> {
   }
 
   onRefresh() async {
-    setState(() => page = 1);
     getProducts();
     await Future<void>.delayed(const Duration(seconds: 3));
     setState(() => visibleReloadCover = false);
@@ -138,11 +146,13 @@ class ShopScreenState extends State<ShopScreen> {
       context: context,
       onRefresh: onRefresh,
       visibleReloadCover: visibleReloadCover,
+      tickerProvider: this,
       productsLst: productsLst,
+      productCount: productCount,
       moreProduct: moreProduct,
       categoriesLst: categoriesLst,
-      categoriesName: categoriesName,
       categoriesId: categoriesId,
+      getProducts: getProducts,
       filterSave: filterSave,
       onMoreBtn: onMoreBtn,
     );

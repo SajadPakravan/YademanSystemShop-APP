@@ -48,7 +48,7 @@ class ProductCardGrid extends StatelessWidget {
               width: width * 0.45,
               height: height,
               padding: const EdgeInsets.all(10),
-              margin: const EdgeInsets.all(10),
+              margin: const EdgeInsets.symmetric(horizontal: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border.all(color: Colors.black54, width: 2),
