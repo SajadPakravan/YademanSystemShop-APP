@@ -8,7 +8,6 @@ bool all = true;
 
 selectCategories({
   required BuildContext context,
-  required TickerProvider tickerProvider,
   required List<ProductCategoryModel> categoriesLst,
   required List<int> id,
   required Function() onPressed,
@@ -19,8 +18,6 @@ selectCategories({
     showDragHandle: true,
     enableDrag: true,
     isScrollControlled: true,
-    transitionAnimationController: AnimationController(vsync: tickerProvider, duration: const Duration(milliseconds: 500)),
-    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
     builder: (BuildContext context) {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {

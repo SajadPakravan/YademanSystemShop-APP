@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_loading_button/easy_loading_button.dart';
-import 'package:flutter/widgets.dart';
 import 'package:yad_sys/models/product_category_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/widgets/bottom_sheet/bottom_sheet_select_categories.dart';
@@ -17,28 +15,28 @@ class ShopView extends StatelessWidget {
     required this.context,
     required this.onRefresh,
     required this.visibleReloadCover,
-    required this.tickerProvider,
     required this.productsLst,
     required this.productCount,
     required this.moreProduct,
     required this.categoriesLst,
     required this.categoriesId,
     required this.getProducts,
-    required this.filterSave,
+    required this.filtersLst,
+    required this.filterSelected,
     required this.onMoreBtn,
   });
 
   final BuildContext context;
   final dynamic onRefresh;
   final bool visibleReloadCover;
-  final TickerProvider tickerProvider;
   final List<ProductModel> productsLst;
   final int productCount;
   final bool moreProduct;
   final List<ProductCategoryModel> categoriesLst;
   final List<int> categoriesId;
+  final List<Map<String, dynamic>> filtersLst;
+  final int filterSelected;
   final Function() getProducts;
-  final List<Map<String, dynamic>> filterSave;
   final Function onMoreBtn;
 
   @override
@@ -109,27 +107,15 @@ class ShopView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           TextButton(
-            onPressed: () => selectCategories(
-              context: context,
-              tickerProvider: tickerProvider,
-              categoriesLst: categoriesLst,
-              id: categoriesId,
-              onPressed: getProducts,
-            ),
+            onPressed: () => selectCategories(context: context, categoriesLst: categoriesLst, id: categoriesId, onPressed: getProducts),
             child: const Row(
               children: [TextBodyMediumView('دسته‌بندی‌ها', maxLines: 1), Icon(Icons.arrow_drop_down, color: Colors.black54)],
             ),
           ),
           TextButton(
-            onPressed: () => selectFilter(
-              context: context,
-              // tickerProvider: tickerProvider,
-              categoriesLst: categoriesLst,
-              id: categoriesId,
-              onPressed: getProducts,
-            ),
+            onPressed: () => selectFilter(context: context, filtersLst: filtersLst, selected: filterSelected, onPressed: getProducts),
             child: Row(
-              children: [TextBodyMediumView(filterSave[0]['name'], maxLines: 1), const Icon(Icons.arrow_drop_down, color: Colors.black54)],
+              children: [TextBodyMediumView(filtersLst[0]['name'], maxLines: 1), const Icon(Icons.arrow_drop_down, color: Colors.black54)],
             ),
           ),
         ],

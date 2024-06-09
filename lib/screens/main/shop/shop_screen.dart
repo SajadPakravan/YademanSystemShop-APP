@@ -12,38 +12,59 @@ class ShopScreen extends StatefulWidget {
   State<ShopScreen> createState() => ShopScreenState();
 }
 
-class ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
+class ShopScreenState extends State<ShopScreen> {
   HttpRequest httpRequest = HttpRequest();
   List<ProductModel> productsLst = [];
   List<ProductCategoryModel> categoriesLst = [];
   List<int> categoriesId = [];
+  List<Map<String, dynamic>> filtersLst = [];
+  int filterSelected = 1;
   bool visibleReloadCover = true;
   int page = 1;
   bool moreProduct = false;
   Map<String, List<String>> categoriesSave = {};
-  List<Map<String, dynamic>> filtersLst = [];
   String order = 'desc';
   String orderBy = 'date';
   String onSale = '';
   List<Map<String, dynamic>> filterSave = [];
   int productCount = 0;
 
-  getCategories(categories) {
-    if (categories != null && !categories.toString().contains(categoriesSave.toString())) {
-      if (kDebugMode) {
-        print("Different categories >>>> \ncategories >> $categories \ncategoriesSave >> $categoriesSave");
-      }
+  setFilters() async {
+    setState(() {
+      filtersLst.add({'id': 1, 'name': 'جدیدترین', 'order': 'desc', 'orderby': 'date', 'select': true});
+      filtersLst.add({'id': 2, 'name': 'قدیمی‌ترین', 'order': 'asc', 'orderby': 'date', 'select': false});
+      filtersLst.add({'id': 3, 'name': 'تخفیف خورده', 'order': 'desc', 'orderby': 'date', 'onSale': true, 'select': false});
+      filtersLst.add({'id': 4, 'name': 'گران‌ترین', 'order': 'desc', 'orderby': 'price', 'select': false});
+      filtersLst.add({'id': 5, 'name': 'ارزان ترین', 'order': 'asc', 'orderby': 'price', 'select': false});
+      filtersLst.add({'id': 6, 'name': 'محبوب‌ترین', 'order': 'desc', 'orderby': 'popularity', 'select': false});
+      filtersLst.add({'id': 7, 'name': 'بالاترین امتیاز', 'order': 'desc', 'orderby': 'rating', 'select': false});
+    });
+    dynamic jsonCategories = await httpRequest.getCategories(perPage: 100);
+    jsonCategories.forEach((category) {
+      setState(() => categoriesLst.add(ProductCategoryModel.fromJson(category)));
+    });
+  }
+
+  getProducts() async {
+    if (!moreProduct) {
       setState(() {
-        categoriesId = categories["categoriesId"];
-        categoriesSave = categories;
-        page = 1;
         productsLst.clear();
+        page = 1;
       });
-      getProducts();
-      if (kDebugMode) {
-        print("Save Categories >>>> \ncategories >> $categories \ncategoriesSave >> $categoriesSave");
-      }
     }
+    dynamic jsonProducts = await httpRequest.getProducts(
+      page: page,
+      category: categoriesId.isEmpty ? '' : categoriesId.toString().replaceAll(RegExp(r'[^0-9,]'), ''),
+      order: order,
+      orderBy: orderBy,
+      onSale: onSale,
+    );
+    setState(() => productCount = 0);
+    jsonProducts.forEach((p) {
+      productsLst.add(ProductModel.fromJson(p));
+      setState(() => productCount++);
+    });
+    setState(() => moreProduct = false);
   }
 
   loadFilters(filterIndex) {
@@ -71,49 +92,6 @@ class ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
     }
   }
 
-  getProducts() async {
-    if (!moreProduct) {
-      setState(() {
-        productsLst.clear();
-        page = 1;
-      });
-    }
-    dynamic jsonProducts = await httpRequest.getProducts(
-      page: page,
-      category: categoriesId.isEmpty ? '' : categoriesId.toString().replaceAll(RegExp(r'[^0-9,]'), ''),
-      order: order,
-      orderBy: orderBy,
-      onSale: onSale,
-    );
-    setState(() => productCount = 0);
-    jsonProducts.forEach((p) {
-      productsLst.add(ProductModel.fromJson(p));
-      setState(() => productCount++);
-    });
-    setState(() => moreProduct = false);
-  }
-
-  getParentCategoriesFilters() async {
-    setState(() {
-      filtersLst.add({'name': 'جدیدترین', 'order': order, 'orderby': orderBy, 'select': true});
-      filtersLst.add({'name': 'قدیمی‌ترین', 'order': 'asc', 'orderby': 'date', 'select': false});
-      filtersLst.add({'name': 'تخفیف خورده', 'order': 'desc', 'orderby': 'date', 'onSale': true, 'select': false});
-      filtersLst.add({"name": 'گران‌ترین', "order": "desc", 'orderby': "price", "select": false});
-      filtersLst.add({"name": 'ارزان ترین', "order": "asc", "orderby": "price", "select": false});
-      filtersLst.add({"name": 'محبوب‌ترین', "order": "desc", "orderby": "popularity", "select": false});
-      filtersLst.add({"name": 'بالاترین امتیاز', "order": "desc", "orderby": "rating", "select": false});
-      filterSave.add(filtersLst[0]);
-    });
-    dynamic jsonGetCategories = await httpRequest.getCategories(perPage: 100);
-    jsonGetCategories.forEach((pc) {
-      setState(() {
-        categoriesLst.add(
-          ProductCategoryModel(id: pc['id'], name: pc['name'], select: false),
-        );
-      });
-    });
-  }
-
   onMoreBtn() async {
     if (!moreProduct) {
       setState(() {
@@ -128,8 +106,8 @@ class ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    setFilters();
     getProducts();
-    getParentCategoriesFilters();
   }
 
   onRefresh() async {
@@ -146,14 +124,14 @@ class ShopScreenState extends State<ShopScreen> with TickerProviderStateMixin {
       context: context,
       onRefresh: onRefresh,
       visibleReloadCover: visibleReloadCover,
-      tickerProvider: this,
       productsLst: productsLst,
       productCount: productCount,
       moreProduct: moreProduct,
       categoriesLst: categoriesLst,
       categoriesId: categoriesId,
       getProducts: getProducts,
-      filterSave: filterSave,
+      filtersLst: filtersLst,
+      filterSelected: filterSelected,
       onMoreBtn: onMoreBtn,
     );
   }
