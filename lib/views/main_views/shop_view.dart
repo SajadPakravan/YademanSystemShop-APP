@@ -101,8 +101,12 @@ class ShopView extends StatelessWidget {
             onPressed: categoriesLst.isEmpty
                 ? null
                 : () async {
-                    var result = selectCategories(context: context, categoriesLst: categoriesLst);
-                    print(result);
+                    selectCategories(
+                      context: context,
+                      categoriesLst: categoriesLst,
+                      id: categoriesId,
+                      onPressed: () => print('categoriesId >>> $categoriesId'),
+                    );
                   },
             child: const Row(
               children: [TextBodyMediumView('دسته‌بندی‌ها', maxLines: 1), Icon(Icons.arrow_drop_down, color: Colors.black54)],
@@ -112,7 +116,7 @@ class ShopView extends StatelessWidget {
             child: Row(
               children: [
                 TextBodyMediumView(filterSave[0]['name'], maxLines: 1),
-                const Icon(Icons.arrow_drop_down, color: Colors.black54)
+                const Icon(Icons.arrow_drop_down, color: Colors.black54),
               ],
             ),
             onPressed: () {

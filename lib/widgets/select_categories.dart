@@ -5,9 +5,13 @@ import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 bool all = true;
-List<int> id = [];
 
-selectCategories({required BuildContext context, required List<ProductCategoryModel> categoriesLst}) async {
+selectCategories({
+  required BuildContext context,
+  required List<ProductCategoryModel> categoriesLst,
+  required List<int> id,
+  required Function() onPressed,
+}) async {
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.red,
@@ -67,7 +71,13 @@ selectCategories({required BuildContext context, required List<ProductCategoryMo
               ),
             ),
             bottomNavigationBar: ElevatedButton(
-              onPressed: !all && id.isEmpty ? null : () => Navigator.pop(context, all ? null : id),
+              onPressed: !all && id.isEmpty
+                  ? null
+                  : () {
+                      if (all) setState(() => id.clear());
+                      onPressed();
+                      Navigator.pop(context);
+                    },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(const RoundedRectangleBorder()),
                 backgroundColor: MaterialStateProperty.resolveWith<Color?>(
