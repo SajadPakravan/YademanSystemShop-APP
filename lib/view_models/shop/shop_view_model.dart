@@ -35,6 +35,7 @@ class ShopViewModel with ChangeNotifier {
     if (!moreProduct) {
       productsLst.clear();
       page = 1;
+      notifyListeners();
     }
 
     for (var filter in filtersLst) {
