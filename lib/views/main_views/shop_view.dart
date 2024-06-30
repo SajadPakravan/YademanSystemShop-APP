@@ -13,7 +13,6 @@ class ShopView extends StatelessWidget {
   const ShopView({
     super.key,
     required this.context,
-    required this.onRefresh,
     required this.visibleReloadCover,
     required this.productsLst,
     required this.productCount,
@@ -27,7 +26,6 @@ class ShopView extends StatelessWidget {
   });
 
   final BuildContext context;
-  final dynamic onRefresh;
   final bool visibleReloadCover;
   final List<ProductModel> productsLst;
   final int productCount;
