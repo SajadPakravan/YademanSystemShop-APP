@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_category_model.dart';
@@ -22,22 +21,18 @@ class ShopScreenState extends State<ShopScreen> {
   bool visibleReloadCover = true;
   int page = 1;
   bool moreProduct = false;
-  Map<String, List<String>> categoriesSave = {};
-  String order = 'desc';
-  String orderBy = 'date';
-  String onSale = '';
-  List<Map<String, dynamic>> filterSave = [];
   int productCount = 0;
+  bool loading = false;
 
   setFilters() async {
     setState(() {
-      filtersLst.add({'id': 1, 'name': 'جدیدترین', 'order': 'desc', 'orderby': 'date', 'select': true});
-      filtersLst.add({'id': 2, 'name': 'قدیمی‌ترین', 'order': 'asc', 'orderby': 'date', 'select': false});
-      filtersLst.add({'id': 3, 'name': 'تخفیف خورده', 'order': 'desc', 'orderby': 'date', 'onSale': true, 'select': false});
-      filtersLst.add({'id': 4, 'name': 'گران‌ترین', 'order': 'desc', 'orderby': 'price', 'select': false});
-      filtersLst.add({'id': 5, 'name': 'ارزان ترین', 'order': 'asc', 'orderby': 'price', 'select': false});
-      filtersLst.add({'id': 6, 'name': 'محبوب‌ترین', 'order': 'desc', 'orderby': 'popularity', 'select': false});
-      filtersLst.add({'id': 7, 'name': 'بالاترین امتیاز', 'order': 'desc', 'orderby': 'rating', 'select': false});
+      filtersLst.add({'index': 0, 'name': 'جدیدترین', 'order': 'desc', 'orderby': 'date', 'onSale': 'false', 'select': true});
+      filtersLst.add({'index': 1, 'name': 'قدیمی‌ترین', 'order': 'asc', 'orderby': 'date', 'onSale': 'false', 'select': false});
+      filtersLst.add({'index': 2, 'name': 'تخفیف خورده', 'order': 'desc', 'orderby': 'date', 'onSale': 'true', 'select': false});
+      filtersLst.add({'index': 3, 'name': 'گران‌ترین', 'order': 'desc', 'orderby': 'price', 'onSale': 'false', 'select': false});
+      filtersLst.add({'index': 4, 'name': 'ارزان ترین', 'order': 'asc', 'orderby': 'price', 'onSale': 'false', 'select': false});
+      filtersLst.add({'index': 5, 'name': 'محبوب‌ترین', 'order': 'desc', 'orderby': 'popularity', 'onSale': 'false', 'select': false});
+      filtersLst.add({'index': 6, 'name': 'بالاترین امتیاز', 'order': 'desc', 'orderby': 'rating', 'onSale': 'false', 'select': false});
     });
     dynamic jsonCategories = await httpRequest.getCategories(perPage: 100);
     jsonCategories.forEach((category) {
@@ -52,12 +47,18 @@ class ShopScreenState extends State<ShopScreen> {
         page = 1;
       });
     }
+
+    for (var filter in filtersLst) {
+      if (filter['select']) setState(() => filterSelected = filter['index']);
+    }
+    print(filtersLst[filterSelected]['name']);
+
     dynamic jsonProducts = await httpRequest.getProducts(
       page: page,
       category: categoriesId.isEmpty ? '' : categoriesId.toString().replaceAll(RegExp(r'[^0-9,]'), ''),
-      order: order,
-      orderBy: orderBy,
-      onSale: onSale,
+      order: filtersLst[filterSelected]['order'],
+      orderBy: filtersLst[filterSelected]['orderby'],
+      onSale: filtersLst[filterSelected]['onSale'],
     );
     setState(() => productCount = 0);
     jsonProducts.forEach((p) {
@@ -65,31 +66,6 @@ class ShopScreenState extends State<ShopScreen> {
       setState(() => productCount++);
     });
     setState(() => moreProduct = false);
-  }
-
-  loadFilters(filterIndex) {
-    if (filterIndex != null && !filterSave.contains(filtersLst[filterIndex])) {
-      if (kDebugMode) {
-        print("Different filter >>>> \nfilter >> ${filtersLst[filterIndex]} \nfilterSave >> $filterSave");
-      }
-      setState(() {
-        filterSave.clear();
-        filterSave.add(filtersLst[filterIndex]);
-        page = 1;
-        order = filtersLst[filterIndex]["order"];
-        orderBy = filtersLst[filterIndex]["orderby"];
-        productsLst.clear();
-      });
-      if (filtersLst[filterIndex].containsKey("onSale")) {
-        onSale = "true";
-      } else {
-        onSale = "";
-      }
-      getProducts();
-      if (kDebugMode) {
-        print("Save Filter >>>> \nfilter >> ${filtersLst[filterIndex]} \nfilterSave >> $filterSave");
-      }
-    }
   }
 
   onMoreBtn() async {

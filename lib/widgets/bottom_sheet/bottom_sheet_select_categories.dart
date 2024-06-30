@@ -18,6 +18,7 @@ selectCategories({
     showDragHandle: true,
     enableDrag: true,
     isScrollControlled: true,
+    constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.9),
     builder: (BuildContext context) {
       return StatefulBuilder(
         builder: (BuildContext context, StateSetter setState) {

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
-bool all = true;
-
 selectFilter({required BuildContext context, required List<Map<String, dynamic>> filtersLst, required int selected, required Function() onPressed}) async {
   showModalBottomSheet(
     context: context,
@@ -26,9 +24,25 @@ selectFilter({required BuildContext context, required List<Map<String, dynamic>>
                       return option(
                         title: filtersLst[index]['name'],
                         selected: selected,
-                        value: filtersLst[index]['id'],
-                        onChanged: (int? v) => setState(() => selected = v!),
-                        onTap: () => setState(() => selected = filtersLst[index]['id']),
+                        value: filtersLst[index]['index'],
+                        onChanged: (int? v) {
+                          for (var filter in filtersLst) {
+                            setState(() => filter['select'] = false);
+                          }
+                          setState(() {
+                            selected = v!;
+                            filtersLst[index]['select'] = true;
+                          });
+                        },
+                        onTap: () {
+                          for (var filter in filtersLst) {
+                            setState(() => filter['select'] = false);
+                          }
+                          setState(() {
+                            selected = index;
+                            filtersLst[index]['select'] = true;
+                          });
+                        },
                       );
                     },
                   ),
@@ -36,7 +50,10 @@ selectFilter({required BuildContext context, required List<Map<String, dynamic>>
               ),
             ),
             bottomNavigationBar: ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                onPressed();
+                Navigator.pop(context);
+              },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all(const RoundedRectangleBorder()),
                 backgroundColor: MaterialStateProperty.resolveWith<Color?>(
@@ -55,7 +72,7 @@ selectFilter({required BuildContext context, required List<Map<String, dynamic>>
   );
 }
 
-option({required String title, required int value, int? selected, required Function(int?) onChanged,required Function() onTap}) {
+option({required String title, required int value, int? selected, required Function(int?) onChanged, required Function() onTap}) {
   return ListTile(
     title: InkWell(onTap: onTap, child: TextBodyMediumView(title)),
     leading: Radio<int>(value: value, groupValue: selected, onChanged: onChanged),

@@ -41,60 +41,54 @@ class ShopView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Directionality(
-        textDirection: TextDirection.rtl,
-        child: Scaffold(
-          body: NestedScrollView(
-            floatHeaderSlivers: true,
-            physics: const NeverScrollableScrollPhysics(),
-            headerSliverBuilder: (context, innerBoxIsScrolled) => [
-              SliverAppBar(
-                floating: true,
-                snap: true,
-                backgroundColor: Colors.white,
-                titleSpacing: 0,
-                toolbarHeight: 100,
-                title: Column(
-                  children: [
-                    const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Search()),
-                    AnimatedOpacity(
-                      opacity: categoriesLst.isEmpty ? 0 : 1,
-                      duration: const Duration(milliseconds: 500),
-                      child: filterBtn(),
-                    ),
-                  ],
-                ),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        body: NestedScrollView(
+          floatHeaderSlivers: true,
+          physics: const NeverScrollableScrollPhysics(),
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              backgroundColor: Colors.white,
+              titleSpacing: 0,
+              toolbarHeight: 100,
+              title: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Search()),
+                  AnimatedOpacity(
+                    opacity: categoriesLst.isEmpty ? 0 : 1,
+                    duration: const Duration(milliseconds: 500),
+                    child: filterBtn(),
+                  ),
+                ],
               ),
-            ],
-            body: productsLst.isEmpty
-                ? const Loading()
-                : Visibility(
-                    visible: visibleReloadCover,
-                    child: RefreshIndicator(
-                      onRefresh: () => onRefresh(),
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 10),
-                            ProductCardGrid(physics: const NeverScrollableScrollPhysics(), list: productsLst),
-                            Visibility(
-                              visible: !(productCount < 10),
-                              child: EasyButton(
-                                type: EasyButtonType.text,
-                                idleStateWidget: const Icon(Icons.more_horiz, color: Colors.red, size: 40),
-                                loadingStateWidget: const Loading(),
-                                onPressed: onMoreBtn,
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                          ],
+            ),
+          ],
+          body: productsLst.isEmpty
+              ? const Loading()
+              : Visibility(
+                  visible: visibleReloadCover,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const SizedBox(height: 10),
+                        ProductCardGrid(physics: const NeverScrollableScrollPhysics(), list: productsLst),
+                        Visibility(
+                          visible: !(productCount < 10),
+                          child: EasyButton(
+                            type: EasyButtonType.text,
+                            idleStateWidget: const Icon(Icons.more_horiz, color: Colors.red, size: 40),
+                            loadingStateWidget: const Loading(),
+                            onPressed: onMoreBtn,
+                          ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                      ],
                     ),
                   ),
-          ),
+                ),
         ),
       ),
     );
@@ -109,13 +103,13 @@ class ShopView extends StatelessWidget {
           TextButton(
             onPressed: () => selectCategories(context: context, categoriesLst: categoriesLst, id: categoriesId, onPressed: getProducts),
             child: const Row(
-              children: [TextBodyMediumView('دسته‌بندی‌ها', maxLines: 1), Icon(Icons.arrow_drop_down, color: Colors.black54)],
+              children: [TextBodyMediumView('دسته‌بندی‌ها'), Icon(Icons.arrow_drop_down, color: Colors.black54)],
             ),
           ),
           TextButton(
             onPressed: () => selectFilter(context: context, filtersLst: filtersLst, selected: filterSelected, onPressed: getProducts),
             child: Row(
-              children: [TextBodyMediumView(filtersLst[0]['name'], maxLines: 1), const Icon(Icons.arrow_drop_down, color: Colors.black54)],
+              children: [TextBodyMediumView(filtersLst[filterSelected]['name']), const Icon(Icons.arrow_drop_down, color: Colors.black54)],
             ),
           ),
         ],
