@@ -1,5 +1,4 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yad_sys/models/product_category_model.dart';
@@ -41,7 +40,7 @@ class HomeView extends StatelessWidget {
   final Function onRefresh;
   final bool visibleContent;
   final List<ProductModel> discountLst;
-  final List<ProductCategoryModel> categoriesLst;
+  final List<CategoryModel> categoriesLst;
   final List<ProductModel> laptopLst;
   final List<ProductModel> speakerLst;
   final List<ProductModel> internalDetLst;
@@ -167,8 +166,8 @@ class HomeView extends StatelessWidget {
             padding: EdgeInsets.zero,
             itemCount: categoriesLst.length,
             itemBuilder: (BuildContext context, int index) {
-              ProductCategoryModel category = categoriesLst[index];
-              ProductCategoryImage img = category.image!;
+              CategoryModel category = categoriesLst[index];
+              CategoryImage img = category.image!;
               return InkWell(
                 onTap: () => appFun.onTapShowAll(title: category.name!, category: category.id.toString()),
                 child: Column(

@@ -6,11 +6,11 @@ import 'package:yad_sys/connections/http_request.dart';
 // ignore: must_be_immutable
 class ProductImagesSlide extends StatelessWidget {
   ProductImagesSlide({
-    Key? key,
+    super.key,
     required this.currentSlide,
     required this.moveSlide,
     required this.json,
-  }) : super(key: key);
+  });
 
   CarouselController slideCtrl = CarouselController();
   Function moveSlide;

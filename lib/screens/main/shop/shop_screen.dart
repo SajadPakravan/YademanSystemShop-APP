@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/models/product_category_model.dart';
-import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/view_models/shop/shop_view_model.dart';
 import 'package:yad_sys/views/main_views/shop_view.dart';
 

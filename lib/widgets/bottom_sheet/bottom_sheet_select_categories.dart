@@ -8,7 +8,7 @@ bool all = true;
 
 selectCategories({
   required BuildContext context,
-  required List<ProductCategoryModel> categoriesLst,
+  required List<CategoryModel> categoriesLst,
   required List<int> id,
   required Function() onPressed,
 }) async {
@@ -47,7 +47,7 @@ selectCategories({
                         (index) {
                           return ChangeNotifierProvider.value(
                             value: categoriesLst[index],
-                            child: Consumer<ProductCategoryModel>(
+                            child: Consumer<CategoryModel>(
                               builder: (context, category, child) {
                                 return option(
                                   title: category.name!,

@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 
 class ProductImagesScreen extends StatefulWidget {
-  const ProductImagesScreen({Key? key}) : super(key: key);
+  const ProductImagesScreen({super.key});
 
   @override
   State<ProductImagesScreen> createState() => _ProductImagesScreenState();

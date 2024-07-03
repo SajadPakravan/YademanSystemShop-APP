@@ -8,6 +8,7 @@ import 'package:yad_sys/screens/main/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';
 import 'package:yad_sys/themes/theme.dart';
 import 'package:yad_sys/tools/app_texts.dart';
+import 'package:yad_sys/view_models/categories/categories_view_model.dart';
 import 'package:yad_sys/view_models/home/home_view_model.dart';
 import 'package:yad_sys/view_models/shop/shop_view_model.dart';
 
@@ -17,7 +18,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => HomeViewModel()),
         ChangeNotifierProvider(create: (_) => ShopViewModel()),
-        ChangeNotifierProvider(create: (_) => ProductCategoryModel()),
+        ChangeNotifierProvider(create: (_) => CategoriesViewModel()),
+        ChangeNotifierProvider(create: (_) => CategoryModel()),
       ],
       child: const YademanSystemShop(),
     ),

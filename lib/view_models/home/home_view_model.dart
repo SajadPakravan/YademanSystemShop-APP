@@ -7,7 +7,7 @@ import 'package:yad_sys/models/product_model.dart';
 class HomeViewModel with ChangeNotifier {
   final HttpRequest _httpRequest = HttpRequest();
   List<ProductModel> discountLst = [];
-  List<ProductCategoryModel> categoriesLst = [];
+  List<CategoryModel> categoriesLst = [];
   List<ProductModel> laptopLst = [];
   List<ProductModel> speakerLst = [];
   int _dataNumber = 1;
@@ -30,7 +30,7 @@ class HomeViewModel with ChangeNotifier {
 
   getParentCategories() async {
     dynamic jsonCategories = await _httpRequest.getCategories(perPage: 9, include: "57,1818,1809,54,153,158,67,1601,1773,51,1816,151");
-    jsonCategories.forEach((c) => categoriesLst.add(ProductCategoryModel.fromJson(c)));
+    jsonCategories.forEach((c) => categoriesLst.add(CategoryModel.fromJson(c)));
     _dataNumber++;
     loadData();
     notifyListeners();

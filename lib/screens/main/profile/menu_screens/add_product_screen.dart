@@ -8,7 +8,7 @@ import 'package:yad_sys/connections/http_request.dart';
 
 // ignore: must_be_immutable
 class AddProductScreen extends StatefulWidget {
-  AddProductScreen({Key? key}) : super(key: key);
+  AddProductScreen({super.key});
 
   bool attributeEmpty = false;
 

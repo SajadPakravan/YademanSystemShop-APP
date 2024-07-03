@@ -6,7 +6,7 @@ import 'package:yad_sys/models/product_model.dart';
 class ShopViewModel with ChangeNotifier {
   HttpRequest httpRequest = HttpRequest();
   List<ProductModel> productsLst = [];
-  List<ProductCategoryModel> categoriesLst = [];
+  List<CategoryModel> categoriesLst = [];
   List<int> categoriesId = [];
   List<Map<String, dynamic>> filtersLst = [];
   int filterSelected = 1;
@@ -25,7 +25,7 @@ class ShopViewModel with ChangeNotifier {
     filtersLst.add({'index': 6, 'name': 'بالاترین امتیاز', 'order': 'desc', 'orderby': 'rating', 'onSale': 'false', 'select': false});
     dynamic jsonCategories = await httpRequest.getCategories(perPage: 100);
     jsonCategories.forEach((category) {
-      categoriesLst.add(ProductCategoryModel.fromJson(category));
+      categoriesLst.add(CategoryModel.fromJson(category));
       notifyListeners();
     });
     notifyListeners();

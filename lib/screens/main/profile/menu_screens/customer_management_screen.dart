@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class CustomerManagementScreen extends StatefulWidget {
-  const CustomerManagementScreen({Key? key}) : super(key: key);
+  const CustomerManagementScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

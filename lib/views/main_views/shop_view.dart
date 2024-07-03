@@ -30,7 +30,7 @@ class ShopView extends StatelessWidget {
   final List<ProductModel> productsLst;
   final int productCount;
   final bool moreProduct;
-  final List<ProductCategoryModel> categoriesLst;
+  final List<CategoryModel> categoriesLst;
   final List<int> categoriesId;
   final List<Map<String, dynamic>> filtersLst;
   final int filterSelected;

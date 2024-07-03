@@ -11,8 +11,8 @@ class ProductSlide extends StatelessWidget {
     required this.jsonProduct,
     required this.slideIndex,
     required this.onSlideChange,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   HttpRequest httpRequest = HttpRequest();
   PageController pageCtrl = PageController();

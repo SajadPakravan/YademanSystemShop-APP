@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 
 class SendMessageScreen extends StatefulWidget {
-  const SendMessageScreen({Key? key}) : super(key: key);
+  const SendMessageScreen({super.key});
 
   @override
   // ignore: library_private_types_in_public_api

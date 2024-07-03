@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class ProductCategoryModel with ChangeNotifier {
-  ProductCategoryModel({
+class CategoryModel with ChangeNotifier {
+  CategoryModel({
     int? id,
     String? name,
     int? parent,
-    ProductCategoryImage? image,
+    CategoryImage? image,
     int? count,
     bool? select,
   }) {
@@ -20,7 +20,7 @@ class ProductCategoryModel with ChangeNotifier {
   int? _id;
   String? _name;
   int? _parent;
-  ProductCategoryImage? _image;
+  CategoryImage? _image;
   int? _count;
   bool? _select;
 
@@ -30,7 +30,7 @@ class ProductCategoryModel with ChangeNotifier {
 
   int? get parent => _parent;
 
-  ProductCategoryImage? get image => _image;
+  CategoryImage? get image => _image;
 
   int? get count => _count;
 
@@ -41,11 +41,11 @@ class ProductCategoryModel with ChangeNotifier {
     notifyListeners();
   }
 
-  ProductCategoryModel.fromJson(dynamic json) {
+  CategoryModel.fromJson(dynamic json) {
     _id = json['id'];
     _name = json['name'];
     _parent = json['parent'];
-    _image = json['image'] != null ? ProductCategoryImage.fromJson(json['image']) : null;
+    _image = json['image'] != null ? CategoryImage.fromJson(json['image']) : null;
     _count = json['count'];
   }
 
@@ -60,12 +60,12 @@ class ProductCategoryModel with ChangeNotifier {
   }
 }
 
-class ProductCategoryImage {
-  ProductCategoryImage({String? src}) {
+class CategoryImage {
+  CategoryImage({String? src}) {
     _src = src;
   }
 
-  ProductCategoryImage.fromJson(dynamic json) {
+  CategoryImage.fromJson(dynamic json) {
     _src = json['src'];
   }
 
