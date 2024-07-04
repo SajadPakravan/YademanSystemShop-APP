@@ -5,14 +5,10 @@ import 'package:yad_sys/database/yademan_db.dart';
 import 'package:yad_sys/models/user_model.dart';
 import 'package:yad_sys/views/account_views/sign_in_view.dart';
 
-// ignore: must_be_immutable
 class SignInScreen extends StatefulWidget {
-  SignInScreen({
-    required this.pageCtrl,
-    super.key,
-  });
+  const SignInScreen({super.key, required this.pageCtrl});
 
-  PageController pageCtrl;
+  final PageController pageCtrl;
 
   @override
   State<SignInScreen> createState() => SignInScreenState();
@@ -75,7 +71,6 @@ class SignInScreenState extends State<SignInScreen> {
     if (!emailErrVis && !passErrVis) {
       await Future<void>.delayed(const Duration(seconds: 3));
       dynamic jsonSignIn = await httpRequest.signIn(email: emailCtrl.text, password: passCtrl.text);
-
       if (jsonSignIn != false) {
         await YadSysDB.instance.insert(User(
           token: jsonSignIn['token'],

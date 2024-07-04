@@ -71,18 +71,15 @@ class HttpRequest {
       if (kDebugMode) {
         print("postRequest.request >>>> ${postRequest.request}");
       }
-      dynamic json;
+      dynamic json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == 200) {
         json = jsonDecode(postRequest.body);
-        if (kDebugMode) {
-          print("JSON >>>> $json");
-        }
+        if (kDebugMode) print("JSON >>>> $json");
         return json;
       } else {
         if (kDebugMode) {
           print("Request ERROR >>>: ${postRequest.request}");
           print("Status Code >>>:  ${postRequest.statusCode}");
-          json = jsonDecode(postRequest.body);
           print("Json ERROR >>>:  $json");
         }
         // ignore: use_build_context_synchronously

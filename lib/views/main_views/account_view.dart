@@ -40,62 +40,20 @@ class AccountView extends StatelessWidget {
   }
 
   loggedContent() {
-    return ;
-  }
-
-  appBar() {
-    double width = MediaQuery.of(context).size.width;
-    return SliverAppBar(
-      floating: true,
-      snap: true,
-      backgroundColor: Colors.white,
-      elevation: 5,
-      toolbarHeight: 150,
-      flexibleSpace: Container(
-        color: ColorStyle.blueFav,
-        padding: EdgeInsets.all(width * 0.03),
-        child: SafeArea(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Icon(Icons.settings),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.account_circle_rounded, color: Colors.white, size: width * 0.2),
-                  Text(name, style: Theme.of(context).textTheme.buttonText1),
-                  Text(email, style: Theme.of(context).textTheme.buttonText1),
-                ],
-              ),
-              const Icon(Icons.call_rounded),
-            ],
-          ),
-        ),
-      ),
-    );
+    return;
   }
 
   notLoggedContent() {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(80),
+        child: SafeArea(child: Icon(Icons.account_circle, color: Colors.grey, size: 100)),
+      ),
       body: PageView(
         controller: pageCtrl,
         physics: const NeverScrollableScrollPhysics(),
-        children: [
-          SignInScreen(pageCtrl: pageCtrl),
-          SignUpScreen(pageCtrl: pageCtrl),
-        ],
+        children: [SignInScreen(pageCtrl: pageCtrl), SignUpScreen(pageCtrl: pageCtrl)],
       ),
     );
-  }
-
-  topCover() {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
-    return Container(
-        width: width,
-        height: height * 0.3,
-        color: ColorStyle.blueFav,
-        child: Icon(Icons.account_circle_rounded, color: Colors.white, size: width * 0.2));
   }
 }
