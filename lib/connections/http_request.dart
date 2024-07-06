@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/app_snackbar.dart';
@@ -6,12 +7,10 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yad_sys/widgets/snack_bar_view.dart';
 
 class HttpRequest {
   HttpRequest();
-
-  AppDialogs appDialogs = AppDialogs();
-  AppSnackBar appSnackBar = AppSnackBar();
 
   String urlMain = 'yademansystem.ir';
   String key = '?consumer_key=ck_87e5e9071398235f51b9302d4d092254927b7d78';
@@ -61,16 +60,14 @@ class HttpRequest {
     }
   }
 
-  postRequest({required String url, required Map<String, dynamic> body, required String error}) async {
+  postRequest({required BuildContext context, required String url, required Map<String, dynamic> body, required String error}) async {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
 
     try {
       final postRequest = await http.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
-      if (kDebugMode) {
-        print("postRequest.request >>>> ${postRequest.request}");
-      }
+      if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       dynamic json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == 200) {
         json = jsonDecode(postRequest.body);
@@ -78,12 +75,10 @@ class HttpRequest {
         return json;
       } else {
         if (kDebugMode) {
-          print("Request ERROR >>>: ${postRequest.request}");
           print("Status Code >>>:  ${postRequest.statusCode}");
           print("Json ERROR >>>:  $json");
         }
-        // ignore: use_build_context_synchronously
-        // appSnackBar.error(context: context, message: error);
+        if (context.mounted) SnackBarView.show(context, error);
         return false;
       }
     } catch (e) {
@@ -138,14 +133,14 @@ class HttpRequest {
     return getRequest(url: urlProductReviews, details: details);
   }
 
-  signUp({required String email, required String password}) async {
+  signUp({required BuildContext context, required String email, required String password}) async {
     Map<String, String> body = {"username": email, "email": email, "password": password};
-    return postRequest(url: urlSignUp, body: body, error: "ایمیل وارد شده قبلا ثبت شده است");
+    return postRequest(context: context, url: urlSignUp, body: body, error: "ایمیل وارد شده قبلا ثبت شده است");
   }
 
-  signIn({required String email, required String password}) async {
-    Map<String, String> body = {"username": email, "password": password};
-    return postRequest(url: urlSignIn, body: body, error: "اطلاعات ورود صحیح نمی‌باشد");
+  signIn({required BuildContext context, required String email, required String password}) async {
+    Map<String, String> body = {'username': email, 'password': password};
+    return postRequest(context: context, url: urlSignIn, body: body, error: 'اطلاعات ورود صحیح نمی‌باشد');
   }
 
   getUser({String role = "all"}) async {

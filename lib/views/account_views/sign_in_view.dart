@@ -1,13 +1,13 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
-import 'package:yad_sys/themes/app_themes.dart';
+import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
-// ignore: must_be_immutable
 class SignInView extends StatelessWidget {
   SignInView({
+    super.key,
     required this.context,
     required this.emailCtrl,
     required this.passCtrl,
@@ -20,24 +20,23 @@ class SignInView extends StatelessWidget {
     required this.passErrVis,
     required this.passErrStr,
     required this.pageCtrl,
-    super.key,
   });
 
-  BuildContext context;
-  AppTexts appTexts = AppTexts();
-  TextEditingController emailCtrl;
-  TextEditingController passCtrl;
-  bool obscureText;
-  bool showPass;
-  TextInputType keyboardType = TextInputType.emailAddress;
-  IconData icon = Icons.email_rounded;
-  Function showPassFun;
-  Function signInFun;
-  bool emailErrVis;
-  String emailErrStr;
-  bool passErrVis;
-  String passErrStr;
-  PageController pageCtrl;
+  final BuildContext context;
+  final AppTexts appTexts = AppTexts();
+  final TextEditingController emailCtrl;
+  final TextEditingController passCtrl;
+  final bool obscureText;
+  final bool showPass;
+  final TextInputType keyboardType = TextInputType.emailAddress;
+  final IconData icon = Icons.email_rounded;
+  final Function showPassFun;
+  final Function signInFun;
+  final bool emailErrVis;
+  final String emailErrStr;
+  final bool passErrVis;
+  final String passErrStr;
+  final PageController pageCtrl;
 
   @override
   Widget build(BuildContext context) {
@@ -52,89 +51,57 @@ class SignInView extends StatelessWidget {
               children: [
                 textFormField(
                   controller: emailCtrl,
-                  hint: "ایمیل",
+                  hint: 'ایمیل',
                   icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
                   errorVis: emailErrVis,
                   errorStr: emailErrStr,
                 ),
+                const SizedBox(height: 20),
                 textFormField(
                   controller: passCtrl,
-                  hint: "گذرواژه",
+                  hint: 'کلمه عبور',
                   icon: Icons.lock,
                   obscureText: obscureText,
                   keyboardType: TextInputType.visiblePassword,
                   errorVis: passErrVis,
                   errorStr: passErrStr,
                 ),
-                Container(
+                const SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CheckboxMenuButton(
+                      value: showPass,
+                      onChanged: (v) => showPassFun(v),
+                      child: const TextBodyMediumView('نمایش کلمه عبور'),
+                    ),
+                    const SizedBox(width: 10),
+                    InkWell(
+                      child: const TextBodyMediumView('فراموشی کلمه عبور', color: ColorStyle.blueFav),
+                      onTap: () {},
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                EasyButton(
+                  idleStateWidget: const TextBodyMediumView('ورود', color: Colors.white),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading()),
+                  buttonColor: ColorStyle.blueFav,
                   width: width,
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Row(
-                      children: [
-                        CheckboxMenuButton(
-                          value: showPass,
-                          onChanged: (v) {
-                            showPassFun(v);
-                          },
-                          child: Text("نمایش گذرواژه", style: Theme.of(context).textTheme.bodyMedium),
-                        ),
-                        SizedBox(
-                          width: width * 0.1,
-                        ),
-                        InkWell(
-                          child: Text(
-                            "گذرواژه خود را فراموش کرده‌اید؟",
-                            style: Theme.of(context).textTheme.txtBtnBlue,
-                          ),
-                          onTap: () {
-                            // appFun.onTapShowAll(title: titleCatalog, id: categoryId.toString());
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
+                  height: 50,
+                  borderRadius: width,
+                  onPressed: signInFun,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: EasyButton(
-                    idleStateWidget: Text("ورود", style: Theme.of(context).textTheme.buttonText1),
-                    loadingStateWidget: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: LoadingAnimationWidget.threeArchedCircle(
-                        color: Colors.white,
-                        size: width * 0.1,
-                      ),
-                    ),
-                    buttonColor: ColorStyle.blueFav,
-                    width: width,
-                    height: 50,
-                    borderRadius: width,
-                    onPressed: signInFun,
-                  ),
-                ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "کاربر جدید هستید؟",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    const TextBodyMediumView('کاربر جدید هستید؟'),
                     const SizedBox(width: 5),
                     InkWell(
-                      child: Text(
-                        "ثبت‌نام کنید",
-                        style: Theme.of(context).textTheme.txtBtnBlue,
-                      ),
-                      onTap: () {
-                        pageCtrl.animateToPage(
-                          1,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      },
+                      child: const TextBodyMediumView('ثبت‌نام کنید', color: ColorStyle.blueFav),
+                      onTap: () => pageCtrl.animateToPage(1, duration: const Duration(milliseconds: 500), curve: Curves.linear),
                     ),
                   ],
                 ),
@@ -156,41 +123,34 @@ class SignInView extends StatelessWidget {
     required String errorStr,
   }) {
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        children: [
-          TextFormField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            obscuringCharacter: "*",
-            style: Theme.of(context).textTheme.textField,
-            // inputFormatters: [],
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              hintText: hint,
-              hintStyle: Theme.of(context).textTheme.hintText,
-              hintTextDirection: TextDirection.rtl,
-              prefixIcon: Icon(icon),
-              fillColor: const Color.fromRGBO(223, 228, 234, 1.0),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(width)),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(width)),
-                borderSide: const BorderSide(color: ColorStyle.blueFav, width: 2),
-              ),
+    return Column(
+      children: [
+        TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          style: Theme.of(context).textTheme.bodyMedium,
+          textDirection: TextDirection.ltr,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            hintText: hint,
+            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            hintTextDirection: TextDirection.rtl,
+            prefixIcon: Icon(icon),
+            fillColor: const Color.fromRGBO(223, 228, 234, 1.0),
+            filled: true,
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(width)), borderSide: const BorderSide()),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(width)),
+              borderSide: const BorderSide(color: ColorStyle.blueFav, width: 2),
             ),
           ),
-          Visibility(
-            visible: errorVis,
-            child: Text(errorStr, style: Theme.of(context).textTheme.errorText3),
-          ),
-        ],
-      ),
+        ),
+        Visibility(
+          visible: errorVis,
+          child: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyMediumView(errorStr, color: Colors.red)),
+        ),
+      ],
     );
   }
 }

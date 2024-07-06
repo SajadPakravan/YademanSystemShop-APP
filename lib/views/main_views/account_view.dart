@@ -45,9 +45,11 @@ class AccountView extends StatelessWidget {
 
   notLoggedContent() {
     return Scaffold(
-      appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(80),
-        child: SafeArea(child: Icon(Icons.account_circle, color: Colors.grey, size: 100)),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        toolbarHeight: 100,
+        title: const Icon(Icons.account_circle, color: Colors.grey, size: 100),
       ),
       body: PageView(
         controller: pageCtrl,

@@ -91,16 +91,16 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     if (!emailErrVis && !passErrVis && !rePassErrVis) {
       await Future<void>.delayed(const Duration(seconds: 3));
-      dynamic jsonSignUp = await httpRequest.signUp(email: emailCtrl.text, password: passCtrl.text);
+      // dynamic jsonSignUp = await httpRequest.signUp(email: emailCtrl.text, password: passCtrl.text);
 
-      if (jsonSignUp != false) {
-        dynamic jsonSignIn = await httpRequest.signIn(email: emailCtrl.text, password: passCtrl.text);
-        await YadSysDB.instance.insert(User(
-          token: jsonSignIn['token'],
-          name: jsonSignIn['user_display_name'],
-          email: jsonSignIn['user_email'],
-        ));
-      }
+      // if (jsonSignUp != false) {
+      //   dynamic jsonSignIn = await httpRequest.signIn(email: emailCtrl.text, password: passCtrl.text);
+      //   await YadSysDB.instance.insert(User(
+      //     token: jsonSignIn['token'],
+      //     name: jsonSignIn['user_display_name'],
+      //     email: jsonSignIn['user_email'],
+      //   ));
+      // }
     }
   }
 

@@ -1,8 +1,7 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/database/yademan_db.dart';
-import 'package:yad_sys/models/user_model.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/account_views/sign_in_view.dart';
 
 class SignInScreen extends StatefulWidget {
@@ -41,8 +40,6 @@ class SignInScreenState extends State<SignInScreen> {
 
   signInFun() async {
     setState(() {
-      emailCtrl.text = emailCtrl.text.replaceAll(" ", "");
-      passCtrl.text = passCtrl.text.replaceAll(" ", "");
       emailErrVis = false;
       passErrVis = false;
     });
@@ -50,13 +47,13 @@ class SignInScreenState extends State<SignInScreen> {
     if (emailCtrl.text.isEmpty) {
       setState(() {
         emailErrVis = true;
-        emailErrStr = "لطفا ایمل را وارد کنید";
+        emailErrStr = 'لطفا ایمل را وارد کنید';
       });
     } else {
       if (!EmailValidator.validate(emailCtrl.text, true)) {
         setState(() {
           emailErrVis = true;
-          emailErrStr = "ایمیل وارد شده معتبر نیست";
+          emailErrStr = 'ایمیل وارد شده معتبر نیست';
         });
       }
     }
@@ -64,19 +61,20 @@ class SignInScreenState extends State<SignInScreen> {
     if (passCtrl.text.isEmpty) {
       setState(() {
         passErrVis = true;
-        passErrStr = "لطفا گذرواژه را وارد کنید";
+        passErrStr = "لطفا کلمه عبور را وارد کنید";
       });
     }
 
     if (!emailErrVis && !passErrVis) {
       await Future<void>.delayed(const Duration(seconds: 3));
-      dynamic jsonSignIn = await httpRequest.signIn(email: emailCtrl.text, password: passCtrl.text);
-      if (jsonSignIn != false) {
-        await YadSysDB.instance.insert(User(
-          token: jsonSignIn['token'],
-          name: jsonSignIn['user_display_name'],
-          email: jsonSignIn['user_email'],
-        ));
+      if (mounted) {
+        dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
+        if (jsonSignIn != false) {
+          AppCache cache = AppCache();
+          await cache.setString('token', jsonSignIn['token']);
+          await cache.setString('email', jsonSignIn['user_email']);
+          await cache.setString('name', jsonSignIn['user_display_name']);
+        }
       }
     }
   }
