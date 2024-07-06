@@ -54,6 +54,7 @@ class SignInView extends StatelessWidget {
                   hint: 'ایمیل',
                   icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   errorVis: emailErrVis,
                   errorStr: emailErrStr,
                 ),
@@ -86,7 +87,7 @@ class SignInView extends StatelessWidget {
                 const SizedBox(height: 20),
                 EasyButton(
                   idleStateWidget: const TextBodyMediumView('ورود', color: Colors.white),
-                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading()),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
                   buttonColor: ColorStyle.blueFav,
                   width: width,
                   height: 50,
@@ -119,6 +120,7 @@ class SignInView extends StatelessWidget {
     required IconData icon,
     bool obscureText = false,
     required TextInputType keyboardType,
+    TextInputAction textInputAction = TextInputAction.done,
     required bool errorVis,
     required String errorStr,
   }) {
@@ -130,6 +132,7 @@ class SignInView extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           style: Theme.of(context).textTheme.bodyMedium,
+          textInputAction: textInputAction,
           textDirection: TextDirection.ltr,
           decoration: InputDecoration(
             contentPadding: const EdgeInsets.symmetric(horizontal: 10),

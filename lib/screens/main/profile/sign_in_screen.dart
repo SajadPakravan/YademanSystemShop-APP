@@ -61,12 +61,11 @@ class SignInScreenState extends State<SignInScreen> {
     if (passCtrl.text.isEmpty) {
       setState(() {
         passErrVis = true;
-        passErrStr = "لطفا کلمه عبور را وارد کنید";
+        passErrStr = 'لطفا کلمه عبور را وارد کنید';
       });
     }
 
     if (!emailErrVis && !passErrVis) {
-      await Future<void>.delayed(const Duration(seconds: 3));
       if (mounted) {
         dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
         if (jsonSignIn != false) {
@@ -74,8 +73,10 @@ class SignInScreenState extends State<SignInScreen> {
           await cache.setString('token', jsonSignIn['token']);
           await cache.setString('email', jsonSignIn['user_email']);
           await cache.setString('name', jsonSignIn['user_display_name']);
+
         }
       }
+      await Future<void>.delayed(const Duration(seconds: 3));
     }
   }
 

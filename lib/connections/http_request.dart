@@ -1,8 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:yad_sys/screens/connection_error.dart';
-import 'package:yad_sys/widgets/app_dialogs.dart';
-import 'package:yad_sys/widgets/app_snackbar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;

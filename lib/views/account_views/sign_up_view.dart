@@ -4,10 +4,12 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/themes/app_themes.dart';
+import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
-// ignore: must_be_immutable
 class SignUpView extends StatelessWidget {
   SignUpView({
+    super.key,
     required this.context,
     required this.emailCtrl,
     required this.passCtrl,
@@ -23,27 +25,26 @@ class SignUpView extends StatelessWidget {
     required this.showPassFun,
     required this.signUpFun,
     required this.pageCtrl,
-    super.key,
   });
 
-  BuildContext context;
-  AppTexts appTexts = AppTexts();
-  TextEditingController emailCtrl;
-  TextEditingController passCtrl;
-  TextEditingController rePassCtrl;
-  bool emailErrVis;
-  String emailErrStr;
-  bool passErrVis;
-  String passErrStr;
-  bool rePassErrVis;
-  String rePassErrStr;
-  PageController pageCtrl;
-  bool obscureText = false;
-  bool showPass = false;
-  Function showPassFun;
-  Function signUpFun;
-  TextInputType keyboardType = TextInputType.emailAddress;
-  IconData icon = Icons.email_rounded;
+  final BuildContext context;
+  final AppTexts appTexts = AppTexts();
+  final TextEditingController emailCtrl;
+  final TextEditingController passCtrl;
+  final TextEditingController rePassCtrl;
+  final bool emailErrVis;
+  final String emailErrStr;
+  final bool passErrVis;
+  final String passErrStr;
+  final bool rePassErrVis;
+  final String rePassErrStr;
+  final PageController pageCtrl;
+  final bool obscureText;
+  final bool showPass;
+  final Function showPassFun;
+  final Function signUpFun;
+  final TextInputType keyboardType = TextInputType.emailAddress;
+  final IconData icon = Icons.email_rounded;
 
   @override
   Widget build(BuildContext context) {
@@ -58,79 +59,59 @@ class SignUpView extends StatelessWidget {
               children: [
                 textFormField(
                   controller: emailCtrl,
-                  hint: "ایمیل",
+                  hint: 'ایمیل',
                   icon: Icons.email,
                   keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
                   errorVis: emailErrVis,
                   errorStr: emailErrStr,
                 ),
+                const SizedBox(height: 20),
                 textFormField(
                   controller: passCtrl,
-                  hint: "گذرواژه",
+                  hint: 'کلمه عبور',
+                  icon: Icons.lock,
+                  obscureText: obscureText,
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.next,
+                  errorVis: passErrVis,
+                  errorStr: passErrStr,
+                ),
+                const SizedBox(height: 20),
+                textFormField(
+                  controller: passCtrl,
+                  hint: 'تکرار کلمه عبور',
                   icon: Icons.lock,
                   obscureText: obscureText,
                   keyboardType: TextInputType.visiblePassword,
                   errorVis: passErrVis,
                   errorStr: passErrStr,
                 ),
-                textFormField(
-                  controller: rePassCtrl,
-                  hint: "تکرار گذرواژه",
-                  icon: Icons.lock,
-                  obscureText: obscureText,
-                  keyboardType: TextInputType.visiblePassword,
-                  errorVis: rePassErrVis,
-                  errorStr: rePassErrStr,
+                const SizedBox(height: 20),
+                CheckboxMenuButton(
+                  value: showPass,
+                  onChanged: (v) => showPassFun(v),
+                  child: const TextBodyMediumView('نمایش کلمه عبور'),
                 ),
-                Container(
+                const SizedBox(height: 20),
+                EasyButton(
+                  idleStateWidget: const TextBodyMediumView('ثبت‌نام', color: Colors.white),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                  buttonColor: ColorStyle.blueFav,
                   width: width,
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: CheckboxMenuButton(
-                    value: showPass,
-                    onChanged: (v) {
-                      showPassFun(v);
-                    },
-                    child: Text("نمایش گذرواژه", style: Theme.of(context).textTheme.bodyMedium),
-                  ),
+                  height: 50,
+                  borderRadius: width,
+                  onPressed: signUpFun,
                 ),
-                Container(
-                  margin: const EdgeInsets.only(bottom: 50),
-                  child: EasyButton(
-                    idleStateWidget: Text("ثبت‌نام", style: Theme.of(context).textTheme.buttonText1),
-                    loadingStateWidget: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: LoadingAnimationWidget.threeArchedCircle(
-                        color: Colors.white,
-                        size: width * 0.1,
-                      ),
-                    ),
-                    buttonColor: ColorStyle.blueFav,
-                    width: width,
-                    height: 50,
-                    borderRadius: width,
-                    onPressed: signUpFun,
-                  ),
-                ),
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "قبلا ثبت‌نام کردید؟",
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                    const TextBodyMediumView('قبلا ثبت‌نام کرده‌اید؟'),
                     const SizedBox(width: 5),
                     InkWell(
-                      child: Text(
-                        "وارد شوید",
-                        style: Theme.of(context).textTheme.txtBtnBlue,
-                      ),
-                      onTap: () {
-                        pageCtrl.animateToPage(
-                          0,
-                          duration: const Duration(milliseconds: 500),
-                          curve: Curves.linear,
-                        );
-                      },
+                      child: const TextBodyMediumView('وارد شوید', color: ColorStyle.blueFav),
+                      onTap: () => pageCtrl.animateToPage(0, duration: const Duration(milliseconds: 500), curve: Curves.linear),
                     ),
                   ],
                 ),
@@ -148,45 +129,40 @@ class SignUpView extends StatelessWidget {
     required IconData icon,
     bool obscureText = false,
     required TextInputType keyboardType,
+    TextInputAction textInputAction = TextInputAction.done,
     required bool errorVis,
     required String errorStr,
   }) {
     double width = MediaQuery.of(context).size.width;
-    return Container(
-      margin: const EdgeInsets.only(bottom: 20),
-      child: Column(
-        children: [
-          TextFormField(
-            controller: controller,
-            obscureText: obscureText,
-            keyboardType: keyboardType,
-            obscuringCharacter: "*",
-            style: Theme.of(context).textTheme.textField,
-            // inputFormatters: [],
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 10),
-              hintText: hint,
-              hintStyle: Theme.of(context).textTheme.hintText,
-              hintTextDirection: TextDirection.rtl,
-              prefixIcon: Icon(icon),
-              fillColor: const Color.fromRGBO(223, 228, 234, 1.0),
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(width)),
-                borderSide: BorderSide.none,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.all(Radius.circular(width)),
-                borderSide: const BorderSide(color: ColorStyle.blueFav, width: 2),
-              ),
+    return Column(
+      children: [
+        TextFormField(
+          controller: controller,
+          obscureText: obscureText,
+          keyboardType: keyboardType,
+          style: Theme.of(context).textTheme.bodyMedium,
+          textInputAction: textInputAction,
+          textDirection: TextDirection.ltr,
+          decoration: InputDecoration(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+            hintText: hint,
+            hintStyle: Theme.of(context).textTheme.bodyMedium,
+            hintTextDirection: TextDirection.rtl,
+            prefixIcon: Icon(icon),
+            fillColor: const Color.fromRGBO(223, 228, 234, 1.0),
+            filled: true,
+            enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(width)), borderSide: const BorderSide()),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(width)),
+              borderSide: const BorderSide(color: ColorStyle.blueFav, width: 2),
             ),
           ),
-          Visibility(
-            visible: errorVis,
-            child: Text(errorStr, style: Theme.of(context).textTheme.errorText3),
-          ),
-        ],
-      ),
+        ),
+        Visibility(
+          visible: errorVis,
+          child: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyMediumView(errorStr, color: Colors.red)),
+        ),
+      ],
     );
   }
 }

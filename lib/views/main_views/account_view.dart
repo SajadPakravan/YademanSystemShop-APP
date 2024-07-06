@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/screens/main/profile/sign_in_screen.dart';
 import 'package:yad_sys/screens/main/profile/sign_up_screen.dart';
-import 'package:yad_sys/themes/color_style.dart';
-import 'package:yad_sys/themes/app_themes.dart';
 
 class AccountView extends StatelessWidget {
   const AccountView({
+    super.key,
     required this.context,
     required this.logged,
     required this.name,
@@ -16,11 +14,10 @@ class AccountView extends StatelessWidget {
     required this.onTapButton,
     required this.subAccHeight,
     required this.subAddHeight,
-    super.key,
   });
 
   final BuildContext context;
-  final dynamic logged;
+  final bool logged;
   final String name;
   final String email;
   final Function logOut;
@@ -31,12 +28,7 @@ class AccountView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    return logged == ""
-        ? Center(child: LoadingAnimationWidget.threeArchedCircle(color: Colors.black54, size: width * 0.1))
-        : logged
-            ? loggedContent()
-            : notLoggedContent();
+    return logged ? loggedContent() : notLoggedContent();
   }
 
   loggedContent() {

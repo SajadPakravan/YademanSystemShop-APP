@@ -1,18 +1,12 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/database/yademan_db.dart';
-import 'package:yad_sys/models/user_model.dart';
 import 'package:yad_sys/views/account_views/sign_up_view.dart';
 
-// ignore: must_be_immutable
 class SignUpScreen extends StatefulWidget {
-  SignUpScreen({
-    required this.pageCtrl,
-    super.key,
-  });
+  const SignUpScreen({super.key, required this.pageCtrl});
 
-  PageController pageCtrl;
+  final PageController pageCtrl;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -48,9 +42,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   signUpFun() async {
     setState(() {
-      emailCtrl.text = emailCtrl.text.replaceAll(" ", "");
-      passCtrl.text = passCtrl.text.replaceAll(" ", "");
-      rePassCtrl.text = rePassCtrl.text.replaceAll(" ", "");
       emailErrVis = false;
       passErrVis = false;
       rePassErrVis = false;
@@ -59,13 +50,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (emailCtrl.text.isEmpty) {
       setState(() {
         emailErrVis = true;
-        emailErrStr = "لطفا ایمل را وارد کنید";
+        emailErrStr = 'لطفا ایمل را وارد کنید';
       });
     } else {
       if (!EmailValidator.validate(emailCtrl.text, true)) {
         setState(() {
           emailErrVis = true;
-          emailErrStr = "ایمیل وارد شده معتبر نیست";
+          emailErrStr = 'ایمیل وارد شده معتبر نیست';
         });
       }
     }
@@ -73,19 +64,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (passCtrl.text.isEmpty) {
       setState(() {
         passErrVis = true;
-        passErrStr = "لطفا گذرواژه را وارد کنید";
+        passErrStr = 'لطفا کلمه عبور را وارد کنید';
       });
     }
 
     if (rePassCtrl.text.isEmpty) {
       setState(() {
         rePassErrVis = true;
-        rePassErrStr = "لطفا تکرار گذرواژه را وارد کنید";
+        rePassErrStr = 'لطفا تکرار کلمه عبور را وارد کنید';
       });
     } else if (rePassCtrl.text != passCtrl.text) {
       setState(() {
         rePassErrVis = true;
-        rePassErrStr = "تکرار گذرواژه با گذرواژه برابر نیست";
+        rePassErrStr = 'تکرار کلمه عبور با کلمه عبور برابر نیست';
       });
     }
 

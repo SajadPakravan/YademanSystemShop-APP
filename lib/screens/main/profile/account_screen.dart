@@ -18,7 +18,7 @@ class _AccountScreenState extends State<AccountScreen> with TickerProviderStateM
   final pageCtrl = PageController(initialPage: 0);
   AppDialogs appDialogs = AppDialogs();
   bool progress = false;
-  dynamic logged = "";
+  bool logged = false;
   int userId = 0;
   String role = "";
   String name = "";
