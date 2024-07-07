@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 // import 'package:get/get.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:yademan_system_shop/views/main_screens/account_view.dart';
+// import 'package:yademan_system_shop/views/main_screens/profile_view.dart';
 //
 // class SettingsScreenView extends StatefulWidget {
 //   const SettingsScreenView({Key? key}) : super(key: key);

@@ -2,12 +2,13 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/tools/app_cache.dart';
-import 'package:yad_sys/views/account_views/sign_in_view.dart';
+import 'package:yad_sys/views/profile/sign_in/sign_in_view.dart';
 
 class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key, required this.pageCtrl});
+  const SignInScreen({super.key, required this.pageCtrl, required this.checkLogged});
 
   final PageController pageCtrl;
+  final Function() checkLogged;
 
   @override
   State<SignInScreen> createState() => SignInScreenState();
@@ -66,6 +67,7 @@ class SignInScreenState extends State<SignInScreen> {
     }
 
     if (!emailErrVis && !passErrVis) {
+      await Future<void>.delayed(const Duration(seconds: 3));
       if (mounted) {
         dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
         if (jsonSignIn != false) {
@@ -73,10 +75,9 @@ class SignInScreenState extends State<SignInScreen> {
           await cache.setString('token', jsonSignIn['token']);
           await cache.setString('email', jsonSignIn['user_email']);
           await cache.setString('name', jsonSignIn['user_display_name']);
-
+          widget.checkLogged();
         }
       }
-      await Future<void>.delayed(const Duration(seconds: 3));
     }
   }
 

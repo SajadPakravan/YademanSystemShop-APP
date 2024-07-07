@@ -132,8 +132,8 @@ class HttpRequest {
   }
 
   signUp({required BuildContext context, required String email, required String password}) async {
-    Map<String, String> body = {"username": email, "email": email, "password": password};
-    return postRequest(context: context, url: urlSignUp, body: body, error: "ایمیل وارد شده قبلا ثبت شده است");
+    Map<String, String> body = {'username': email, 'email': email, 'password': password};
+    return postRequest(context: context, url: urlSignUp, body: body, error: 'ایمیل وارد شده قبلا ثبت شده است');
   }
 
   signIn({required BuildContext context, required String email, required String password}) async {

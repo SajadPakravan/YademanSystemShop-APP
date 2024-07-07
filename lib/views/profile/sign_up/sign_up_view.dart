@@ -1,9 +1,7 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
-import 'package:yad_sys/themes/app_themes.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
@@ -88,11 +86,7 @@ class SignUpView extends StatelessWidget {
                   errorStr: passErrStr,
                 ),
                 const SizedBox(height: 20),
-                CheckboxMenuButton(
-                  value: showPass,
-                  onChanged: (v) => showPassFun(v),
-                  child: const TextBodyMediumView('نمایش کلمه عبور'),
-                ),
+                CheckboxMenuButton(value: showPass, onChanged: (v) => showPassFun(v), child: const TextBodyMediumView('نمایش کلمه عبور')),
                 const SizedBox(height: 20),
                 EasyButton(
                   idleStateWidget: const TextBodyMediumView('ثبت‌نام', color: Colors.white),

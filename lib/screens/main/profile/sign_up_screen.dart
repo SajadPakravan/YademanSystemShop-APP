@@ -1,7 +1,8 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/views/account_views/sign_up_view.dart';
+import 'package:yad_sys/tools/app_cache.dart';
+import 'package:yad_sys/views/profile/sign_up/sign_up_view.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key, required this.pageCtrl});
@@ -81,17 +82,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     if (!emailErrVis && !passErrVis && !rePassErrVis) {
+      if (mounted) {
+        dynamic jsonSignUp = await httpRequest.signUp(context: context, email: emailCtrl.text, password: passCtrl.text);
+        if (jsonSignUp != false) {
+          if (mounted) {
+            dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
+            if (jsonSignIn != false) {
+              AppCache cache = AppCache();
+              await cache.setString('token', jsonSignIn['token']);
+              await cache.setString('email', jsonSignIn['user_email']);
+              await cache.setString('name', jsonSignIn['user_display_name']);
+            }
+          }
+        }
+      }
       await Future<void>.delayed(const Duration(seconds: 3));
-      // dynamic jsonSignUp = await httpRequest.signUp(email: emailCtrl.text, password: passCtrl.text);
-
-      // if (jsonSignUp != false) {
-      //   dynamic jsonSignIn = await httpRequest.signIn(email: emailCtrl.text, password: passCtrl.text);
-      //   await YadSysDB.instance.insert(User(
-      //     token: jsonSignIn['token'],
-      //     name: jsonSignIn['user_display_name'],
-      //     email: jsonSignIn['user_email'],
-      //   ));
-      // }
     }
   }
 

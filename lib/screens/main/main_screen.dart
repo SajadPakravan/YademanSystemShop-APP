@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:yad_sys/screens/main/categories/categories_screen.dart';
 import 'package:yad_sys/screens/main/home/home_screen.dart';
-import 'package:yad_sys/screens/main/profile/account_screen.dart';
+import 'package:yad_sys/screens/main/profile/profile_screen.dart';
 import 'package:yad_sys/screens/main/shop/shop_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -46,7 +46,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             HomeScreen(),
             ShopScreen(),
             CategoriesScreen(),
-            AccountScreen(),
+            ProfileScreen(),
           ],
         ),
         bottomNavigationBar: bottomNavigationBar(),
