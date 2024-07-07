@@ -16,8 +16,8 @@ class SignInScreen extends StatefulWidget {
 
 class SignInScreenState extends State<SignInScreen> {
   HttpRequest httpRequest = HttpRequest();
-  TextEditingController emailCtrl = TextEditingController();
-  TextEditingController passCtrl = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   bool obscureText = true;
   bool showPass = false;
   bool emailErrVis = false;
@@ -45,13 +45,13 @@ class SignInScreenState extends State<SignInScreen> {
       passErrVis = false;
     });
 
-    if (emailCtrl.text.isEmpty) {
+    if (email.text.isEmpty) {
       setState(() {
         emailErrVis = true;
         emailErrStr = 'لطفا ایمل را وارد کنید';
       });
     } else {
-      if (!EmailValidator.validate(emailCtrl.text, true)) {
+      if (!EmailValidator.validate(email.text, true)) {
         setState(() {
           emailErrVis = true;
           emailErrStr = 'ایمیل وارد شده معتبر نیست';
@@ -59,7 +59,7 @@ class SignInScreenState extends State<SignInScreen> {
       }
     }
 
-    if (passCtrl.text.isEmpty) {
+    if (password.text.isEmpty) {
       setState(() {
         passErrVis = true;
         passErrStr = 'لطفا کلمه عبور را وارد کنید';
@@ -68,13 +68,15 @@ class SignInScreenState extends State<SignInScreen> {
 
     if (!emailErrVis && !passErrVis) {
       await Future<void>.delayed(const Duration(seconds: 3));
+      AppCache cache = AppCache();
       if (mounted) {
-        dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
+        dynamic jsonSignIn = await httpRequest.signIn(context: context, email: email.text, password: password.text);
         if (jsonSignIn != false) {
-          AppCache cache = AppCache();
           await cache.setString('token', jsonSignIn['token']);
-          await cache.setString('email', jsonSignIn['user_email']);
-          await cache.setString('name', jsonSignIn['user_display_name']);
+          dynamic jsonCustomer = await httpRequest.getCustomer(email: email.text);
+          await cache.setString('email', jsonCustomer[0]['email']);
+          await cache.setString('name', '${jsonCustomer[0]['first_name']} ${jsonCustomer[0]['last_name']}');
+          await cache.setString('avatar', jsonCustomer[0]['avatar_url']);
           widget.checkLogged();
         }
       }
@@ -85,8 +87,8 @@ class SignInScreenState extends State<SignInScreen> {
   Widget build(BuildContext context) {
     return SignInView(
       context: context,
-      emailCtrl: emailCtrl,
-      passCtrl: passCtrl,
+      emailCtrl: email,
+      passCtrl: password,
       obscureText: obscureText,
       showPass: showPass,
       showPassFun: showPassFun,

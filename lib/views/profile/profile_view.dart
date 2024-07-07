@@ -10,7 +10,8 @@ class ProfileView extends StatelessWidget {
     required this.logged,
     required this.name,
     required this.email,
-    required this.logOut,
+    required this.avatar,
+    required this.signOut,
     required this.pageCtrl,
     required this.checkLogged,
   });
@@ -19,14 +20,15 @@ class ProfileView extends StatelessWidget {
   final bool logged;
   final String name;
   final String email;
-  final Function logOut;
+  final String avatar;
   final PageController pageCtrl;
   final Function() checkLogged;
+  final void Function() signOut;
 
   @override
   Widget build(BuildContext context) {
     return logged
-        ? const LoggedView()
+        ? LoggedView(name: name, email: email, avatar: avatar, signOut: signOut)
         : Scaffold(
             appBar: AppBar(
               centerTitle: true,

@@ -24,7 +24,7 @@ class HttpRequest {
 
   get urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register';
 
-  get urlUsers => 'https://$urlMain/wp-json/wc/v3/customers/';
+  get urlCustomers => 'https://$urlMain/wp-json/wc/v3/customers/';
 
   get urlOrders => 'https://$urlMain/wp-json/wc/v3/orders/';
 
@@ -45,7 +45,6 @@ class HttpRequest {
         return json;
       } else {
         if (kDebugMode) {
-          print("Request ERROR >>>: ${getRequest.request}");
           print("Status Code >>>:  ${getRequest.statusCode}");
           print("Json ERROR >>>:  $json");
         }
@@ -141,26 +140,8 @@ class HttpRequest {
     return postRequest(context: context, url: urlSignIn, body: body, error: 'اطلاعات ورود صحیح نمی‌باشد');
   }
 
-  getUser({String role = "all"}) async {
-    SharedPreferences sharePref = await SharedPreferences.getInstance();
-    String email = sharePref.getString("email")!;
-    // String token = sharePref.getString("token")!;
-    String more = "&role=$role&search=$email";
-    final requestGetUser = await http.get(
-      Uri.parse(urlUsers + key + secret + more),
-    );
-
-    dynamic jsonGetUser;
-
-    if (requestGetUser.statusCode == 200) {
-      jsonGetUser = jsonDecode(requestGetUser.body);
-      return jsonGetUser;
-    } else {
-      print("requestGetUser.request >>>:  ${requestGetUser.request}");
-      print("requestGetUser.statusCode >>>:  ${requestGetUser.statusCode}");
-      print("requestGetUser.body_Error >>>:  ${requestGetUser.body}");
-      return false;
-    }
+  getCustomer({required String email}) async {
+    return getRequest(url: urlCustomers, details: '&email=$email');
   }
 
   getSearchProduct({
@@ -220,7 +201,7 @@ class HttpRequest {
     };
 
     final requestUpdateUser = await http.post(
-      Uri.parse(urlUsers + id.toString()),
+      Uri.parse(urlCustomers + id.toString()),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -306,7 +287,7 @@ class HttpRequest {
     String token = sharedPreferences.getString("token")!;
 
     final requestGetBillAddress = await http.get(
-      Uri.parse(urlUsers + id.toString()),
+      Uri.parse(urlCustomers + id.toString()),
       headers: {"Authorization": "Bearer $token"},
     );
     print("requestGetBillAddress >>>: ${requestGetBillAddress.request}");
@@ -330,7 +311,7 @@ class HttpRequest {
     String token = sharedPreferences.getString("token")!;
 
     final requestGetShippingAddress = await http.get(
-      Uri.parse(urlUsers + id.toString()),
+      Uri.parse(urlCustomers + id.toString()),
       headers: {"Authorization": "Bearer $token"},
     );
     print("requestGetShippingAddress >>>: ${requestGetShippingAddress.request}");
@@ -381,7 +362,7 @@ class HttpRequest {
     };
 
     final requestUpdateBillAddress = await http.put(
-      Uri.parse(urlUsers + id.toString() + key + secret),
+      Uri.parse(urlCustomers + id.toString() + key + secret),
       headers: headers,
       body: jsonEncode(body),
     );
@@ -428,7 +409,7 @@ class HttpRequest {
     };
 
     final requestUpdateShippingAddress = await http.put(
-      Uri.parse(urlUsers + id.toString() + key + secret),
+      Uri.parse(urlCustomers + id.toString() + key + secret),
       headers: headers,
       body: jsonEncode(body),
     );

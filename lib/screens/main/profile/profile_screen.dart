@@ -19,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   String email = '';
   String avatar = '';
 
-  logOut() async {
+  signOut() async {
     AppCache cache = AppCache();
     await cache.clearCache();
     checkLogged();
@@ -29,9 +29,11 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     AppCache cache = AppCache();
     String n = await cache.getString('name') ?? '';
     String e = await cache.getString('email') ?? '';
+    String a = await cache.getString('avatar') ?? '';
     setState(() {
       name = n;
       email = e;
+      avatar = a;
       logged = false;
     });
     if (name.isNotEmpty) setState(() => logged = true);
@@ -50,7 +52,8 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       logged: logged,
       name: name,
       email: email,
-      logOut: logOut,
+      avatar: avatar,
+      signOut: signOut,
       pageCtrl: pageCtrl,
       checkLogged: checkLogged,
     );

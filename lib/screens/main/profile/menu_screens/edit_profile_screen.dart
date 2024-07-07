@@ -39,22 +39,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   loadDetail() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    dynamic jsonGetUser = await httpRequest.getUser();
+    // dynamic jsonGetUser = await httpRequest.getCustomer();
 
-    if (jsonGetUser == false) {
-      snackBar(color: Colors.red.shade800, message: "خطا در دريافت اطلاعات");
-      setState(() {
-        progress = false;
-      });
-    } else {
-      setState(() {
-        avatarImageLink = jsonGetUser[0]['avatar_urls']['96'];
-        fieldFirstName.text = jsonGetUser[0]["name"];
-        fieldLastName.text = jsonGetUser[0]["last_name"];
-        fieldEmail.text = sharedPreferences.getString("email")!;
-        progress = false;
-      });
-    }
+    // if (jsonGetUser == false) {
+    //   snackBar(color: Colors.red.shade800, message: "خطا در دريافت اطلاعات");
+    //   setState(() {
+    //     progress = false;
+    //   });
+    // } else {
+    //   setState(() {
+    //     avatarImageLink = jsonGetUser[0]['avatar_urls']['96'];
+    //     fieldFirstName.text = jsonGetUser[0]["name"];
+    //     fieldLastName.text = jsonGetUser[0]["last_name"];
+    //     fieldEmail.text = sharedPreferences.getString("email")!;
+    //     progress = false;
+    //   });
+    // }
   }
 
   @override
