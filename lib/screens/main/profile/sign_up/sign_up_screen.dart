@@ -5,9 +5,10 @@ import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/profile/sign_up/sign_up_view.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({super.key, required this.pageCtrl});
+  const SignUpScreen({super.key, required this.pageCtrl, required this.checkLogged});
 
   final PageController pageCtrl;
+  final Function() checkLogged;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -82,6 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
 
     if (!emailErrVis && !passErrVis && !rePassErrVis) {
+      await Future<void>.delayed(const Duration(seconds: 3));
       if (mounted) {
         dynamic jsonSignUp = await httpRequest.signUp(context: context, email: emailCtrl.text, password: passCtrl.text);
         if (jsonSignUp != false) {
@@ -91,12 +93,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               AppCache cache = AppCache();
               await cache.setString('token', jsonSignIn['token']);
               await cache.setString('email', jsonSignIn['user_email']);
-              await cache.setString('name', jsonSignIn['user_display_name']);
+              widget.checkLogged();
             }
           }
         }
       }
-      await Future<void>.delayed(const Duration(seconds: 3));
     }
   }
 

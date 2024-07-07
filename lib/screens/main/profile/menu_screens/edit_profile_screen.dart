@@ -37,7 +37,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   loadDetail() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    // SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     // dynamic jsonGetUser = await httpRequest.getCustomer();
 

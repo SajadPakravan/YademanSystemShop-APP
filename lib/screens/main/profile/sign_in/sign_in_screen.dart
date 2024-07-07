@@ -21,9 +21,9 @@ class SignInScreenState extends State<SignInScreen> {
   bool obscureText = true;
   bool showPass = false;
   bool emailErrVis = false;
-  String emailErrStr = "";
+  String emailErrStr = '';
   bool passErrVis = false;
-  String passErrStr = "";
+  String passErrStr = '';
 
   showPassFun(v) {
     if (v) {
@@ -73,7 +73,7 @@ class SignInScreenState extends State<SignInScreen> {
         dynamic jsonSignIn = await httpRequest.signIn(context: context, email: email.text, password: password.text);
         if (jsonSignIn != false) {
           await cache.setString('token', jsonSignIn['token']);
-          await cache.setString('email', jsonSignIn['email']);
+          await cache.setString('email', jsonSignIn['user_email']);
           widget.checkLogged();
         }
       }

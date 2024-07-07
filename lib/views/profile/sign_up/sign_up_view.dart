@@ -77,7 +77,7 @@ class SignUpView extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 textFormField(
-                  controller: passCtrl,
+                  controller: rePassCtrl,
                   hint: 'تکرار کلمه عبور',
                   icon: Icons.lock,
                   obscureText: obscureText,

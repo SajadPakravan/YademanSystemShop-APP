@@ -41,8 +41,9 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     if (email.isNotEmpty) {
       getCustomer();
       setState(() => logged = true);
+    } else {
+      setState(() => loading = false);
     }
-    setState(() => loading = false);
   }
 
   getCustomer() async {
@@ -59,7 +60,10 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     if (customer.billing!.city!.isEmpty) {
       setState(() => addressAlert = true);
     }
-    await cache.setString('avatar', customer.avatarUrl!);
+    setState(() {
+      avatar = customer.avatarUrl!;
+      loading = false;
+    });
   }
 
   @override

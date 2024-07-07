@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yad_sys/screens/main/profile/sign_in_screen.dart';
-import 'package:yad_sys/screens/main/profile/sign_up_screen.dart';
+import 'package:yad_sys/screens/main/profile/sign_in/sign_in_screen.dart';
+import 'package:yad_sys/screens/main/profile/sign_up/sign_up_screen.dart';
 import 'package:yad_sys/views/profile/logged/logged_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
 
@@ -55,7 +55,10 @@ class ProfileView extends StatelessWidget {
                 body: PageView(
                   controller: pageCtrl,
                   physics: const NeverScrollableScrollPhysics(),
-                  children: [SignInScreen(pageCtrl: pageCtrl, checkLogged: checkLogged), SignUpScreen(pageCtrl: pageCtrl)],
+                  children: [
+                    SignInScreen(pageCtrl: pageCtrl, checkLogged: checkLogged),
+                    SignUpScreen(pageCtrl: pageCtrl, checkLogged: checkLogged),
+                  ],
                 ),
               );
   }

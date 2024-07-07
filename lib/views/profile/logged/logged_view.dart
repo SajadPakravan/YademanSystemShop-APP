@@ -66,7 +66,7 @@ class LoggedView extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 4,
-      color: Colors.blue.shade200,
+      color: Colors.white,
       child: ListTile(
         title: TextBodyMediumView(title),
         leading: Icon(icon),
