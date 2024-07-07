@@ -73,10 +73,7 @@ class SignInScreenState extends State<SignInScreen> {
         dynamic jsonSignIn = await httpRequest.signIn(context: context, email: email.text, password: password.text);
         if (jsonSignIn != false) {
           await cache.setString('token', jsonSignIn['token']);
-          dynamic jsonCustomer = await httpRequest.getCustomer(email: email.text);
-          await cache.setString('email', jsonCustomer[0]['email']);
-          await cache.setString('name', '${jsonCustomer[0]['first_name']} ${jsonCustomer[0]['last_name']}');
-          await cache.setString('avatar', jsonCustomer[0]['avatar_url']);
+          await cache.setString('email', jsonSignIn['email']);
           widget.checkLogged();
         }
       }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
+import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/profile/profile_view.dart';
 
@@ -12,12 +13,16 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateMixin {
   HttpRequest httpRequest = HttpRequest();
+  CustomerModel customer = CustomerModel();
   PageController pageCtrl = PageController(initialPage: 0);
   bool logged = false;
   int userId = 0;
   String name = '';
   String email = '';
   String avatar = '';
+  bool loading = false;
+  bool personalInfoAlert = false;
+  bool addressAlert = false;
 
   signOut() async {
     AppCache cache = AppCache();
@@ -26,17 +31,35 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   }
 
   checkLogged() async {
+    setState(() => loading = true);
     AppCache cache = AppCache();
-    String n = await cache.getString('name') ?? '';
     String e = await cache.getString('email') ?? '';
-    String a = await cache.getString('avatar') ?? '';
     setState(() {
-      name = n;
       email = e;
-      avatar = a;
       logged = false;
     });
-    if (name.isNotEmpty) setState(() => logged = true);
+    if (email.isNotEmpty) {
+      getCustomer();
+      setState(() => logged = true);
+    }
+    setState(() => loading = false);
+  }
+
+  getCustomer() async {
+    AppCache cache = AppCache();
+    dynamic jsonCustomer = await httpRequest.getCustomer(email: email);
+    jsonCustomer.forEach((c) => setState(() => customer = CustomerModel.fromJson(c)));
+
+    if (customer.firstName!.isEmpty) {
+      setState(() => personalInfoAlert = true);
+    } else {
+      await cache.setString('name', '${customer.firstName!} ${customer.lastName}');
+    }
+
+    if (customer.billing!.city!.isEmpty) {
+      setState(() => addressAlert = true);
+    }
+    await cache.setString('avatar', customer.avatarUrl!);
   }
 
   @override
@@ -56,6 +79,9 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       signOut: signOut,
       pageCtrl: pageCtrl,
       checkLogged: checkLogged,
+      loading: loading,
+      personalInfoAlert: personalInfoAlert,
+      addressAlert: addressAlert,
     );
   }
 }
