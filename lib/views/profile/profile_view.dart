@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/main/profile/sign_in/sign_in_screen.dart';
 import 'package:yad_sys/screens/main/profile/sign_up/sign_up_screen.dart';
 import 'package:yad_sys/views/profile/logged/logged_view.dart';
@@ -8,10 +9,9 @@ class ProfileView extends StatelessWidget {
   const ProfileView({
     super.key,
     required this.context,
+    required this.customer,
+    required this.getCustomer,
     required this.logged,
-    required this.name,
-    required this.email,
-    required this.avatar,
     required this.signOut,
     required this.pageCtrl,
     required this.checkLogged,
@@ -21,10 +21,9 @@ class ProfileView extends StatelessWidget {
   });
 
   final BuildContext context;
+  final CustomerModel customer;
+  final Function() getCustomer;
   final bool logged;
-  final String name;
-  final String email;
-  final String avatar;
   final PageController pageCtrl;
   final Function() checkLogged;
   final void Function() signOut;
@@ -38,9 +37,8 @@ class ProfileView extends StatelessWidget {
         ? const Loading()
         : logged
             ? LoggedView(
-                name: name,
-                email: email,
-                avatar: avatar,
+                customer: customer,
+                getCustomer: getCustomer,
                 signOut: signOut,
                 personalInfoAlert: personalInfoAlert,
                 addressAlert: addressAlert,

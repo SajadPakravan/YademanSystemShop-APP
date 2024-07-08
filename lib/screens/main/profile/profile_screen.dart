@@ -13,13 +13,10 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateMixin {
   HttpRequest httpRequest = HttpRequest();
+  AppCache cache = AppCache();
   CustomerModel customer = CustomerModel();
   PageController pageCtrl = PageController(initialPage: 0);
   bool logged = false;
-  int userId = 0;
-  String name = '';
-  String email = '';
-  String avatar = '';
   bool loading = false;
   bool personalInfoAlert = false;
   bool addressAlert = false;
@@ -32,36 +29,25 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
 
   checkLogged() async {
     setState(() => loading = true);
-    AppCache cache = AppCache();
-    String e = await cache.getString('email') ?? '';
-    setState(() {
-      email = e;
-      logged = false;
-    });
+    String email = await cache.getString('email') ?? '';
     if (email.isNotEmpty) {
       getCustomer();
-      setState(() => logged = true);
     } else {
-      setState(() => loading = false);
+      setState(() {
+        logged = false;
+        loading = false;
+      });
     }
   }
 
   getCustomer() async {
-    AppCache cache = AppCache();
-    dynamic jsonCustomer = await httpRequest.getCustomer(email: email);
+    setState(() => loading = true);
+    dynamic jsonCustomer = await httpRequest.getCustomer(email: await cache.getString('email'));
     jsonCustomer.forEach((c) => setState(() => customer = CustomerModel.fromJson(c)));
-
-    if (customer.firstName!.isEmpty) {
-      setState(() => personalInfoAlert = true);
-    } else {
-      await cache.setString('name', '${customer.firstName!} ${customer.lastName}');
-    }
-
-    if (customer.billing!.city!.isEmpty) {
-      setState(() => addressAlert = true);
-    }
+    if (customer.firstName!.isEmpty) setState(() => personalInfoAlert = true);
+    if (customer.billing!.city!.isEmpty) setState(() => addressAlert = true);
     setState(() {
-      avatar = customer.avatarUrl!;
+      logged = true;
       loading = false;
     });
   }
@@ -76,10 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   Widget build(BuildContext context) {
     return ProfileView(
       context: context,
+      customer: customer,
+      getCustomer: getCustomer,
       logged: logged,
-      name: name,
-      email: email,
-      avatar: avatar,
       signOut: signOut,
       pageCtrl: pageCtrl,
       checkLogged: checkLogged,

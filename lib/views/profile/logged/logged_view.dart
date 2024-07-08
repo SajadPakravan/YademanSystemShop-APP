@@ -1,5 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:yad_sys/models/customer_model.dart';
+import 'package:yad_sys/screens/main/profile/personal_info/personal_info_screen.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
@@ -7,17 +10,15 @@ import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
 class LoggedView extends StatelessWidget {
   const LoggedView({
     super.key,
-    required this.name,
-    required this.email,
-    required this.avatar,
+    required this.customer,
+    required this.getCustomer,
     required this.signOut,
     required this.personalInfoAlert,
     required this.addressAlert,
   });
 
-  final String name;
-  final String email;
-  final String avatar;
+  final CustomerModel customer;
+  final Function() getCustomer;
   final void Function() signOut;
   final bool personalInfoAlert;
   final bool addressAlert;
@@ -31,17 +32,25 @@ class LoggedView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(radius: 150 / 2, backgroundImage: CachedNetworkImageProvider(avatar)),
+                CircleAvatar(radius: 150 / 2, backgroundImage: CachedNetworkImageProvider(customer.avatarUrl!)),
                 const SizedBox(height: 10),
-                TextBodyLargeView(name),
+                TextBodyLargeView('${customer.firstName} ${customer.lastName}'),
                 const SizedBox(height: 10),
-                TextBodyMediumView(email),
+                TextBodyMediumView(customer.email!),
                 const SizedBox(height: 20),
                 option(
                   title: 'مشخصات فردی',
                   icon: Icons.person,
                   subtitle: personalInfoAlert ? const TextBodySmallView('لطفا مشخصات فردی خود را تکمیل کنید', color: Colors.red) : null,
-                  onTap: () {},
+                  onTap: () async {
+                    await Get.to(
+                      const PersonalInfoScreen(),
+                      transition: Transition.rightToLeft,
+                      duration: const Duration(milliseconds: 500),
+                      arguments: customer,
+                    );
+                    getCustomer();
+                  },
                 ),
                 option(
                   title: 'آدرس‌ها',
@@ -66,12 +75,13 @@ class LoggedView extends StatelessWidget {
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 4,
-      color: Colors.white,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: ListTile(
         title: TextBodyMediumView(title),
         leading: Icon(icon),
         trailing: const Icon(Icons.arrow_forward_ios),
         subtitle: subtitle,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         onTap: onTap,
       ),
     );

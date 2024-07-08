@@ -90,6 +90,35 @@ class HttpRequest {
     }
   }
 
+  putRequest({required String url, String id = '', String details = ''}) async {
+    Map<String, String> headers = {
+      'accept': 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    try {
+      final putRequest = await http.put(Uri.parse(url + id + key + secret + details), headers: headers);
+      if (kDebugMode) print("Put Request >>>> ${putRequest.request}");
+
+      dynamic json = jsonDecode(putRequest.body);
+
+      if (putRequest.statusCode == 200) {
+        if (kDebugMode) print("JSON >>>> $json");
+        return json;
+      } else {
+        if (kDebugMode) {
+          print("Status Code >>>:  ${putRequest.statusCode}");
+          print("Json ERROR >>>:  $json");
+        }
+        return false;
+      }
+    } catch (e) {
+      if (kDebugMode) print("ERROR >>>> $e");
+      // Get.offAll(const ConnectionError(), transition: Transition.fade, duration: const Duration(seconds: 1));
+      return false;
+    }
+  }
+
   getProducts({
     int perPage = 10,
     int page = 1,
@@ -142,6 +171,10 @@ class HttpRequest {
 
   getCustomer({required String email}) async {
     return getRequest(url: urlCustomers, details: '&email=$email');
+  }
+
+  updateCustomer({required String id}) async {
+    return putRequest(url: urlCustomers, id: id);
   }
 
   getSearchProduct({
