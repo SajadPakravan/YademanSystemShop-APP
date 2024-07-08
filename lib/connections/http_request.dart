@@ -90,14 +90,14 @@ class HttpRequest {
     }
   }
 
-  putRequest({required String url, String id = '', String details = ''}) async {
+  putRequest({required String url, String id = '', String details = '', required Map<String, dynamic> body}) async {
     Map<String, String> headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };
 
     try {
-      final putRequest = await http.put(Uri.parse(url + id + key + secret + details), headers: headers);
+      final putRequest = await http.put(Uri.parse(url + id + key + secret + details), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("Put Request >>>> ${putRequest.request}");
 
       dynamic json = jsonDecode(putRequest.body);
@@ -173,8 +173,15 @@ class HttpRequest {
     return getRequest(url: urlCustomers, details: '&email=$email');
   }
 
-  updateCustomer({required String id}) async {
-    return putRequest(url: urlCustomers, id: id);
+  updateCustomer({
+    required String id,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String avatar,
+  }) async {
+    Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'email': email, 'avatar_url': avatar};
+    return putRequest(url: urlCustomers, id: id, body: body);
   }
 
   getSearchProduct({

@@ -9,9 +9,11 @@ import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
+import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/bottom_sheet/bottom_sheet_pick_image.dart';
 import 'package:yad_sys/widgets/crop_image_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class PersonalInfoScreen extends StatefulWidget {
@@ -24,13 +26,28 @@ class PersonalInfoScreen extends StatefulWidget {
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   HttpRequest httpRequest = HttpRequest();
   CustomerModel customer = CustomerModel();
+  AppDialogs appDialogs = AppDialogs();
+  String firstname = '';
+  String lastname = '';
+  String email = '';
+  TextEditingController firstnameField = TextEditingController();
+  TextEditingController lastnameField = TextEditingController();
+  TextEditingController emailField = TextEditingController();
   File? avatarFile;
   ImagePicker imagePicker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    setState(() => customer = Get.arguments);
+    setState(() {
+      customer = Get.arguments;
+      firstname = customer.firstName!;
+      lastname = customer.lastName!;
+      email = customer.email!;
+      firstnameField.text = customer.firstName!;
+      lastnameField.text = customer.lastName!;
+      emailField.text = customer.email!;
+    });
   }
 
   @override
@@ -45,23 +62,68 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
             children: [
               info(title: 'شناسه کاربری', subtitle: customer.id.toString(), icon: Icons.person_outline, trailing: null, onTap: null),
               info(title: 'نام کاربری', subtitle: customer.username!, icon: Icons.person_outline, trailing: null, onTap: null),
-              info(title: 'نام', subtitle: customer.firstName!, icon: Icons.person, onTap: null),
-              info(title: 'نام خانوادگی', subtitle: customer.lastName!, icon: Icons.person, onTap: null),
-              info(title: 'ایمیل', subtitle: customer.email!, icon: Icons.email, onTap: null),
-              info(title: 'شماره همراه', subtitle: customer.billing!.phone!, icon: Icons.phone_android, onTap: null),
+              info(
+                title: 'نام',
+                subtitle: firstname,
+                icon: Icons.person,
+                onTap: () => appDialogs.editeValue(
+                  context: context,
+                  value: firstname,
+                  title: 'نام',
+                  controller: firstnameField,
+                  hint: 'نام خود را وارد کنید',
+                  onPressed: () => setState(() => firstname = firstnameField.text),
+                ),
+              ),
+              info(
+                title: 'نام خانوادگی',
+                subtitle: lastname,
+                icon: Icons.person,
+                onTap: () => appDialogs.editeValue(
+                  context: context,
+                  value: lastname,
+                  title: 'نام خانوادگی',
+                  controller: lastnameField,
+                  hint: 'نام خانوادگی خود را وارد کنید',
+                  onPressed: () => setState(() => lastname = lastnameField.text),
+                ),
+              ),
+              info(
+                title: 'ایمیل',
+                subtitle: email,
+                icon: Icons.email,
+                onTap: () => appDialogs.editeValue(
+                  context: context,
+                  value: email,
+                  title: 'ایمیل',
+                  controller: emailField,
+                  hint: 'ایمیل خود را وارد کنید',
+                  textDirection: TextDirection.ltr,
+                  onPressed: () => setState(() => email = emailField.text),
+                ),
+              ),
               const SizedBox(height: 20),
               profileChangeView(),
               const SizedBox(height: 20),
-              EasyButton(
-                idleStateWidget: const TextBodyMediumView('ورود', color: Colors.white),
-                loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
-                buttonColor: ColorStyle.blueFav,
-                width: width,
-                height: 50,
-                borderRadius: width,
-                onPressed: () async {
-                  dynamic jsonUpdate = await httpRequest.updateCustomer(id: customer.id.toString());
-                },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 30),
+                child: EasyButton(
+                  idleStateWidget: const TextBodyMediumView('ثبت', color: Colors.white),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                  buttonColor: ColorStyle.blueFav,
+                  width: width,
+                  height: 50,
+                  borderRadius: width,
+                  onPressed: () async {
+                    dynamic jsonUpdate = await httpRequest.updateCustomer(
+                      id: customer.id.toString(),
+                      firstname: firstname,
+                      lastname: lastname,
+                      email: email,
+                      avatar: '',
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -80,11 +142,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     return Card(
       margin: const EdgeInsets.all(10),
       elevation: 4,
+      color: Colors.blue.shade300,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
-        title: TextBodyMediumView(title, fontSize: 16),
-        subtitle: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyMediumView(subtitle)),
+        title: TextBodyMediumView(title),
+        subtitle: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyLargeView(subtitle, fontWeight: FontWeight.bold)),
         leading: Icon(icon),
         trailing: trailing,
         onTap: onTap,
@@ -103,16 +166,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
           style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black54)),
           onPressed: () => bottomSheetPickImage(
             context: context,
-            onTapCamera: () => pickImage(context: context, isFromGallery: false, cropType: true),
-            onTapGallery: () => pickImage(context: context, isFromGallery: true, cropType: true),
+            onTapCamera: () => pickImage(context: context, gallery: false),
+            onTapGallery: () => pickImage(context: context, gallery: true),
           ),
         ),
       ),
     );
   }
 
-  pickImage({required BuildContext context, required bool isFromGallery, required bool cropType}) async {
-    XFile? image = await imagePicker.pickImage(source: isFromGallery ? ImageSource.gallery : ImageSource.camera);
+  pickImage({required BuildContext context, required bool gallery}) async {
+    XFile? image = await imagePicker.pickImage(source: gallery ? ImageSource.gallery : ImageSource.camera);
     if (context.mounted) {
       Navigator.pop(context);
       cropImageView(context: context, imageFile: image!.path).then((value) => setState(() => avatarFile = File(value.path)));

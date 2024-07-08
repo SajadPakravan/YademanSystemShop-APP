@@ -3,22 +3,23 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:yad_sys/themes/color_style.dart';
 
 Future<CroppedFile> cropImageView({required BuildContext context, required String imageFile}) async {
-  CroppedFile? croppedFile0;
+  CroppedFile? file;
   final croppedFile = await ImageCropper().cropImage(
     sourcePath: imageFile,
     maxWidth: 512,
     maxHeight: 512,
     uiSettings: [
       AndroidUiSettings(
-        toolbarTitle: '',
-        toolbarColor: ColorStyle.colorBlack0a,
-        toolbarWidgetColor: ColorStyle.colorWhite,
-        activeControlsWidgetColor: ColorStyle.colorPurple,
+        toolbarTitle: 'عکس خود را برش دهید',
+        toolbarColor: ColorStyle.blueFav,
+        toolbarWidgetColor: Colors.white,
+        activeControlsWidgetColor: ColorStyle.blueFav,
         lockAspectRatio: false,
+        cropStyle: CropStyle.circle,
       ),
-      IOSUiSettings(title: 'Cropper'),
+      IOSUiSettings(title: 'عکس خود را برش دهید', cropStyle: CropStyle.circle),
     ],
   );
-  if (croppedFile != null) croppedFile0 = croppedFile;
-  return croppedFile0!;
+  if (croppedFile != null) file = croppedFile;
+  return file!;
 }
