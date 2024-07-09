@@ -8,11 +8,13 @@ import 'package:image_picker/image_picker.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/bottom_sheet/bottom_sheet_pick_image.dart';
 import 'package:yad_sys/widgets/crop_image_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/snack_bar_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
@@ -33,7 +35,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   TextEditingController firstnameField = TextEditingController();
   TextEditingController lastnameField = TextEditingController();
   TextEditingController emailField = TextEditingController();
-  File? avatarFile;
+  dynamic avatarFile;
   ImagePicker imagePicker = ImagePicker();
 
   @override
@@ -103,8 +105,6 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              profileChangeView(),
-              const SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: EasyButton(
@@ -115,13 +115,19 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   height: 50,
                   borderRadius: width,
                   onPressed: () async {
-                    dynamic jsonUpdate = await httpRequest.updateCustomer(
-                      id: customer.id.toString(),
-                      firstname: firstname,
-                      lastname: lastname,
-                      email: email,
-                      avatar: '',
-                    );
+                    if (firstname != customer.firstName! || lastname != customer.lastName || email != customer.email) {
+                      dynamic jsonUpdate = await httpRequest.updateCustomer(
+                        id: customer.id.toString(),
+                        firstname: firstname,
+                        lastname: lastname,
+                        email: email,
+                      );
+                      if (jsonUpdate != false) {
+                        AppCache cache = AppCache();
+                        await cache.setString('email', email);
+                        if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                      }
+                    }
                   },
                 ),
               ),
@@ -158,7 +164,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   profileChangeView() {
     return CircleAvatar(
       radius: 140 / 2,
-      backgroundImage: avatarFile == null ? CachedNetworkImageProvider(customer.avatarUrl!) : Image.file(File(avatarFile!.path)).image,
+      backgroundImage: avatarFile == null ? CachedNetworkImageProvider(customer.avatarUrl!) : Image.file(File(avatarFile.path)).image,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: IconButton(

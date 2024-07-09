@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/cupertino.dart';
-import 'package:yad_sys/screens/connection_error.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yad_sys/widgets/snack_bar_view.dart';
 
@@ -25,6 +26,8 @@ class HttpRequest {
   get urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register';
 
   get urlCustomers => 'https://$urlMain/wp-json/wc/v3/customers/';
+
+  get urlUpload => 'https://$urlMain/wp-content/app-uploads/';
 
   get urlOrders => 'https://$urlMain/wp-json/wc/v3/orders/';
 
@@ -57,7 +60,7 @@ class HttpRequest {
     }
   }
 
-  postRequest({required BuildContext context, required String url, required Map<String, dynamic> body, required String error}) async {
+  postRequest({required BuildContext context, required String url, required Map<String, dynamic> body, String? error}) async {
     Map<String, String> headers = {
       'Content-Type': 'application/json; charset=UTF-8',
     };
@@ -67,7 +70,6 @@ class HttpRequest {
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       dynamic json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == 200) {
-        json = jsonDecode(postRequest.body);
         if (kDebugMode) print("JSON >>>> $json");
         return json;
       } else {
@@ -75,18 +77,22 @@ class HttpRequest {
           print("Status Code >>>:  ${postRequest.statusCode}");
           print("Json ERROR >>>:  $json");
         }
-        if (context.mounted) SnackBarView.show(context, error);
+        if (error!.isEmpty) {
+          if (context.mounted) SnackBarView.show(context, json['message']);
+        } else {
+          if (context.mounted) SnackBarView.show(context, error);
+        }
         return false;
       }
     } catch (e) {
       if (kDebugMode) {
         print("ERROR >>>> $e");
       }
-      Get.off(
-        const ConnectionError(),
-        transition: Transition.fade,
-        duration: const Duration(seconds: 1),
-      );
+      // Get.off(
+      //   const ConnectionError(),
+      //   transition: Transition.fade,
+      //   duration: const Duration(seconds: 1),
+      // );
     }
   }
 
@@ -178,10 +184,35 @@ class HttpRequest {
     required String firstname,
     required String lastname,
     required String email,
-    required String avatar,
   }) async {
-    Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'email': email, 'avatar_url': avatar};
+    Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'email': email};
     return putRequest(url: urlCustomers, id: id, body: body);
+  }
+
+  uploadAvatar({required BuildContext context, required String userId, required File avatar}) async {
+    final request = http.MultipartRequest('POST', Uri.parse(urlUpload));
+    request.fields['user_id'] = userId;
+    request.files.add(
+      http.MultipartFile(
+        'file',
+        http.ByteStream(avatar.openRead()),
+        await avatar.length(),
+        filename: basename(avatar.path),
+      ),
+    );
+    var response = await request.send();
+    dynamic json = jsonDecode(await response.stream.bytesToString());
+    if (response.statusCode == 200) {
+      if (kDebugMode) print('JSON >>>> $json');
+      return json;
+    } else {
+      if (kDebugMode) {
+        print("Status Code >>>:  ${response.statusCode}");
+        print("Json ERROR >>>:  $json");
+      }
+      if (context.mounted) SnackBarView.show(context, json['message']);
+      return false;
+    }
   }
 
   getSearchProduct({
@@ -209,75 +240,6 @@ class HttpRequest {
       print("requestGetProducts >>>: ${requestGetSearchProducts.request}");
       print("requestGetProducts_statusCode >>>:  ${requestGetSearchProducts.statusCode}");
       print("jsonGetProducts_error >>>:  $jsonGetSearchProducts");
-      return false;
-    }
-  }
-
-  updateUser({
-    required String firstName,
-    required String lastName,
-    required String email,
-    required String avatarImageLink,
-  }) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int id = sharedPreferences.getInt("user_id")!;
-    String token = sharedPreferences.getString("token")!;
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-      "Authorization": "Bearer $token",
-    };
-
-    Map<String, dynamic> body = {
-      "first_name": firstName,
-      "last_name": lastName,
-      "name": "$firstName $lastName",
-      "email": email,
-      "avatar_urls": {
-        "24": avatarImageLink,
-        "48": avatarImageLink,
-        "96": avatarImageLink,
-      },
-    };
-
-    final requestUpdateUser = await http.post(
-      Uri.parse(urlCustomers + id.toString()),
-      headers: headers,
-      body: jsonEncode(body),
-    );
-
-    dynamic jsonUpdateUser;
-
-    if (requestUpdateUser.statusCode == 200) {
-      jsonUpdateUser = jsonDecode(requestUpdateUser.body);
-      return jsonUpdateUser;
-    } else {
-      print("requestUpdateUser.statusCodee >>>:  ${requestUpdateUser.statusCode}");
-      print("requestUpdateUser.body_Error >>>:  ${requestUpdateUser.body}");
-      jsonUpdateUser = jsonDecode(requestUpdateUser.body);
-      return jsonUpdateUser['message'];
-    }
-  }
-
-  uploadImage({
-    required String base64Image,
-    required String fileName,
-  }) async {
-    final requestUploadImage = await http.post(
-      Uri.parse('https://sajadpakravan.ir/app/upload_image.php'),
-      body: {
-        "image": base64Image,
-        "name": fileName,
-      },
-    );
-
-    dynamic jsonUploadImage;
-
-    if (requestUploadImage.statusCode == 200) {
-      jsonUploadImage = jsonDecode(requestUploadImage.body);
-      return jsonUploadImage;
-    } else {
-      print("requestUploadImage.statusCode >>>: ${requestUploadImage.statusCode}");
       return false;
     }
   }
