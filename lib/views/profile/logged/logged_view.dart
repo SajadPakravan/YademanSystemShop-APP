@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/models/customer_model.dart';
+import 'package:yad_sys/screens/main/profile/address/address_screen.dart';
 import 'package:yad_sys/screens/main/profile/personal_info/personal_info_screen.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
@@ -53,10 +54,18 @@ class LoggedView extends StatelessWidget {
                   },
                 ),
                 option(
-                  title: 'آدرس‌ها',
+                  title: 'آدرس‌',
                   icon: Icons.location_on,
                   subtitle: addressAlert ? const TextBodySmallView('لطفا آدرس خود را وارد کنید', color: Colors.red) : null,
-                  onTap: () {},
+                  onTap: () async {
+                    await Get.to(
+                      const AddressScreen(),
+                      transition: Transition.rightToLeft,
+                      duration: const Duration(milliseconds: 500),
+                      arguments: customer,
+                    );
+                    getCustomer();
+                  },
                 ),
                 option(title: 'سبد خرید', icon: Icons.shopping_cart, onTap: () {}),
                 option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () {}),
