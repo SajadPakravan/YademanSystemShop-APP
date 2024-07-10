@@ -1,10 +1,10 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_title_medium_view.dart';
 
 class ShowAllView extends StatelessWidget {
   const ShowAllView({
@@ -28,6 +28,7 @@ class ShowAllView extends StatelessWidget {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         body: NestedScrollView(
+          floatHeaderSlivers: true,
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             appBar(),
           ],
@@ -64,8 +65,7 @@ class ShowAllView extends StatelessWidget {
       floating: true,
       snap: true,
       backgroundColor: Colors.white,
-      forceElevated: true,
-      title: AutoSizeText(Get.arguments[0], maxLines: 1, style: Theme.of(context).textTheme.titleMedium),
+      title: TextTitleMediumView(Get.arguments[0]),
       centerTitle: true,
       iconTheme: const IconThemeData(color: Colors.black54),
     );
