@@ -12,12 +12,6 @@ class AppFunction {
     );
   }
 
-  onTapShowAll({required String title, String category = "", String onSale = ""}) async {
-    Get.to(
-      const ShowAllScreen(),
-      transition: Transition.rightToLeft,
-      duration: const Duration(milliseconds: 500),
-      arguments: [title, category, onSale],
-    );
-  }
+  onTapShowAll({required String title, String category = '', String onSale = ''}) async => Get.to(const ShowAllScreen(),
+      transition: Transition.rightToLeft, duration: const Duration(milliseconds: 300), arguments: [title, category, onSale]);
 }

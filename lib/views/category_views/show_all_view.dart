@@ -1,34 +1,31 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
+import 'package:yad_sys/widgets/loading.dart';
 
-// ignore: must_be_immutable
 class ShowAllView extends StatelessWidget {
   ShowAllView({
     super.key,
     required this.context,
     required this.onRefresh,
-    required this.scrollController,
-    required this.productsDetLst,
-    required this.productsImgLst,
-    required this.moreProduct,
+    required this.productCount,
+    required this.productsLst,
+    required this.onMoreBtn,
   });
 
-  BuildContext context;
-  dynamic onRefresh;
-  AppDialogs appDialogs = AppDialogs();
-  ScrollController scrollController;
-  List<ProductModel> productsDetLst;
-  List<Images> productsImgLst;
-  bool moreProduct;
+  final BuildContext context;
+  final dynamic onRefresh;
+  final List<ProductModel> productsLst;
+  final int productCount;
+  final Function onMoreBtn;
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -37,31 +34,24 @@ class ShowAllView extends StatelessWidget {
             appBar(),
           ],
           body: RefreshIndicator(
-            onRefresh: () {
-              return onRefresh();
-            },
-            child: productsDetLst.isEmpty
-                ? Center(
-                    child: LoadingAnimationWidget.threeArchedCircle(
-                      color: Colors.black54,
-                      size: width * 0.1,
-                    ),
-                  )
+            onRefresh: () => onRefresh(),
+            child: productsLst.isEmpty
+                ? const Loading()
                 : SingleChildScrollView(
-                    controller: scrollController,
                     physics: const BouncingScrollPhysics(),
                     child: Column(
                       children: [
-                        ProductCardGrid(
-                          list: productsDetLst,
-                          physics: const NeverScrollableScrollPhysics(),
+                        ProductCardGrid(list: productsLst, physics: const NeverScrollableScrollPhysics()),
+                        Visibility(
+                          visible: !(productCount < 10),
+                          child: EasyButton(
+                            type: EasyButtonType.text,
+                            idleStateWidget: const Icon(Icons.more_horiz, color: Colors.red, size: 40),
+                            loadingStateWidget: const Loading(),
+                            onPressed: onMoreBtn,
+                          ),
                         ),
-                        moreProduct
-                            ? LoadingAnimationWidget.threeArchedCircle(
-                                color: Colors.black54,
-                                size: width * 0.1,
-                              )
-                            : const Icon(Icons.more_horiz_rounded),
+                        const SizedBox(height: 10),
                       ],
                     ),
                   ),

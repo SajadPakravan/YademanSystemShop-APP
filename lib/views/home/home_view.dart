@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:yad_sys/models/product_category_model.dart';
@@ -142,7 +143,7 @@ class HomeView extends StatelessWidget {
                       elevation: MaterialStateProperty.all(10),
                     ),
                     child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
-                    onPressed: () => appFun.onTapShowAll(title: "پیشنهاد شگفت‌انگیز", onSale: "true"),
+                    onPressed: () => appFun.onTapShowAll(title: 'پیشنهاد شگفت‌انگیز', onSale: 'true'),
                   ),
                 ],
               ),
@@ -156,36 +157,34 @@ class HomeView extends StatelessWidget {
   parentCategories() {
     return Column(
       children: [
-        const TextBodyLargeView("خرید بر اساس دسته‌بندی"),
-        Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 0.9),
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: categoriesLst.length,
-            itemBuilder: (BuildContext context, int index) {
-              CategoryModel category = categoriesLst[index];
-              CategoryImage img = category.image!;
-              return InkWell(
-                onTap: () => appFun.onTapShowAll(title: category.name!, category: category.id.toString()),
-                child: Column(
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl: img.src!,
-                      width: 80,
-                      errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: TextBodyMediumView(category.name!, textAlign: TextAlign.center, maxLines: 2),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
+        const TextBodyLargeView('دسته‌بندی‌های شاخص'),
+        const SizedBox(height: 20),
+        GridView.builder(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 0.9),
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          padding: EdgeInsets.zero,
+          itemCount: categoriesLst.length,
+          itemBuilder: (BuildContext context, int index) {
+            CategoryModel category = categoriesLst[index];
+            CategoryImage img = category.image!;
+            return InkWell(
+              onTap: () => appFun.onTapShowAll(title: category.name!, category: category.id.toString()),
+              child: Column(
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: img.src!,
+                    width: 80,
+                    errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: TextBodyMediumView(category.name!, textAlign: TextAlign.center, maxLines: 2),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
@@ -195,37 +194,25 @@ class HomeView extends StatelessWidget {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10),
       minVerticalPadding: 0,
-      title: Container(
-        padding: const EdgeInsets.all(5),
-        decoration: const BoxDecoration(
-          color: ColorStyle.blueFav,
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(10), topRight: Radius.circular(10)),
-        ),
-        child: TextBodyLargeView(titleCategory, color: Colors.white),
+      title: Padding(
+        padding: const EdgeInsets.all(10),
+        child: TextBodyLargeView(titleCategory),
       ),
       subtitle: Column(
         children: [
-          Container(
-            decoration: BoxDecoration(border: Border.all(color: Colors.black38)),
-            child: ProductImageCard(physics: const NeverScrollableScrollPhysics(), list: list),
-          ),
-          InkWell(
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(5),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(colors: [Colors.deepPurple, ColorStyle.blueFav]),
-                borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+          ProductImageCard(physics: const NeverScrollableScrollPhysics(), list: list),
+          const SizedBox(width: 20),
+          Directionality(
+            textDirection: TextDirection.ltr,
+            child: ElevatedButton.icon(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                elevation: MaterialStateProperty.all(0),
               ),
-              child: const Row(
-                children: [
-                  SizedBox(width: 10),
-                  TextBodyMediumView('مشاهده همه', color: Colors.white, textAlign: TextAlign.center),
-                  Icon(Icons.arrow_forward_ios, color: Colors.white),
-                ],
-              ),
+              label: const TextBodyMediumView('مشاهده همه', color: Colors.red),
+              icon: const Icon(Icons.keyboard_arrow_left, color: Colors.red),
+              onPressed: () => appFun.onTapShowAll(title: titleCategory, category: categoryId.toString()),
             ),
-            onTap: () => appFun.onTapShowAll(title: titleCategory, category: categoryId.toString()),
           ),
         ],
       ),
