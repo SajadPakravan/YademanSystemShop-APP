@@ -15,58 +15,58 @@ class _SearchScreenState extends State<SearchScreen> {
   List<ProductModel> productDetailList = [];
   List<Images> productImageList = [];
 
-  getSearchProducts(String search) async {
-    dynamic jsonGetSearchProducts = await httpRequest.getSearchProduct(
-      search: search,
-    );
-    switch (jsonGetSearchProducts) {
-      case false:
-        {
-          break;
-        }
-      case "empty":
-        {
-
-          break;
-        }
-      default:
-        {
-          setState(() {
-            productImageList.clear();
-            productDetailList.clear();
-          });
-          List jsonProductsImages = [];
-
-          jsonGetSearchProducts.forEach((i) {
-            setState(() {
-              jsonProductsImages.add(i['images'][0]);
-            });
-          });
-
-          print("jsonProductsImages >>>: $jsonProductsImages");
-
-          for (var image in jsonProductsImages) {
-            setState(() {
-              productImageList.add(Images(src: image['src']));
-            });
-          }
-
-          jsonGetSearchProducts.forEach((p) {
-            setState(() {
-              productDetailList.add(
-                ProductModel(
-                  id: p['id'],
-                  name: p['name'],
-                  regularPrice: p['regular_price'],
-                  price: p['sale_price'],
-                ),
-              );
-            });
-          });
-          break;
-        }
-    }
-  }
+  // getSearchProducts(String search) async {
+  //   dynamic jsonGetSearchProducts = await httpRequest.getSearchProduct(
+  //     search: search,
+  //   );
+  //   switch (jsonGetSearchProducts) {
+  //     case false:
+  //       {
+  //         break;
+  //       }
+  //     case "empty":
+  //       {
+  //
+  //         break;
+  //       }
+  //     default:
+  //       {
+  //         setState(() {
+  //           productImageList.clear();
+  //           productDetailList.clear();
+  //         });
+  //         List jsonProductsImages = [];
+  //
+  //         jsonGetSearchProducts.forEach((i) {
+  //           setState(() {
+  //             jsonProductsImages.add(i['images'][0]);
+  //           });
+  //         });
+  //
+  //         print("jsonProductsImages >>>: $jsonProductsImages");
+  //
+  //         for (var image in jsonProductsImages) {
+  //           setState(() {
+  //             productImageList.add(Images(src: image['src']));
+  //           });
+  //         }
+  //
+  //         jsonGetSearchProducts.forEach((p) {
+  //           setState(() {
+  //             productDetailList.add(
+  //               ProductModel(
+  //                 id: p['id'],
+  //                 name: p['name'],
+  //                 regularPrice: p['regular_price'],
+  //                 price: p['sale_price'],
+  //               ),
+  //             );
+  //           });
+  //         });
+  //         break;
+  //       }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

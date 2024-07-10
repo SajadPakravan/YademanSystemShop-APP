@@ -8,13 +8,13 @@ import 'package:yad_sys/tools/app_dimension.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/view_models/product_view_model.dart';
 import 'package:yad_sys/widgets/image_slides/product_slide.dart';
+import 'package:yad_sys/widgets/loading.dart';
 
 // ignore: must_be_immutable
 class ProductView extends StatelessWidget {
   ProductView({
     super.key,
     required this.context,
-    required this.onRefresh,
     required this.jsonProduct,
     required this.slideIndex,
     required this.onSlideChange,
@@ -27,7 +27,6 @@ class ProductView extends StatelessWidget {
   });
 
   BuildContext context;
-  dynamic onRefresh;
   AppTexts appTextStrings = AppTexts();
   AppDimension appDimension = AppDimension();
   AppTexts appTexts = AppTexts();
@@ -51,7 +50,6 @@ class ProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -60,33 +58,23 @@ class ProductView extends StatelessWidget {
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             appBar(),
           ],
-          body: RefreshIndicator(
-            onRefresh: () {
-              return onRefresh();
-            },
-            child: jsonProduct.isEmpty
-                ? Center(
-                    child: LoadingAnimationWidget.threeArchedCircle(
-                      color: Colors.black54,
-                      size: width * 0.1,
-                    ),
-                  )
-                : SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        ProductSlide(
-                          jsonProduct: jsonProduct,
-                          slideIndex: slideIndex,
-                          onSlideChange: onSlideChange,
-                        ),
-                        productDetails(),
-                        productReviews(),
-                        // relatedProducts(),
-                      ],
-                    ),
+          body: jsonProduct.isEmpty
+              ? const Loading()
+              : SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    children: [
+                      ProductSlide(
+                        jsonProduct: jsonProduct,
+                        slideIndex: slideIndex,
+                        onSlideChange: onSlideChange,
+                      ),
+                      productDetails(),
+                      productReviews(),
+                      // relatedProducts(),
+                    ],
                   ),
-          ),
+                ),
         ),
         // bottomNavigationBar: cartPrice(),
       ),

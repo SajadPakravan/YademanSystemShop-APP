@@ -141,11 +141,7 @@ class HttpRequest {
     return getRequest(url: urlProducts, details: details);
   }
 
-  getProduct() async {
-    int id = Get.arguments['id'];
-    if (kDebugMode) print("Product id >>>> $id");
-    return getRequest(url: urlProducts, id: id.toString());
-  }
+  getProduct() async => getRequest(url: urlProducts, id: Get.arguments['id'].toString());
 
   getCategories({int parent = 0, int perPage = 10, String include = ""}) async {
     String addInclude = "";
@@ -269,32 +265,32 @@ class HttpRequest {
     }
   }
 
-  getSearchProduct({
-    required String search,
-    int perPage = 100,
-    int page = 1,
-  }) async {
-    var more = "&&search=$search&per_page=$perPage&page=$page";
-
-    final requestGetSearchProducts = await http.get(
-      Uri.parse(urlProducts + key + secret + more),
-    );
-
-    dynamic jsonGetSearchProducts;
-
-    if (requestGetSearchProducts.statusCode == 200) {
-      jsonGetSearchProducts = jsonDecode(requestGetSearchProducts.body);
-
-      if (jsonGetSearchProducts.toString() == "[]") {
-        return "empty";
-      } else {
-        return jsonGetSearchProducts;
-      }
-    } else {
-      print("requestGetProducts >>>: ${requestGetSearchProducts.request}");
-      print("requestGetProducts_statusCode >>>:  ${requestGetSearchProducts.statusCode}");
-      print("jsonGetProducts_error >>>:  $jsonGetSearchProducts");
-      return false;
-    }
-  }
+// getSearchProduct({
+//   required String search,
+//   int perPage = 100,
+//   int page = 1,
+// }) async {
+//   var more = "&&search=$search&per_page=$perPage&page=$page";
+//
+//   final requestGetSearchProducts = await http.get(
+//     Uri.parse(urlProducts + key + secret + more),
+//   );
+//
+//   dynamic jsonGetSearchProducts;
+//
+//   if (requestGetSearchProducts.statusCode == 200) {
+//     jsonGetSearchProducts = jsonDecode(requestGetSearchProducts.body);
+//
+//     if (jsonGetSearchProducts.toString() == "[]") {
+//       return "empty";
+//     } else {
+//       return jsonGetSearchProducts;
+//     }
+//   } else {
+//     print("requestGetProducts >>>: ${requestGetSearchProducts.request}");
+//     print("requestGetProducts_statusCode >>>:  ${requestGetSearchProducts.statusCode}");
+//     print("jsonGetProducts_error >>>:  $jsonGetSearchProducts");
+//     return false;
+//   }
+// }
 }

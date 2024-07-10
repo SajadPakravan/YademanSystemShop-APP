@@ -17,18 +17,17 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   HttpRequest httpRequest = HttpRequest();
+  List<ProductModel> product = [];
+  List<ProductReviewsModel> productReviewsLst = [];
+  int dataNumber = 0;
   dynamic jsonProduct = "";
   dynamic jsonGetProductReviews = "";
-  List<ProductModel> productsDetLst = [];
-  List<Images> productsImg = [];
-  List<ProductReviewsModel> productReviewsLst = [];
   int categoryId = 0;
   String name = "";
   String description = "";
   List attributes = [];
   int regularPrice = 0;
   int salePrice = 0;
-  int numLoad = 0;
   IconData favoriteIcon = Icons.favorite;
   Color favoriteIconColor = Colors.red;
   bool favorite = false;
@@ -36,15 +35,14 @@ class _ProductScreenState extends State<ProductScreen> {
   int slideIndex = 0;
 
   onSlideChange(index) {
-    setState(() {
-      slideIndex = index;
-    });
+    setState(() => slideIndex = index);
   }
 
   getProduct() async {
     jsonProduct = await httpRequest.getProduct();
+
     setState(() {
-      categoryId = jsonProduct["categories"][0]["id"];
+      categoryId = jsonProduct['categories'][0]["id"];
       name = jsonProduct['name'];
       description = jsonProduct['description'];
       attributes = jsonProduct['attributes'];
@@ -56,7 +54,7 @@ class _ProductScreenState extends State<ProductScreen> {
     if (salePrice != 0) {
       salePrice = int.parse(jsonProduct['sale_price'].toString().toPersianDigit());
     }
-    numLoad++;
+    dataNumber++;
     loadContent();
   }
 
@@ -76,7 +74,7 @@ class _ProductScreenState extends State<ProductScreen> {
         );
       });
     }
-    numLoad++;
+    dataNumber++;
     loadContent();
   }
 
@@ -86,42 +84,42 @@ class _ProductScreenState extends State<ProductScreen> {
       perPage: 10,
     );
 
-    List json = jsonGetRelatedProducts;
-
-    SharedPreferences sharePref = await SharedPreferences.getInstance();
-    int? productId = sharePref.getInt("productId");
-
-    json.removeWhere((e) => e["id"] == productId);
-
-    List jsonProductsImages = [];
-
-    for (var i in json) {
-      jsonProductsImages.add(i['images'][0]);
-    }
-    for (var image in jsonProductsImages) {
-      setState(() {
-        productsImg.add(Images(src: image['src']));
-      });
-    }
-
-    for (var p in json) {
-      setState(() {
-        productsDetLst.add(
-          ProductModel(
-            id: p['id'],
-            name: p['name'],
-            regularPrice: p['regular_price'],
-            price: p['sale_price'],
-          ),
-        );
-      });
-    }
-    numLoad++;
-    loadContent();
+    // List json = jsonGetRelatedProducts;
+    //
+    // SharedPreferences sharePref = await SharedPreferences.getInstance();
+    // int? productId = sharePref.getInt("productId");
+    //
+    // json.removeWhere((e) => e["id"] == productId);
+    //
+    // List jsonProductsImages = [];
+    //
+    // for (var i in json) {
+    //   jsonProductsImages.add(i['images'][0]);
+    // }
+    // for (var image in jsonProductsImages) {
+    //   setState(() {
+    //     productsImg.add(Images(src: image['src']));
+    //   });
+    // }
+    //
+    // for (var p in json) {
+    //   setState(() {
+    //     productsDetLst.add(
+    //       ProductModel(
+    //         id: p['id'],
+    //         name: p['name'],
+    //         regularPrice: p['regular_price'],
+    //         price: p['sale_price'],
+    //       ),
+    //     );
+    //   });
+    // }
+    // dataNumber++;
+    // loadContent();
   }
 
   loadContent() {
-    switch (numLoad) {
+    switch (dataNumber) {
       case 0:
         {
           getProduct();
@@ -146,24 +144,10 @@ class _ProductScreenState extends State<ProductScreen> {
     loadContent();
   }
 
-  Future<void> onRefresh() async {
-    setState(() {
-      jsonProduct.clear();
-      productsDetLst.clear();
-      productsImg.clear();
-      productReviewsLst.clear();
-      numLoad = 0;
-      slideIndex = 0;
-    });
-    loadContent();
-    await Future<void>.delayed(const Duration(seconds: 3));
-  }
-
   @override
   Widget build(BuildContext context) {
     return ProductView(
       context: context,
-      onRefresh: onRefresh,
       jsonProduct: jsonProduct,
       slideIndex: slideIndex,
       onSlideChange: onSlideChange,
