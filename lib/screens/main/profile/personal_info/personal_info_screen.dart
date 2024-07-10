@@ -43,11 +43,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     super.initState();
     setState(() {
       customer = Get.arguments;
-      firstname = customer.firstName!;
-      lastname = customer.lastName!;
+      firstname = customer.firstname!;
+      lastname = customer.lastname!;
       email = customer.email!;
-      firstnameField.text = customer.firstName!;
-      lastnameField.text = customer.lastName!;
+      firstnameField.text = customer.firstname!;
+      lastnameField.text = customer.lastname!;
       emailField.text = customer.email!;
     });
   }
@@ -62,47 +62,31 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              info(title: 'شناسه کاربری', subtitle: customer.id.toString(), icon: Icons.person_outline, trailing: null, onTap: null),
-              info(title: 'نام کاربری', subtitle: customer.username!, icon: Icons.person_outline, trailing: null, onTap: null),
               info(
                 title: 'نام',
                 subtitle: firstname,
                 icon: Icons.person,
-                onTap: () => appDialogs.editeValue(
-                  context: context,
-                  value: firstname,
-                  title: 'نام',
-                  controller: firstnameField,
-                  hint: 'نام خود را وارد کنید',
-                  onPressed: () => setState(() => firstname = firstnameField.text),
-                ),
+                controller: firstnameField,
+                hint: 'نام خود را وارد کنید',
+                onPressed: () => setState(() => firstname = firstnameField.text),
               ),
               info(
                 title: 'نام خانوادگی',
                 subtitle: lastname,
                 icon: Icons.person,
-                onTap: () => appDialogs.editeValue(
-                  context: context,
-                  value: lastname,
-                  title: 'نام خانوادگی',
-                  controller: lastnameField,
-                  hint: 'نام خانوادگی خود را وارد کنید',
-                  onPressed: () => setState(() => lastname = lastnameField.text),
-                ),
+                controller: lastnameField,
+                hint: 'نام خانوادگی خود را وارد کنید',
+                onPressed: () => setState(() => lastname = lastnameField.text),
               ),
               info(
                 title: 'ایمیل',
                 subtitle: email,
                 icon: Icons.email,
-                onTap: () => appDialogs.editeValue(
-                  context: context,
-                  value: email,
-                  title: 'ایمیل',
-                  controller: emailField,
-                  hint: 'ایمیل خود را وارد کنید',
-                  textDirection: TextDirection.ltr,
-                  onPressed: () => setState(() => email = emailField.text),
-                ),
+                controller: emailField,
+                hint: 'ایمیل خود را وارد کنید',
+                textDirection: TextDirection.ltr,
+                textInputType: TextInputType.emailAddress,
+                onPressed: () => setState(() => email = emailField.text),
               ),
               const SizedBox(height: 20),
               Padding(
@@ -115,7 +99,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   height: 50,
                   borderRadius: width,
                   onPressed: () async {
-                    if (firstname != customer.firstName! || lastname != customer.lastName || email != customer.email) {
+                    if (firstname != customer.firstname! || lastname != customer.lastname || email != customer.email) {
                       dynamic jsonUpdate = await httpRequest.updateCustomer(
                         id: customer.id.toString(),
                         firstname: firstname,
@@ -143,7 +127,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     required String subtitle,
     required IconData icon,
     Widget? trailing = const Icon(Icons.edit),
-    required void Function()? onTap,
+    required TextEditingController controller,
+    required String hint,
+    TextInputType textInputType = TextInputType.name,
+    TextDirection textDirection = TextDirection.rtl,
+    required dynamic Function() onPressed,
   }) {
     return Card(
       margin: const EdgeInsets.all(10),
@@ -156,7 +144,16 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         subtitle: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyLargeView(subtitle, fontWeight: FontWeight.bold)),
         leading: Icon(icon),
         trailing: trailing,
-        onTap: onTap,
+        onTap: () => appDialogs.editeValue(
+          context: context,
+          value: subtitle,
+          title: title,
+          controller: controller,
+          hint: hint,
+          textInputType: textInputType,
+          textDirection: textDirection,
+          onPressed: onPressed,
+        ),
       ),
     );
   }

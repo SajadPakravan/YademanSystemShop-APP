@@ -128,6 +128,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       "لطفا فیلترشکن را خاموش کرده و وضعیت اینترنت را بررسی کنید",
                       color: Colors.white,
                       height: 1.7,
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 10),
                     Container(

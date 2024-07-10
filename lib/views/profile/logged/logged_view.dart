@@ -35,7 +35,7 @@ class LoggedView extends StatelessWidget {
               children: [
                 CircleAvatar(radius: 150 / 2, backgroundImage: CachedNetworkImageProvider(customer.avatarUrl!)),
                 const SizedBox(height: 10),
-                TextBodyLargeView('${customer.firstName} ${customer.lastName}'),
+                TextBodyLargeView('${customer.firstname} ${customer.lastname}'),
                 const SizedBox(height: 10),
                 TextBodyMediumView(customer.email!),
                 const SizedBox(height: 20),

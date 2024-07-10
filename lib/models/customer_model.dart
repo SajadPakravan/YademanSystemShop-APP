@@ -1,8 +1,8 @@
 class CustomerModel {
   int? id;
   String? email;
-  String? firstName;
-  String? lastName;
+  String? firstname;
+  String? lastname;
   String? role;
   String? username;
   String? avatarUrl;
@@ -12,8 +12,8 @@ class CustomerModel {
   CustomerModel({
     this.id,
     this.email,
-    this.firstName,
-    this.lastName,
+    this.firstname,
+    this.lastname,
     this.role,
     this.username,
     this.avatarUrl,
@@ -24,8 +24,8 @@ class CustomerModel {
   CustomerModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     email = json['email'];
-    firstName = json['first_name'];
-    lastName = json['last_name'];
+    firstname = json['first_name'];
+    lastname = json['last_name'];
     role = json['role'];
     username = json['username'];
     avatarUrl = json['avatar_url'];
@@ -37,8 +37,8 @@ class CustomerModel {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['email'] = email;
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
+    data['first_name'] = firstname;
+    data['last_name'] = lastname;
     data['role'] = role;
     data['username'] = username;
     data['avatar_url'] = avatarUrl;
@@ -53,6 +53,7 @@ class Billing {
   String? lastName;
   String? email;
   String? phone;
+  String? company;
   String? country;
   String? state;
   String? city;
@@ -65,6 +66,7 @@ class Billing {
     this.lastName,
     this.email,
     this.phone,
+    this.company,
     this.country,
     this.state,
     this.city,
@@ -78,6 +80,7 @@ class Billing {
     lastName = json['last_name'];
     email = json['email'];
     phone = json['phone'];
+    company = json['company'];
     country = json['country'];
     state = json['state'];
     city = json['city'];
@@ -92,6 +95,7 @@ class Billing {
     data['last_name'] = lastName;
     data['email'] = email;
     data['phone'] = phone;
+    data['company'] = company;
     data['country'] = country;
     data['state'] = state;
     data['city'] = city;
@@ -106,6 +110,7 @@ class Shipping {
   String? firstName;
   String? lastName;
   String? phone;
+  String? company;
   String? country;
   String? state;
   String? city;
@@ -113,12 +118,24 @@ class Shipping {
   String? address2;
   String? postcode;
 
-  Shipping({this.firstName, this.lastName, this.phone, this.country, this.state, this.city, this.address1, this.address2, this.postcode});
+  Shipping({
+    this.firstName,
+    this.lastName,
+    this.phone,
+    this.company,
+    this.country,
+    this.state,
+    this.city,
+    this.address1,
+    this.address2,
+    this.postcode,
+  });
 
   Shipping.fromJson(Map<String, dynamic> json) {
     firstName = json['first_name'];
     lastName = json['last_name'];
     phone = json['phone'];
+    company = json['company'];
     country = json['country'];
     state = json['state'];
     city = json['city'];
@@ -132,6 +149,7 @@ class Shipping {
     data['first_name'] = firstName;
     data['last_name'] = lastName;
     data['phone'] = phone;
+    data['company'] = company;
     data['country'] = country;
     data['state'] = state;
     data['city'] = city;

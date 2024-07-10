@@ -44,7 +44,11 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     setState(() => loading = true);
     dynamic jsonCustomer = await httpRequest.getCustomer(email: await cache.getString('email'));
     jsonCustomer.forEach((c) => setState(() => customer = CustomerModel.fromJson(c)));
-    if (customer.firstName!.isEmpty) setState(() => personalInfoAlert = true);
+    setState(() {
+      personalInfoAlert = false;
+      addressAlert = false;
+    });
+    if (customer.firstname!.isEmpty) setState(() => personalInfoAlert = true);
     if (customer.billing!.city!.isEmpty) setState(() => addressAlert = true);
     setState(() {
       logged = true;

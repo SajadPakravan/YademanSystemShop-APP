@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/widgets/snack_bar_view.dart';
 
 class HttpRequest {
@@ -189,6 +189,60 @@ class HttpRequest {
     return putRequest(url: urlCustomers, id: id, body: body);
   }
 
+  updateBillingAddress({
+    required String id,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String phone,
+    required String company,
+    required String state,
+    required String city,
+    required String street,
+    required String number,
+    required String postcode,
+  }) async {
+    Billing billing = Billing();
+    billing.firstName = firstname;
+    billing.lastName = lastname;
+    billing.email = email;
+    billing.phone = phone;
+    billing.company = company;
+    billing.country = 'IR';
+    billing.state = state;
+    billing.city = city;
+    billing.address1 = street;
+    billing.address2 = number;
+    billing.postcode = postcode;
+    return putRequest(url: urlCustomers, id: id, body: {'billing': billing.toJson()});
+  }
+
+  updateShippingAddress({
+    required String id,
+    required String firstname,
+    required String lastname,
+    required String phone,
+    required String company,
+    required String state,
+    required String city,
+    required String street,
+    required String number,
+    required String postcode,
+  }) async {
+    Shipping shipping = Shipping();
+    shipping.firstName = firstname;
+    shipping.lastName = lastname;
+    shipping.phone = phone;
+    shipping.company = company;
+    shipping.country = 'IR';
+    shipping.state = state;
+    shipping.city = city;
+    shipping.address1 = street;
+    shipping.address2 = number;
+    shipping.postcode = postcode;
+    return putRequest(url: urlCustomers, id: id, body: {'shipping': shipping.toJson()});
+  }
+
   uploadAvatar({required BuildContext context, required String userId, required File avatar}) async {
     final request = http.MultipartRequest('POST', Uri.parse(urlUpload));
     request.fields['user_id'] = userId;
@@ -241,293 +295,6 @@ class HttpRequest {
       print("requestGetProducts_statusCode >>>:  ${requestGetSearchProducts.statusCode}");
       print("jsonGetProducts_error >>>:  $jsonGetSearchProducts");
       return false;
-    }
-  }
-
-  createProduct({
-    required String name,
-    required String regularPrice,
-    required String salePrice,
-    required List<dynamic> categories,
-    required List<dynamic> images,
-    required List<dynamic> attributes,
-  }) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-    Map<String, dynamic> body = {
-      "name": name,
-      "regular_price": regularPrice,
-      "sale_price": salePrice,
-      "categories": categories,
-      "images": images,
-      "attributes": attributes,
-    };
-    print(body);
-    final requestCreateProduct = await http.post(
-      Uri.parse(urlProducts + key + secret),
-      headers: headers,
-      body: jsonEncode(body),
-    );
-
-    dynamic jsonCreateProduct;
-
-    if (requestCreateProduct.statusCode == 201) {
-      jsonCreateProduct = jsonDecode(requestCreateProduct.body);
-      return jsonCreateProduct;
-    } else {
-      print("requestGetCategoryProducts >>>: ${requestCreateProduct.request}");
-      print("requestGetCategoryProducts_statusCode >>>:  ${requestCreateProduct.statusCode}");
-      print("jsonGetCategoryProducts_error >>>:  $jsonCreateProduct");
-      return false;
-    }
-  }
-
-  getBillAddress() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int id = sharedPreferences.getInt("user_id")!;
-    String token = sharedPreferences.getString("token")!;
-
-    final requestGetBillAddress = await http.get(
-      Uri.parse(urlCustomers + id.toString()),
-      headers: {"Authorization": "Bearer $token"},
-    );
-    print("requestGetBillAddress >>>: ${requestGetBillAddress.request}");
-
-    dynamic jsonGetBillAddress;
-
-    if (requestGetBillAddress.statusCode == 200) {
-      jsonGetBillAddress = jsonDecode(requestGetBillAddress.body);
-      print("jsonGetBillAddress_body >>>:  ${jsonGetBillAddress["billing"]}");
-      return jsonGetBillAddress["billing"];
-    } else {
-      print("requestGetCustomer_statusCode >>>:  ${requestGetBillAddress.statusCode}");
-      print("jsonGetCustomer_body_Error >>>:  ${requestGetBillAddress.body}");
-      return false;
-    }
-  }
-
-  getShippingAddress() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int id = sharedPreferences.getInt("user_id")!;
-    String token = sharedPreferences.getString("token")!;
-
-    final requestGetShippingAddress = await http.get(
-      Uri.parse(urlCustomers + id.toString()),
-      headers: {"Authorization": "Bearer $token"},
-    );
-    print("requestGetShippingAddress >>>: ${requestGetShippingAddress.request}");
-
-    dynamic jsonGetShippingAddress;
-
-    if (requestGetShippingAddress.statusCode == 200) {
-      jsonGetShippingAddress = jsonDecode(requestGetShippingAddress.body);
-      print("jsonGetBillAddress_body >>>:  ${jsonGetShippingAddress["billing"]}");
-      return jsonGetShippingAddress["billing"];
-    } else {
-      print("requestGetCustomer_statusCode >>>:  ${requestGetShippingAddress.statusCode}");
-      print("jsonGetCustomer_body_Error >>>:  ${requestGetShippingAddress.body}");
-      return false;
-    }
-  }
-
-  updateBillAddress({
-    required String firstName,
-    required String lastName,
-    required String phone,
-    required String state,
-    required String city,
-    required String address_1,
-    required String address_2,
-    required String postcode,
-  }) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int id = sharedPreferences.getInt("user_id")!;
-    String email = sharedPreferences.getString("email")!;
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-    Map<String, dynamic> body = {
-      "billing": {
-        "first_name": firstName,
-        "last_name": lastName,
-        "phone": phone,
-        "email": email,
-        "country": "IR",
-        "state": state,
-        "city": city,
-        "address_1": address_1,
-        "address_2": address_2,
-        "postcode": postcode,
-      },
-    };
-
-    final requestUpdateBillAddress = await http.put(
-      Uri.parse(urlCustomers + id.toString() + key + secret),
-      headers: headers,
-      body: jsonEncode(body),
-    );
-    print("requestUpdateBillAddress >>>: ${requestUpdateBillAddress.request}");
-
-    dynamic jsonUpdateBillAddress;
-
-    if (requestUpdateBillAddress.statusCode == 200) {
-      jsonUpdateBillAddress = jsonDecode(requestUpdateBillAddress.body);
-      print("jsonUpdateBillAddress_body >>>:  ${jsonUpdateBillAddress["billing"]}");
-    } else {
-      print("requestUpdateBillAddress.statusCode >>>:  ${requestUpdateBillAddress.statusCode}");
-      print("requestUpdateBillAddress.body_Error >>>:  ${requestUpdateBillAddress.body}");
-      return false;
-    }
-  }
-
-  updateShippingAddress({
-    required String firstName,
-    required String lastName,
-    required String state,
-    required String city,
-    required String address_1,
-    required String address_2,
-    required String postcode,
-  }) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int id = sharedPreferences.getInt("user_id")!;
-
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
-    Map<String, dynamic> body = {
-      "billing": {
-        "first_name": firstName,
-        "last_name": lastName,
-        "country": "IR",
-        "state": state,
-        "city": city,
-        "address_1": address_1,
-        "address_2": address_2,
-        "postcode": postcode,
-      },
-    };
-
-    final requestUpdateShippingAddress = await http.put(
-      Uri.parse(urlCustomers + id.toString() + key + secret),
-      headers: headers,
-      body: jsonEncode(body),
-    );
-    print("requestUpdateShippingAddress >>>: ${requestUpdateShippingAddress.request}");
-
-    dynamic jsonUpdateShippingAddress;
-
-    if (requestUpdateShippingAddress.statusCode == 200) {
-      jsonUpdateShippingAddress = jsonDecode(requestUpdateShippingAddress.body);
-      print("jsonUpdateBillAddress_body >>>:  ${jsonUpdateShippingAddress["billing"]}");
-    } else {
-      print("requestUpdateShippingAddress.statusCode >>>:  ${requestUpdateShippingAddress.statusCode}");
-      print("requestUpdateShippingAddress.body_Error >>>:  ${requestUpdateShippingAddress.body}");
-      return false;
-    }
-  }
-
-  createOrder({
-    required String status,
-    required List<Map<String, int>> lineItems,
-  }) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int? customerId = sharedPreferences.getInt("user_id");
-
-    if (customerId == 0) {
-      // MaterialPageRoute(builder: (BuildContext context) => const LoginScreen());
-    } else {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-
-      dynamic jsonGetBillAddress = await getBillAddress();
-      dynamic jsonGetShippingAddress = await getShippingAddress();
-
-      print(jsonGetBillAddress);
-
-      Map<String, dynamic> body = {
-        "payment_method_title": "سفارش از اپلیکیشن",
-        "customer_id": customerId,
-        "status": status,
-        "billing": jsonGetBillAddress,
-        "shipping": jsonGetShippingAddress,
-        "line_items": lineItems,
-        "shipping_lines": [
-          {"method_id": "flat_rate", "method_title": "Flat Rate", "total": "30000"}
-        ]
-      };
-      final requestCreateOrder = await http.post(
-        Uri.parse(urlOrders + key + secret),
-        headers: headers,
-        body: jsonEncode(body),
-      );
-
-      dynamic jsonCreateOrder;
-
-      print(jsonEncode(body));
-
-      if (requestCreateOrder.statusCode == 201) {
-        jsonCreateOrder = jsonDecode(requestCreateOrder.body);
-        return jsonCreateOrder;
-      } else {
-        print("requestCreateOrder >>>: ${requestCreateOrder.request}");
-        print("requestCreateOrder_statusCode >>>:  ${requestCreateOrder.statusCode}");
-        print("jsonCreateOrder_error >>>:  $jsonCreateOrder");
-        return false;
-      }
-    }
-  }
-
-  updateOrder({
-    required String status,
-    required Map<String, int> lineItems,
-  }) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    int? customerId = sharedPreferences.getInt("user_id");
-
-    if (customerId == 0) {
-      // MaterialPageRoute(builder: (BuildContext context) => const LoginScreen());
-    } else {
-      Map<String, String> headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-
-      dynamic jsonGetBillAddress = await getBillAddress();
-      dynamic jsonGetShippingAddress = await getShippingAddress();
-
-      print(jsonGetBillAddress);
-
-      Map<String, dynamic> body = {
-        "payment_method_title": "سفارش از اپلیکیشن",
-        "customer_id": customerId,
-        "status": status,
-        "billing": jsonGetBillAddress,
-        "shipping": jsonGetShippingAddress,
-        "line_items": [lineItems],
-        "shipping_lines": [
-          {"method_id": "flat_rate", "method_title": "Flat Rate", "total": "30000"}
-        ]
-      };
-      final requestCreateOrder = await http.post(
-        Uri.parse(urlOrders + key + secret),
-        headers: headers,
-        body: jsonEncode(body),
-      );
-
-      dynamic jsonCreateOrder;
-
-      if (requestCreateOrder.statusCode == 201) {
-        jsonCreateOrder = jsonDecode(requestCreateOrder.body);
-        return jsonCreateOrder;
-      } else {
-        print("requestCreateOrder >>>: ${requestCreateOrder.request}");
-        print("requestCreateOrder_statusCode >>>:  ${requestCreateOrder.statusCode}");
-        print("jsonCreateOrder_error >>>:  $jsonCreateOrder");
-        return false;
-      }
     }
   }
 }
