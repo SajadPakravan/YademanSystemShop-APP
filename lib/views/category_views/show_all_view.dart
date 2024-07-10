@@ -2,14 +2,12 @@ import 'package:auto_size_text/auto_size_text.dart';
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/widgets/app_dialogs.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
 import 'package:yad_sys/widgets/loading.dart';
 
 class ShowAllView extends StatelessWidget {
-  ShowAllView({
+  const ShowAllView({
     super.key,
     required this.context,
     required this.onRefresh,
