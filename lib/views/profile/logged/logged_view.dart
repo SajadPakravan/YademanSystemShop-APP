@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/main/profile/address/address_screen.dart';
+import 'package:yad_sys/screens/main/profile/cart/cart_screen.dart';
 import 'package:yad_sys/screens/main/profile/personal_info/personal_info_screen.dart';
+import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
@@ -67,7 +69,7 @@ class LoggedView extends StatelessWidget {
                     getCustomer();
                   },
                 ),
-                option(title: 'سبد خرید', icon: Icons.shopping_cart, onTap: () {}),
+                option(title: 'سبد خرید', icon: Icons.shopping_cart, onTap: () => toPage(const CartScreen())),
                 option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () {}),
                 option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () {}),
                 option(title: 'تماس با پشتیبانی', icon: Icons.headphones, onTap: () {}),

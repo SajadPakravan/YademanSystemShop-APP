@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:yad_sys/connections/http_request.dart';
+import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
 import 'package:yad_sys/tools/app_cache.dart';
@@ -25,6 +27,7 @@ class _ProductScreenState extends State<ProductScreen> {
   bool favorite = false;
   bool isAddCart = false;
   int slideIndex = 0;
+  Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
 
   onSlideChange(index) => setState(() => slideIndex = index);
 
@@ -80,9 +83,15 @@ class _ProductScreenState extends State<ProductScreen> {
   addCart() async {
     AppCache cache = AppCache();
     String email = await cache.getString('email') ?? '';
-    if (email.isEmpty) setState(() => authError = true);
-
-
+    if (email.isEmpty) {
+      setState(() => authError = true);
+    } else {
+      ProductImage img = product.images![0];
+      setState(() {
+        cartBox.add(CartModel(id: product.id!, name: product.name!, image: img.src!, price: int.parse(product.price!), quantity: 1));
+      });
+      print(cartBox.name);
+    }
   }
 
   @override

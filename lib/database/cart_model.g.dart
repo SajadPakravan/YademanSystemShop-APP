@@ -1,44 +1,44 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of '../hive/book_models.dart';
+part of 'cart_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class BookModelsAdapter extends TypeAdapter<BookModels> {
+class CartModelAdapter extends TypeAdapter<CartModel> {
   @override
   final int typeId = 0;
 
   @override
-  BookModels read(BinaryReader reader) {
+  CartModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return BookModels(
-      fields[0] as String?,
-      fields[1] as String?,
-      fields[2] as String?,
-      fields[3] as String?,
-      fields[4] as double?,
+    return CartModel(
+      id: fields[0] as int,
+      name: fields[1] as String,
+      image: fields[2] as String,
+      price: fields[3] as int,
+      quantity: fields[4] as int,
     );
   }
 
   @override
-  void write(BinaryWriter writer, BookModels obj) {
+  void write(BinaryWriter writer, CartModel obj) {
     writer
       ..writeByte(5)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.author)
+      ..write(obj.name)
       ..writeByte(2)
-      ..write(obj.description)
+      ..write(obj.image)
       ..writeByte(3)
-      ..write(obj.imgUrl)
+      ..write(obj.price)
       ..writeByte(4)
-      ..write(obj.price);
+      ..write(obj.quantity);
   }
 
   @override
@@ -47,5 +47,7 @@ class BookModelsAdapter extends TypeAdapter<BookModels> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is BookModelsAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is CartModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

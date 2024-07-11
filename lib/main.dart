@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:hive_flutter/adapters.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
@@ -12,7 +15,12 @@ import 'package:yad_sys/view_models/categories/categories_view_model.dart';
 import 'package:yad_sys/view_models/home/home_view_model.dart';
 import 'package:yad_sys/view_models/shop/shop_view_model.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final directory = await getApplicationDocumentsDirectory();
+  await Hive.initFlutter(directory.path);
+  Hive.registerAdapter(CartModelAdapter());
+  await Hive.openBox<CartModel>('cartBox');
   runApp(
     MultiProvider(
       providers: [

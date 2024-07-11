@@ -35,9 +35,6 @@ class ProductView extends StatelessWidget {
   final bool authError;
   final void Function() addCart;
   final int quantity = 1;
-  final int pPrice = 0;
-  final double fontSize = 14;
-  final int categoryNumber = 1;
   final IconData favoriteIcon = Icons.favorite;
   final Color favoriteIconColor = Colors.red;
   final bool favorite = false;
@@ -81,27 +78,7 @@ class ProductView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(icon: const Icon(Icons.shopping_cart), onPressed: () {}),
-            IconButton(
-              icon: Icon(
-                favoriteIcon,
-                color: favoriteIconColor,
-              ),
-              onPressed: () {
-                if (favorite) {
-                  // setState(() {
-                  //   favoriteIcon = Icons.favorite;
-                  //   favoriteIconColor = Colors.red;
-                  //   favorite = false;
-                  // });
-                } else {
-                  // setState(() {
-                  //   favoriteIcon = Icons.favorite_outline;
-                  //   favoriteIconColor = Colors.black54;
-                  //   favorite = true;
-                  // });
-                }
-              },
-            ),
+            IconButton(icon: Icon(favoriteIcon, color: favoriteIconColor), onPressed: () {}),
             IconButton(icon: const Icon(Icons.share), onPressed: () {}),
           ],
         ),
@@ -140,7 +117,7 @@ class ProductView extends StatelessWidget {
       ),
       onTap: () => toPage(
         const ProductInfoScreen(),
-        {'content': content, 'description': product.description!, 'attributes': product.attributes!, 'reviews': reviewsLst},
+        arguments: {'content': content, 'description': product.description!, 'attributes': product.attributes!, 'reviews': reviewsLst},
       ),
     );
   }
@@ -178,7 +155,7 @@ class ProductView extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             authError
-                ? const TextBodyMediumView('لطفا وارد حساب کاربری خود شوید',color: Colors.red)
+                ? const TextBodyMediumView('لطفا وارد حساب کاربری خود شوید', color: Colors.red)
                 : ElevatedButton(
                     style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
                     onPressed: addCart,
