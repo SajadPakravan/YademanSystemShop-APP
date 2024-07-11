@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
+import 'package:yad_sys/screens/product/product_info_screen.dart';
+import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/view_models/product_view_model.dart';
 import 'package:yad_sys/widgets/image_slides/product_slide.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
+import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
 
 class ProductView extends StatelessWidget {
   ProductView({
@@ -49,7 +52,6 @@ class ProductView extends StatelessWidget {
                     children: [
                       ProductSlide(product: product, slideIndex: slideIndex, onSlideChange: onSlideChange),
                       productDetails(),
-                      // productReviews(),
                       // relatedProducts(),
                     ],
                   ),
@@ -102,20 +104,25 @@ class ProductView extends StatelessWidget {
   }
 
   productDetails() {
+    ProductCategory category = product.categories![0];
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(alignment: Alignment.centerRight, child: TextBodyMediumView(product.name!, maxLines: 2)),
+          TextBodyMediumView(product.name!, maxLines: 2, fontWeight: FontWeight.bold),
+          const SizedBox(height: 10),
+          TextBodySmallView('دسته‌بندی: ${category.name!}'),
           const SizedBox(height: 20),
-          Visibility(visible: product.description!.isEmpty ? false : true, child: productDetBtn(title: 'معرفی محصول', content: 1)),
-          productDetBtn(title: 'مشخصات محصول', content: 2),
+          Visibility(visible: product.description!.isEmpty ? false : true, child: infoBtn(title: 'معرفی محصول', content: 1)),
+          infoBtn(title: 'مشخصات محصول', content: 2),
+          Visibility(visible: reviewsLst.isEmpty ? false : true, child: infoBtn(title: 'دیدگاه‌ها', content: 3)),
         ],
       ),
     );
   }
 
-  productDetBtn({required String title, required int content}) {
+  infoBtn({required String title, required int content}) {
     return InkWell(
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 20),
@@ -125,17 +132,16 @@ class ProductView extends StatelessWidget {
           children: [TextBodyMediumView(title), const Icon(Icons.arrow_forward_ios, color: Colors.black54, size: 20)],
         ),
       ),
-      onTap: () => productDetailViewModel.onTapProductInfo(
-        content: content,
-        description: product.description!,
-        attributes: product.attributes!,
+      onTap: () => toPage(
+        const ProductInfoScreen(),
+        {'content': content, 'description': product.description!, 'attributes': product.attributes!, 'reviews': reviewsLst},
       ),
     );
   }
 
-  // cartPrice() {
-  //   return
-  // }
+// cartPrice() {
+//   return
+// }
 
 // productReviews() {
 //   double width = MediaQuery.of(context).size.width;

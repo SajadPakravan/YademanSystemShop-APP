@@ -143,7 +143,7 @@ class HttpRequest {
 
   getProduct() async => getRequest(url: urlProducts, id: Get.arguments['id'].toString());
 
-  getCategories({int parent = 0, int perPage = 10, String include = ""}) async {
+  getCategories({int parent = 0, int perPage = 10, String include = ''}) async {
     String addInclude = "";
     if (include.isNotEmpty) {
       addInclude = "&include=$include";
@@ -152,12 +152,8 @@ class HttpRequest {
     return getRequest(url: urlCategories, details: details);
   }
 
-  getProductReviews({
-    String status = "approved",
-    int perPage = 5,
-  }) async {
-    int id = Get.arguments["id"];
-    String details = "&product=$id&status=$status&per_page=$perPage";
+  getProductReviews({String status = 'approved', int perPage = 10}) async {
+    String details = '&product=${Get.arguments['id']}&status=$status&per_page=$perPage';
     return getRequest(url: urlProductReviews, details: details);
   }
 

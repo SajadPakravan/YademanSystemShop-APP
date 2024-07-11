@@ -7,7 +7,7 @@ class ProductModel {
     String? price,
     String? regularPrice,
     bool? onSale,
-    List<Category>? categories,
+    List<ProductCategory>? categories,
     List<ProductImage>? images,
     List<Attribute>? attributes,
   }) {
@@ -29,7 +29,7 @@ class ProductModel {
   String? _price;
   String? _regularPrice;
   bool? _onSale;
-  List<Category>? _categories;
+  List<ProductCategory>? _categories;
   List<ProductImage>? _images;
   List<Attribute>? _attributes;
 
@@ -47,7 +47,7 @@ class ProductModel {
 
   bool? get onSale => _onSale;
 
-  List<Category>? get categories => _categories;
+  List<ProductCategory>? get categories => _categories;
 
   List<ProductImage>? get images => _images;
 
@@ -63,7 +63,7 @@ class ProductModel {
     _onSale = json['on_sale'];
     if (json['categories'] != null) {
       _categories = [];
-      json['categories'].forEach((v) => _categories?.add(Category.fromJson(v)));
+      json['categories'].forEach((v) => _categories?.add(ProductCategory.fromJson(v)));
     }
     if (json['images'] != null) {
       _images = [];
@@ -91,8 +91,8 @@ class ProductModel {
   }
 }
 
-class Category {
-  Category({int? id, String? name}) {
+class ProductCategory {
+  ProductCategory({int? id, String? name}) {
     _id = id;
     _name = name;
   }
@@ -104,7 +104,7 @@ class Category {
 
   String? get name => _name;
 
-  Category.fromJson(dynamic json) {
+  ProductCategory.fromJson(dynamic json) {
     _id = json['id'];
     _name = json['name'];
   }

@@ -23,9 +23,7 @@ class _ProductScreenState extends State<ProductScreen> {
   int slideIndex = 0;
   bool loading = false;
 
-  onSlideChange(index) {
-    setState(() => slideIndex = index);
-  }
+  onSlideChange(index) => setState(() => slideIndex = index);
 
   getProduct() async {
     dynamic jsonProduct = await httpRequest.getProduct();
