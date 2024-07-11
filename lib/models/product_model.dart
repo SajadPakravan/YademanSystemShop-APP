@@ -7,9 +7,9 @@ class ProductModel {
     String? price,
     String? regularPrice,
     bool? onSale,
-    List<Categories>? categories,
-    List<Images>? images,
-    List<Attributes>? attributes,
+    List<Category>? categories,
+    List<ProductImage>? images,
+    List<Attribute>? attributes,
   }) {
     _id = id;
     _name = name;
@@ -29,9 +29,9 @@ class ProductModel {
   String? _price;
   String? _regularPrice;
   bool? _onSale;
-  List<Categories>? _categories;
-  List<Images>? _images;
-  List<Attributes>? _attributes;
+  List<Category>? _categories;
+  List<ProductImage>? _images;
+  List<Attribute>? _attributes;
 
   int? get id => _id;
 
@@ -47,11 +47,11 @@ class ProductModel {
 
   bool? get onSale => _onSale;
 
-  List<Categories>? get categories => _categories;
+  List<Category>? get categories => _categories;
 
-  List<Images>? get images => _images;
+  List<ProductImage>? get images => _images;
 
-  List<Attributes>? get attributes => _attributes;
+  List<Attribute>? get attributes => _attributes;
 
   ProductModel.fromJson(dynamic json) {
     _id = json['id'];
@@ -63,15 +63,15 @@ class ProductModel {
     _onSale = json['on_sale'];
     if (json['categories'] != null) {
       _categories = [];
-      json['categories'].forEach((v) => _categories?.add(Categories.fromJson(v)));
+      json['categories'].forEach((v) => _categories?.add(Category.fromJson(v)));
     }
     if (json['images'] != null) {
       _images = [];
-      json['images'].forEach((v) => _images?.add(Images.fromJson(v)));
+      json['images'].forEach((v) => _images?.add(ProductImage.fromJson(v)));
     }
     if (json['attributes'] != null) {
       _attributes = [];
-      json['attributes'].forEach((v) => _attributes?.add(Attributes.fromJson(v)));
+      json['attributes'].forEach((v) => _attributes?.add(Attribute.fromJson(v)));
     }
   }
 
@@ -91,8 +91,8 @@ class ProductModel {
   }
 }
 
-class Categories {
-  Categories({int? id, String? name}) {
+class Category {
+  Category({int? id, String? name}) {
     _id = id;
     _name = name;
   }
@@ -104,7 +104,7 @@ class Categories {
 
   String? get name => _name;
 
-  Categories.fromJson(dynamic json) {
+  Category.fromJson(dynamic json) {
     _id = json['id'];
     _name = json['name'];
   }
@@ -117,8 +117,8 @@ class Categories {
   }
 }
 
-class Images {
-  Images({int? id, String? src}) {
+class ProductImage {
+  ProductImage({int? id, String? src}) {
     _id = id;
     _src = src;
   }
@@ -130,7 +130,7 @@ class Images {
 
   String? get src => _src;
 
-  Images.fromJson(dynamic json) {
+  ProductImage.fromJson(dynamic json) {
     _id = json['id'];
     _src = json['src'];
   }
@@ -143,8 +143,8 @@ class Images {
   }
 }
 
-class Attributes {
-  Attributes({String? name, List<String>? options}) {
+class Attribute {
+  Attribute({String? name, List<String>? options}) {
     _name = name;
     _options = options;
   }
@@ -156,7 +156,7 @@ class Attributes {
 
   List<String>? get options => _options;
 
-  Attributes.fromJson(dynamic json) {
+  Attribute.fromJson(dynamic json) {
     _name = json['name'];
     _options = json['options'] != null ? json['options'].cast<String>() : [];
   }

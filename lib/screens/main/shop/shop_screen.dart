@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yad_sys/view_models/shop/shop_view_model.dart';
-import 'package:yad_sys/views/main_views/shop_view.dart';
+import 'package:yad_sys/views/shop/shop_view.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});

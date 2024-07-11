@@ -13,7 +13,7 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   HttpRequest httpRequest = HttpRequest();
   List<ProductModel> productDetailList = [];
-  List<Images> productImageList = [];
+  List<ProductImage> productImageList = [];
 
   // getSearchProducts(String search) async {
   //   dynamic jsonGetSearchProducts = await httpRequest.getSearchProduct(

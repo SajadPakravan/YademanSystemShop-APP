@@ -28,7 +28,7 @@ class ProductCardGrid extends StatelessWidget {
         primary: false,
         itemBuilder: (BuildContext context, int index) {
           ProductModel product = list[index];
-          Images img = product.images![0];
+          ProductImage img = product.images![0];
 
           double price = double.parse(product.price!);
           double regularPrice = double.parse(product.regularPrice!);

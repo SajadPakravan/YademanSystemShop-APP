@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:provider/provider.dart';
-import 'package:yad_sys/models/product_category_model.dart';
+import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/screens/main/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';

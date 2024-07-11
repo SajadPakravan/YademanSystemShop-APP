@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:yad_sys/models/product_category_model.dart';
+import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 

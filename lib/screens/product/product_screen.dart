@@ -1,12 +1,8 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:persian_number_utility/persian_number_utility.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/models/product_reviews_model.dart';
-import 'package:yad_sys/views/product_views/product_view.dart';
+import 'package:yad_sys/models/review_model.dart';
+import 'package:yad_sys/views/product/product_view.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -17,72 +13,39 @@ class ProductScreen extends StatefulWidget {
 
 class _ProductScreenState extends State<ProductScreen> {
   HttpRequest httpRequest = HttpRequest();
-  List<ProductModel> product = [];
-  List<ProductReviewsModel> productReviewsLst = [];
+  ProductModel product = ProductModel();
+  List<ReviewModel> reviewsLst = [];
   int dataNumber = 0;
-  dynamic jsonProduct = "";
-  dynamic jsonGetProductReviews = "";
-  int categoryId = 0;
-  String name = "";
-  String description = "";
-  List attributes = [];
-  int regularPrice = 0;
-  int salePrice = 0;
   IconData favoriteIcon = Icons.favorite;
   Color favoriteIconColor = Colors.red;
   bool favorite = false;
   bool isAddCart = false;
   int slideIndex = 0;
+  bool loading = false;
 
   onSlideChange(index) {
     setState(() => slideIndex = index);
   }
 
   getProduct() async {
-    jsonProduct = await httpRequest.getProduct();
-
-    setState(() {
-      categoryId = jsonProduct['categories'][0]["id"];
-      name = jsonProduct['name'];
-      description = jsonProduct['description'];
-      attributes = jsonProduct['attributes'];
-    });
-
-    if (regularPrice != 0) {
-      regularPrice = int.parse(jsonProduct['regular_price'].toString().toPersianDigit().seRagham());
-    }
-    if (salePrice != 0) {
-      salePrice = int.parse(jsonProduct['sale_price'].toString().toPersianDigit());
-    }
+    dynamic jsonProduct = await httpRequest.getProduct();
+    setState(() => product = ProductModel.fromJson(jsonProduct));
     dataNumber++;
     loadContent();
   }
 
   getProductReviews() async {
-    jsonGetProductReviews = await httpRequest.getProductReviews();
-
-    for (var r in jsonGetProductReviews) {
-      setState(() {
-        productReviewsLst.add(
-          ProductReviewsModel(
-            id: r['id'],
-            reviewer: r['reviewer'],
-            review: r['review'],
-            rating: r['rating'],
-            dateCreated: r['date_created'],
-          ),
-        );
-      });
-    }
+    dynamic jsonReviews = await httpRequest.getProductReviews();
+    jsonReviews.forEach((r) => setState(() => reviewsLst.add(ReviewModel.fromJson(r))));
     dataNumber++;
     loadContent();
   }
 
   getRelatedProducts() async {
-    dynamic jsonGetRelatedProducts = await httpRequest.getProducts(
-      category: categoryId.toString(),
-      perPage: 10,
-    );
+    // dynamic jsonGetRelatedProducts = await httpRequest.getProducts(
+    //   category: product.categories.toString(),
+    //   perPage: 10,
+    // );
 
     // List json = jsonGetRelatedProducts;
     //
@@ -122,6 +85,7 @@ class _ProductScreenState extends State<ProductScreen> {
     switch (dataNumber) {
       case 0:
         {
+          setState(() => loading = true);
           getProduct();
           break;
         }
@@ -130,9 +94,14 @@ class _ProductScreenState extends State<ProductScreen> {
           getProductReviews();
           break;
         }
-      case 2:
+      // case 2:
+      //   {
+      //     // getRelatedProducts();
+      //     break;
+      //   }
+      default:
         {
-          // getRelatedProducts();
+          setState(() => loading = false);
           break;
         }
     }
@@ -148,15 +117,11 @@ class _ProductScreenState extends State<ProductScreen> {
   Widget build(BuildContext context) {
     return ProductView(
       context: context,
-      jsonProduct: jsonProduct,
+      product: product,
+      reviewsLst: reviewsLst,
       slideIndex: slideIndex,
       onSlideChange: onSlideChange,
-      name: name,
-      description: description,
-      attributes: attributes,
-      regularPrice: regularPrice,
-      salePrice: salePrice,
-      productReviewsLst: productReviewsLst,
+      loading: loading,
     );
   }
 }

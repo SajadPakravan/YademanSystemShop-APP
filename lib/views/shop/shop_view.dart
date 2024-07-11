@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:easy_loading_button/easy_loading_button.dart';
-import 'package:yad_sys/models/product_category_model.dart';
+import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/widgets/bottom_sheet/bottom_sheet_select_categories.dart';
 import 'package:yad_sys/widgets/bottom_sheet/bottom_sheet_select_filter.dart';

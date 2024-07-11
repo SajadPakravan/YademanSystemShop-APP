@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/models/product_category_model.dart';
+import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 
 class ShopViewModel with ChangeNotifier {

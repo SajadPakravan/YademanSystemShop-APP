@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:yad_sys/view_models/categories/categories_view_model.dart';
-import 'package:yad_sys/views/main_views/categories_view.dart';
+import 'package:yad_sys/views/main/categories_view.dart';
 
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});

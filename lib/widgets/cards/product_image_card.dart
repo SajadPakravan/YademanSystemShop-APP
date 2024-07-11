@@ -32,7 +32,7 @@ class _ProductImageCardState extends State<ProductImageCard> {
       padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
         ProductModel product = widget.list[index];
-        Images img = product.images![0];
+        ProductImage img = product.images![0];
         switch (index) {
           case 0:
           case 2:

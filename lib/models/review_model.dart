@@ -1,4 +1,4 @@
-class ProductReviewsModel {
+class ReviewModel {
   int? id;
   String? dateCreated;
   String? dateCreatedGmt;
@@ -10,7 +10,7 @@ class ProductReviewsModel {
   int? rating;
   bool? verified;
 
-  ProductReviewsModel({
+  ReviewModel({
     this.id,
     this.dateCreated,
     this.dateCreatedGmt,
@@ -23,7 +23,7 @@ class ProductReviewsModel {
     this.verified,
   });
 
-  ProductReviewsModel.fromJson(dynamic json) {
+  ReviewModel.fromJson(dynamic json) {
     id = json['id'];
     dateCreated = json['date_created'];
     dateCreatedGmt = json['date_created_gmt'];
