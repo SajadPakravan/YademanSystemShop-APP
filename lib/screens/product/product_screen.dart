@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/product/product_view.dart';
 
 class ProductScreen extends StatefulWidget {
@@ -15,13 +16,15 @@ class _ProductScreenState extends State<ProductScreen> {
   HttpRequest httpRequest = HttpRequest();
   ProductModel product = ProductModel();
   List<ReviewModel> reviewsLst = [];
+  List<ProductModel> relatedProductsLst = [];
+  bool loading = false;
+  bool authError = false;
   int dataNumber = 0;
   IconData favoriteIcon = Icons.favorite;
   Color favoriteIconColor = Colors.red;
   bool favorite = false;
   bool isAddCart = false;
   int slideIndex = 0;
-  bool loading = false;
 
   onSlideChange(index) => setState(() => slideIndex = index);
 
@@ -40,43 +43,12 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   getRelatedProducts() async {
-    // dynamic jsonGetRelatedProducts = await httpRequest.getProducts(
-    //   category: product.categories.toString(),
-    //   perPage: 10,
-    // );
-
-    // List json = jsonGetRelatedProducts;
-    //
-    // SharedPreferences sharePref = await SharedPreferences.getInstance();
-    // int? productId = sharePref.getInt("productId");
-    //
-    // json.removeWhere((e) => e["id"] == productId);
-    //
-    // List jsonProductsImages = [];
-    //
-    // for (var i in json) {
-    //   jsonProductsImages.add(i['images'][0]);
-    // }
-    // for (var image in jsonProductsImages) {
-    //   setState(() {
-    //     productsImg.add(Images(src: image['src']));
-    //   });
-    // }
-    //
-    // for (var p in json) {
-    //   setState(() {
-    //     productsDetLst.add(
-    //       ProductModel(
-    //         id: p['id'],
-    //         name: p['name'],
-    //         regularPrice: p['regular_price'],
-    //         price: p['sale_price'],
-    //       ),
-    //     );
-    //   });
-    // }
-    // dataNumber++;
-    // loadContent();
+    ProductCategory category = product.categories![0];
+    dynamic jsonRelatedProducts = await httpRequest.getProducts(perPage: 11, category: category.id.toString());
+    jsonRelatedProducts.forEach((p) => setState(() => relatedProductsLst.add(ProductModel.fromJson(p))));
+    setState(() => relatedProductsLst.removeWhere((element) => element.id == product.id));
+    dataNumber++;
+    loadContent();
   }
 
   loadContent() {
@@ -92,17 +64,25 @@ class _ProductScreenState extends State<ProductScreen> {
           getProductReviews();
           break;
         }
-      // case 2:
-      //   {
-      //     // getRelatedProducts();
-      //     break;
-      //   }
+      case 2:
+        {
+          getRelatedProducts();
+          break;
+        }
       default:
         {
           setState(() => loading = false);
           break;
         }
     }
+  }
+
+  addCart() async {
+    AppCache cache = AppCache();
+    String email = await cache.getString('email') ?? '';
+    if (email.isEmpty) setState(() => authError = true);
+
+
   }
 
   @override
@@ -117,9 +97,12 @@ class _ProductScreenState extends State<ProductScreen> {
       context: context,
       product: product,
       reviewsLst: reviewsLst,
+      relatedProductsLst: relatedProductsLst,
       slideIndex: slideIndex,
       onSlideChange: onSlideChange,
       loading: loading,
+      authError: authError,
+      addCart: addCart,
     );
   }
 }

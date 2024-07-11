@@ -1,31 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
 import 'package:yad_sys/screens/product/product_info_screen.dart';
 import 'package:yad_sys/tools/to_page.dart';
-import 'package:yad_sys/view_models/product_view_model.dart';
+import 'package:yad_sys/widgets/cards/product_card_horizontal.dart';
 import 'package:yad_sys/widgets/image_slides/product_slide.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
 
 class ProductView extends StatelessWidget {
-  ProductView({
+  const ProductView({
     super.key,
     required this.context,
     required this.product,
     required this.reviewsLst,
+    required this.relatedProductsLst,
     required this.slideIndex,
     required this.onSlideChange,
     required this.loading,
+    required this.authError,
+    required this.addCart,
   });
 
   final BuildContext context;
   final ProductModel product;
   final List<ReviewModel> reviewsLst;
+  final List<ProductModel> relatedProductsLst;
   final int slideIndex;
   final Function onSlideChange;
-  final ProductViewModel productDetailViewModel = ProductViewModel();
+  final bool loading;
+  final bool authError;
+  final void Function() addCart;
   final int quantity = 1;
   final int pPrice = 0;
   final double fontSize = 14;
@@ -33,32 +41,30 @@ class ProductView extends StatelessWidget {
   final IconData favoriteIcon = Icons.favorite;
   final Color favoriteIconColor = Colors.red;
   final bool favorite = false;
-  final bool loading;
 
   @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        body: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            appBar(),
-          ],
-          body: loading
-              ? const Loading()
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      ProductSlide(product: product, slideIndex: slideIndex, onSlideChange: onSlideChange),
-                      productDetails(),
-                      // relatedProducts(),
-                    ],
+          body: NestedScrollView(
+            floatHeaderSlivers: true,
+            headerSliverBuilder: (context, innerBoxIsScrolled) => [appBar()],
+            body: loading
+                ? const Loading()
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        ProductSlide(product: product, slideIndex: slideIndex, onSlideChange: onSlideChange),
+                        const SizedBox(height: 10),
+                        productDetails(),
+                        const SizedBox(height: 20),
+                        relatedProducts(),
+                      ],
+                    ),
                   ),
-                ),
-        ),
-        // bottomNavigationBar: cartPrice(),
-      ),
+          ),
+          bottomNavigationBar: loading ? const Loading() : cartPrice()),
     );
   }
 
@@ -112,7 +118,7 @@ class ProductView extends StatelessWidget {
         children: [
           TextBodyMediumView(product.name!, maxLines: 2, fontWeight: FontWeight.bold),
           const SizedBox(height: 10),
-          TextBodySmallView('دسته‌بندی: ${category.name!}'),
+          TextBodySmallView('دسته‌بندی: ${category.name!}', color: Colors.blue.shade900),
           const SizedBox(height: 20),
           Visibility(visible: product.description!.isEmpty ? false : true, child: infoBtn(title: 'معرفی محصول', content: 1)),
           infoBtn(title: 'مشخصات محصول', content: 2),
@@ -139,175 +145,100 @@ class ProductView extends StatelessWidget {
     );
   }
 
-// cartPrice() {
-//   return
-// }
+  relatedProducts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: TextBodyMediumView('محصولات مرتبط')),
+        const SizedBox(height: 10),
+        ProductCardHorizontal(list: relatedProductsLst),
+      ],
+    );
+  }
 
-// productReviews() {
-//   double width = MediaQuery.of(context).size.width;
-//   return productReviewsLst.isEmpty
-//       ? Container(
-//           margin: EdgeInsets.all(width * 0.04),
-//           child: LoadingAnimationWidget.threeArchedCircle(
-//             color: Colors.black54,
-//             size: width * 0.1,
-//           ),
-//         )
-//       : Container(
-//           padding: EdgeInsets.symmetric(vertical: width * 0.05),
-//           decoration: const BoxDecoration(
-//             border: Border(
-//               bottom: BorderSide(
-//                 color: Colors.black12,
-//                 width: 1,
-//               ),
-//             ),
-//           ),
-//           child: Column(
-//             children: [
-//               Padding(
-//                 padding: EdgeInsets.symmetric(horizontal: width * 0.03),
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                   children: [
-//                     Text(
-//                       "دیدگاه کاربران",
-//                       style: Theme.of(context).textTheme.bodyMedium,
-//                     ),
-//                     Directionality(
-//                       textDirection: TextDirection.ltr,
-//                       child: TextButton.icon(
-//                         label: Text(
-//                           "مشاهده همه",
-//                           style: Theme.of(context).textTheme.bodyMedium,
-//                         ),
-//                         icon: const Icon(
-//                           Icons.arrow_back,
-//                           color: Colors.black87,
-//                         ),
-//                         onPressed: () {
-//                           // homeScrModel.onPressAllCatProducts(
-//                           //   categoryId: categoryId,
-//                           // );
-//                         },
-//                       ),
-//                     ),
-//                   ],
-//                 ),
-//               ),
-//               SizedBox(
-//                 height: 165,
-//                 child: ListView.builder(
-//                   itemCount: productReviewsLst.length,
-//                   scrollDirection: Axis.horizontal,
-//                   itemBuilder: (BuildContext context, int index) {
-//                     ReviewModel productRev = productReviewsLst[index];
-//
-//                     String? review = productRev.review;
-//                     String? reviewer = productRev.reviewer;
-//                     int? rating = productRev.rating;
-//                     Color rateColor = Colors.green;
-//
-//                     switch (rating) {
-//                       case 1:
-//                         {
-//                           rateColor = Colors.red;
-//                           break;
-//                         }
-//                       case 2:
-//                         {
-//                           rateColor = Colors.red.shade300;
-//                           break;
-//                         }
-//                       case 3:
-//                         {
-//                           rateColor = Colors.green.shade300;
-//                           break;
-//                         }
-//                       case 4:
-//                         {
-//                           rateColor = Colors.green.shade400;
-//                           break;
-//                         }
-//                       case 5:
-//                         {
-//                           rateColor = Colors.green.shade600;
-//                           break;
-//                         }
-//                     }
-//
-//                     return Stack(
-//                       alignment: Alignment.bottomCenter,
-//                       children: [
-//                         InkWell(
-//                           child: Container(
-//                             width: 280,
-//                             height: 150,
-//                             margin: EdgeInsets.symmetric(horizontal: width * 0.02),
-//                             decoration: BoxDecoration(
-//                               border: Border.all(
-//                                 color: Colors.grey,
-//                                 width: 1,
-//                               ),
-//                               borderRadius: const BorderRadius.all(Radius.circular(5)),
-//                             ),
-//                             child: Column(
-//                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                               children: [
-//                                 Container(
-//                                   margin: const EdgeInsets.only(top: 15),
-//                                   padding: const EdgeInsets.all(5),
-//                                   child: HtmlWidget(
-//                                     review!,
-//                                     textStyle: Theme.of(context).textTheme.bodyMedium,
-//                                     customWidgetBuilder: (e) {
-//                                       return AutoSizeText(
-//                                         e.text,
-//                                         textAlign: TextAlign.right,
-//                                         style: Theme.of(context).textTheme.bodyMedium,
-//                                         maxLines: 4,
-//                                         overflow: TextOverflow.ellipsis,
-//                                         minFontSize: appDimension.textNormal,
-//                                         maxFontSize: appDimension.textNormal,
-//                                       );
-//                                     },
-//                                   ),
-//                                 ),
-//                                 Text(
-//                                   reviewer!,
-//                                   textAlign: TextAlign.right,
-//                                   style: Theme.of(context).textTheme.bodyMedium,
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                           onTap: () {
-//                             // onTapProduct(productId: productModel.id!);
-//                           },
-//                         ),
-//                         Transform.translate(
-//                           offset: const Offset(0, -135),
-//                           child: Container(
-//                             width: 30,
-//                             height: 30,
-//                             alignment: Alignment.center,
-//                             decoration: BoxDecoration(
-//                               color: rateColor,
-//                               borderRadius: const BorderRadius.all(Radius.circular(5)),
-//                             ),
-//                             child: Text(
-//                               "$rating.0".toPersianDigit(),
-//                               style: Theme.of(context).textTheme.bodyMedium,
-//                             ),
-//                           ),
-//                         ),
-//                       ],
-//                     );
-//                   },
-//                 ),
-//               ),
-//             ],
-//           ),
-//         );
-// }
+  cartPrice() {
+    double price = double.parse(product.price!);
+    double regularPrice = double.parse(product.regularPrice!);
+    int percent = 0;
+    String toman = ' تومان';
+    Color textColor = Colors.black87;
+    double fontSize = 16;
+
+    if (product.onSale!) {
+      textColor = Colors.black54;
+      fontSize = 14;
+      toman = '';
+      percent = (((price - regularPrice) / regularPrice) * 100).roundToDouble().toInt();
+    }
+    return IntrinsicHeight(
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 3))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            authError
+                ? const TextBodyMediumView('لطفا وارد حساب کاربری خود شوید',color: Colors.red)
+                : ElevatedButton(
+                    style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
+                    onPressed: addCart,
+                    child: const TextBodyLargeView('افزودن به سبد خرید', color: Colors.white),
+                  ),
+            Column(
+              children: [
+                Visibility(
+                  visible: product.onSale!,
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    margin: const EdgeInsets.only(bottom: 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextBodyLargeView(
+                          price.toString().toPersianDigit().seRagham(),
+                          textAlign: TextAlign.left,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        const TextBodyLargeView(' تومان', fontWeight: FontWeight.bold),
+                      ],
+                    ),
+                  ),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Visibility(
+                        visible: product.onSale!,
+                        child: Container(
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.all(5),
+                          margin: const EdgeInsets.only(left: 5),
+                          decoration: BoxDecoration(color: Colors.red.shade600),
+                          child: TextBodyLargeView(
+                            "${percent.toString().replaceAll('-', '').toPersianDigit()}%",
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      TextBodyLargeView(
+                        regularPrice.toString().toPersianDigit().seRagham(),
+                        textAlign: TextAlign.left,
+                        fontWeight: FontWeight.bold,
+                        fontSize: fontSize,
+                        color: textColor,
+                      ),
+                      TextBodyLargeView(toman, fontWeight: FontWeight.bold),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -33,7 +33,7 @@ class ProductCardHorizontal extends StatelessWidget {
             double price = double.parse(product.price!);
             double regularPrice = double.parse(product.regularPrice!);
             int percent = 0;
-            String toman = 'تومان';
+            String toman = ' تومان';
             Color textColor = Colors.black87;
             double fontSize = 14;
 
@@ -50,8 +50,8 @@ class ProductCardHorizontal extends StatelessWidget {
                 margin: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 5, spreadRadius: 3)],
+                  border: Border.all(color: Colors.black54, width: 2),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
