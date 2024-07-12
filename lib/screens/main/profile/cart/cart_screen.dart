@@ -39,11 +39,7 @@ class _CartScreenState extends State<CartScreen> {
                     shrinkWrap: true,
                     crossAxisCount: 2,
                     children: [
-                      SizedBox(
-                        width: 100,
-                        height: 100,
-                        child: CachedNetworkImage(imageUrl: cart.image, fit: BoxFit.contain),
-                      ),
+                      CachedNetworkImage(imageUrl: cart.image, fit: BoxFit.contain),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
