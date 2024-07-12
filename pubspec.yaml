@@ -28,7 +28,7 @@ dependencies:
   show_up_animation: ^2.0.0
   simple_shadow: ^0.3.1
   smooth_page_indicator: ^1.1.0
-  email_validator: ^2.1.17
+  email_validator: ^3.0.0
   easy_loading_button: ^0.3.2
   image_cropper: ^7.1.0
   persian_datetime_picker: ^2.6.0

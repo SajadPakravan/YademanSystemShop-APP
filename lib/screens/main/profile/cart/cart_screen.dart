@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/database/cart_model.dart';
@@ -18,22 +16,26 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
 
-  // increaseQuantity(int index) {
-  //   CartModel cart = cartBox.getAt(index)!;
-  //   cartBox.putAt(index, cart..quantity);
-  //   setState(() {});
-  // }
-  //
-  // decreaseQuantity(int index) {
-  //   final cart = cartBox.getAt(index)!;
-  //   if (cart.quantity > 1) cartBox.putAt(index, cart..quantity--);
-  //   setState(() {});
-  // }
-  //
-  // deleteItem(int index) {
-  //   cartBox.deleteAt(index);
-  //   setState(() {});
-  // }
+  increaseQuantity(int index) {
+    CartModel cart = cartBox.getAt(index)!;
+    cart.quantity++;
+    cartBox.putAt(index, cart);
+    setState(() {});
+  }
+
+  decreaseQuantity(int index) {
+    CartModel cart = cartBox.getAt(index)!;
+    if (cart.quantity > 1) {
+      cart.quantity--;
+      cartBox.putAt(index, cart);
+    }
+    setState(() {});
+  }
+
+  deleteItem(int index) {
+    cartBox.deleteAt(index);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +81,7 @@ class _CartScreenState extends State<CartScreen> {
                                       children: [
                                         IconButton(
                                           icon: const Icon(Icons.add_circle, color: Colors.indigo, size: 30),
-                                          onPressed: () {},
+                                          onPressed: () => increaseQuantity(cart.id),
                                         ),
                                         const SizedBox(width: 20),
                                         TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
@@ -87,11 +89,11 @@ class _CartScreenState extends State<CartScreen> {
                                         cart.quantity == 1
                                             ? IconButton(
                                           icon: const Icon(Icons.delete, color: Colors.indigo, size: 30),
-                                          onPressed: () {},
+                                          onPressed: () => deleteItem(cart.id),
                                         )
                                             : IconButton(
                                           icon: const Icon(Icons.remove_circle, color: Colors.indigo, size: 30),
-                                          onPressed: () {},
+                                          onPressed: () => decreaseQuantity(cart.id),
                                         ),
                                       ],
                                     ),
