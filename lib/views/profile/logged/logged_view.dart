@@ -79,12 +79,20 @@ class LoggedView extends StatelessWidget {
                   title: 'سبد خرید',
                   icon: Icons.shopping_cart,
                   subtitle: cartAlert
-                      ? Container(
-                          width: 30,
-                          height: 30,
-                          alignment: Alignment.center,
-                          decoration: const BoxDecoration(shape: BoxShape.circle, color: ColorStyle.blueFav),
-                          child: TextBodyMediumView(cartNumber.toString().toPersianDigit(),color: Colors.white),
+                      ? Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            width: 25,
+                            height: 25,
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(top: 5),
+                            decoration: const BoxDecoration(shape: BoxShape.circle, color: ColorStyle.blueFav),
+                            child: TextBodyMediumView(
+                              cartNumber.toString().toPersianDigit(),
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         )
                       : null,
                   onTap: () => toPage(const CartScreen()),
