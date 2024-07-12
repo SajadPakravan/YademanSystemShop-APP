@@ -16,24 +16,21 @@ class CartScreen extends StatefulWidget {
 class _CartScreenState extends State<CartScreen> {
   Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
 
-  increaseQuantity(int index) {
-    CartModel cart = cartBox.getAt(index)!;
+  increaseQuantity(int id) {
+    final cart = cartBox.values.firstWhere((element) => element.id == id);
     cart.quantity++;
-    cartBox.putAt(index, cart);
+    cart.save();
     setState(() {});
   }
 
-  decreaseQuantity(int index) {
-    CartModel cart = cartBox.getAt(index)!;
+  decreaseQuantity(int id) {
+    final cart = cartBox.values.firstWhere((element) => element.id == id);
     if (cart.quantity > 1) {
       cart.quantity--;
-      cartBox.putAt(index, cart);
+      cart.save();
+    } else {
+      cart.delete();
     }
-    setState(() {});
-  }
-
-  deleteItem(int index) {
-    cartBox.deleteAt(index);
     setState(() {});
   }
 
@@ -73,8 +70,10 @@ class _CartScreenState extends State<CartScreen> {
                                 alignment: Alignment.center,
                                 child: IntrinsicWidth(
                                   child: Container(
-                                    decoration:
-                                    BoxDecoration(border: Border.all(color: Colors.black45), borderRadius: BorderRadius.circular(10)),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.black45),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -86,13 +85,12 @@ class _CartScreenState extends State<CartScreen> {
                                         const SizedBox(width: 20),
                                         TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
                                         const SizedBox(width: 20),
-                                        cart.quantity == 1
-                                            ? IconButton(
-                                          icon: const Icon(Icons.delete, color: Colors.indigo, size: 30),
-                                          onPressed: () => deleteItem(cart.id),
-                                        )
-                                            : IconButton(
-                                          icon: const Icon(Icons.remove_circle, color: Colors.indigo, size: 30),
+                                        IconButton(
+                                          icon: Icon(
+                                            cart.quantity == 1 ? Icons.delete : Icons.remove_circle,
+                                            color: Colors.indigo,
+                                            size: 30,
+                                          ),
                                           onPressed: () => decreaseQuantity(cart.id),
                                         ),
                                       ],
