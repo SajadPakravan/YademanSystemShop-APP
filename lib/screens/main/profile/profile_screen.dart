@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:yad_sys/connections/http_request.dart';
+import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/profile/profile_view.dart';
@@ -15,11 +17,14 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   HttpRequest httpRequest = HttpRequest();
   AppCache cache = AppCache();
   CustomerModel customer = CustomerModel();
+  Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
   PageController pageCtrl = PageController(initialPage: 0);
   bool logged = false;
   bool loading = false;
   bool personalInfoAlert = false;
   bool addressAlert = false;
+  bool cartAlert = false;
+  int cartNumber = 0;
 
   signOut() async {
     AppCache cache = AppCache();
@@ -32,6 +37,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     String email = await cache.getString('email') ?? '';
     if (email.isNotEmpty) {
       getCustomer();
+      checkCart();
     } else {
       setState(() {
         logged = false;
@@ -56,6 +62,15 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     });
   }
 
+  checkCart() {
+    if (cartBox.isNotEmpty) {
+      setState(() {
+        cartNumber = cartBox.length;
+        cartAlert = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -75,6 +90,8 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       loading: loading,
       personalInfoAlert: personalInfoAlert,
       addressAlert: addressAlert,
+      cartAlert: cartAlert,
+      cartNumber: cartNumber,
     );
   }
 }

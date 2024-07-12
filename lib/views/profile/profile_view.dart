@@ -18,6 +18,8 @@ class ProfileView extends StatelessWidget {
     required this.loading,
     required this.personalInfoAlert,
     required this.addressAlert,
+    required this.cartAlert,
+    required this.cartNumber,
   });
 
   final BuildContext context;
@@ -30,6 +32,8 @@ class ProfileView extends StatelessWidget {
   final bool loading;
   final bool personalInfoAlert;
   final bool addressAlert;
+  final bool cartAlert;
+  final int cartNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +46,8 @@ class ProfileView extends StatelessWidget {
                 signOut: signOut,
                 personalInfoAlert: personalInfoAlert,
                 addressAlert: addressAlert,
+                cartAlert: cartAlert,
+                cartNumber: cartNumber,
               )
             : Scaffold(
                 appBar: AppBar(

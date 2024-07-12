@@ -1,10 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/main/profile/address/address_screen.dart';
 import 'package:yad_sys/screens/main/profile/cart/cart_screen.dart';
 import 'package:yad_sys/screens/main/profile/personal_info/personal_info_screen.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
@@ -18,6 +20,8 @@ class LoggedView extends StatelessWidget {
     required this.signOut,
     required this.personalInfoAlert,
     required this.addressAlert,
+    required this.cartAlert,
+    required this.cartNumber,
   });
 
   final CustomerModel customer;
@@ -25,6 +29,8 @@ class LoggedView extends StatelessWidget {
   final void Function() signOut;
   final bool personalInfoAlert;
   final bool addressAlert;
+  final bool cartAlert;
+  final int cartNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +75,20 @@ class LoggedView extends StatelessWidget {
                     getCustomer();
                   },
                 ),
-                option(title: 'سبد خرید', icon: Icons.shopping_cart, onTap: () => toPage(const CartScreen())),
+                option(
+                  title: 'سبد خرید',
+                  icon: Icons.shopping_cart,
+                  subtitle: cartAlert
+                      ? Container(
+                          width: 30,
+                          height: 30,
+                          alignment: Alignment.center,
+                          decoration: const BoxDecoration(shape: BoxShape.circle, color: ColorStyle.blueFav),
+                          child: TextBodyMediumView(cartNumber.toString().toPersianDigit(),color: Colors.white),
+                        )
+                      : null,
+                  onTap: () => toPage(const CartScreen()),
+                ),
                 option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () {}),
                 option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () {}),
                 option(title: 'تماس با پشتیبانی', icon: Icons.headphones, onTap: () {}),

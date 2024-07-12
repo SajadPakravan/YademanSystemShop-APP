@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
+import 'package:yad_sys/screens/main/profile/cart/cart_screen.dart';
 import 'package:yad_sys/screens/product/product_info_screen.dart';
 import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/cards/product_card_horizontal.dart';
@@ -21,8 +23,10 @@ class ProductView extends StatelessWidget {
     required this.slideIndex,
     required this.onSlideChange,
     required this.loading,
+    required this.existCart,
     required this.authError,
     required this.addCart,
+    required this.quantity,
   });
 
   final BuildContext context;
@@ -32,9 +36,10 @@ class ProductView extends StatelessWidget {
   final int slideIndex;
   final Function onSlideChange;
   final bool loading;
+  final bool existCart;
   final bool authError;
+  final int quantity;
   final void Function() addCart;
-  final int quantity = 1;
   final IconData favoriteIcon = Icons.favorite;
   final Color favoriteIconColor = Colors.red;
   final bool favorite = false;
@@ -154,14 +159,42 @@ class ProductView extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            authError
-                ? const TextBodyMediumView('لطفا وارد حساب کاربری خود شوید', color: Colors.red)
-                : ElevatedButton(
-                    style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
-                    onPressed: addCart,
-                    child: const TextBodyLargeView('افزودن به سبد خرید', color: Colors.white),
-                  ),
+            existCart
+                ? IntrinsicWidth(
+                    child: ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      minVerticalPadding: 0,
+                      title: Row(
+                        children: [
+                          TextBodyLargeView(quantity.toString().toPersianDigit(),
+                              color: Colors.red, fontWeight: FontWeight.bold, fontSize: 20),
+                          const SizedBox(width: 5),
+                          const TextBodyMediumView('عدد در سبد خرید شما'),
+                        ],
+                      ),
+                      subtitle: ElevatedButton(
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                        ),
+                        onPressed: () => Get.to(
+                          const CartScreen(),
+                          transition: Transition.downToUp,
+                          duration: const Duration(milliseconds: 300),
+                        ),
+                        child: const TextBodyMediumView('رفتن به سبد خرید', color: Colors.white),
+                      ),
+                    ),
+                  )
+                : authError
+                    ? const TextBodyMediumView('لطفا وارد حساب کاربری خود شوید', color: Colors.red)
+                    : ElevatedButton(
+                        style:
+                            ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
+                        onPressed: addCart,
+                        child: const TextBodyLargeView('افزودن به سبد خرید', color: Colors.white),
+                      ),
             Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Visibility(
                   visible: product.onSale!,

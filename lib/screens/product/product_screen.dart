@@ -17,17 +17,18 @@ class ProductScreen extends StatefulWidget {
 class _ProductScreenState extends State<ProductScreen> {
   HttpRequest httpRequest = HttpRequest();
   ProductModel product = ProductModel();
+  Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
   List<ReviewModel> reviewsLst = [];
   List<ProductModel> relatedProductsLst = [];
+  bool existCart = false;
   bool loading = false;
   bool authError = false;
+  int quantity = 0;
   int dataNumber = 0;
   IconData favoriteIcon = Icons.favorite;
   Color favoriteIconColor = Colors.red;
   bool favorite = false;
-  bool isAddCart = false;
   int slideIndex = 0;
-  Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
 
   onSlideChange(index) => setState(() => slideIndex = index);
 
@@ -74,6 +75,7 @@ class _ProductScreenState extends State<ProductScreen> {
         }
       default:
         {
+          checkCart();
           setState(() => loading = false);
           break;
         }
@@ -90,7 +92,21 @@ class _ProductScreenState extends State<ProductScreen> {
       setState(() {
         cartBox.add(CartModel(id: product.id!, name: product.name!, image: img.src!, price: int.parse(product.price!), quantity: 1));
       });
-      print(cartBox.name);
+      checkCart();
+    }
+  }
+
+  checkCart() {
+    if (cartBox.isNotEmpty) {
+      for (int i = 0; i < cartBox.length; i++) {
+        CartModel cart = cartBox.getAt(i)!;
+        if (cart.id == product.id) {
+          setState(() {
+            quantity = cart.quantity;
+            existCart = true;
+          });
+        }
+      }
     }
   }
 
@@ -110,8 +126,10 @@ class _ProductScreenState extends State<ProductScreen> {
       slideIndex: slideIndex,
       onSlideChange: onSlideChange,
       loading: loading,
+      existCart: existCart,
       authError: authError,
       addCart: addCart,
+      quantity: quantity,
     );
   }
 }
