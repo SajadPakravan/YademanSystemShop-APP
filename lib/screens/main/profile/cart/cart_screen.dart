@@ -146,12 +146,15 @@ class _CartScreenState extends State<CartScreen> {
             children: [
               ElevatedButton(
                 style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
-                onPressed: () => Get.to(
-                  const ContinuePaymentScreen(),
-                  transition: Transition.downToUp,
-                  duration: const Duration(milliseconds: 300),
-                ),
-                child: const TextBodyLargeView('ثبت سفارش', color: Colors.white),
+                onPressed: () async {
+                  await Get.to(
+                    ContinuePaymentScreen(cartBox: cartBox),
+                    transition: Transition.downToUp,
+                    duration: const Duration(milliseconds: 300),
+                  );
+                  setTotalPrice();
+                },
+                child: const TextBodyLargeView('ادامه فرآیند خرید', color: Colors.white),
               ),
               Column(
                 children: [

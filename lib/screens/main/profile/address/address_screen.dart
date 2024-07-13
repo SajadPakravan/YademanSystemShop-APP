@@ -1,6 +1,7 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
@@ -30,7 +31,7 @@ class _AddressScreenState extends State<AddressScreen> {
   String state = '';
   String city = '';
   String street = '';
-  String number = '';
+  String numberAlley = '';
   String postcode = '';
   TextEditingController firstnameField = TextEditingController();
   TextEditingController lastnameField = TextEditingController();
@@ -56,7 +57,7 @@ class _AddressScreenState extends State<AddressScreen> {
       state = customer.billing!.state!;
       city = customer.billing!.city!;
       street = customer.billing!.address1!;
-      number = customer.billing!.address2!;
+      numberAlley = customer.billing!.address2!;
       postcode = customer.billing!.postcode!;
       firstnameField.text = firstname;
       lastnameField.text = lastname;
@@ -66,7 +67,7 @@ class _AddressScreenState extends State<AddressScreen> {
       stateField.text = state;
       cityField.text = city;
       streetField.text = street;
-      numberField.text = number;
+      numberField.text = numberAlley;
       postcodeField.text = postcode;
     });
   }
@@ -77,7 +78,7 @@ class _AddressScreenState extends State<AddressScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: const AppBarView(title: 'آدرس گیرنده'),
+        appBar: const AppBarView(title: 'آدرس'),
         body: SingleChildScrollView(
           child: Column(
             children: [
@@ -142,20 +143,20 @@ class _AddressScreenState extends State<AddressScreen> {
                 onPressed: () => setState(() => city = cityField.text),
               ),
               info(
-                title: 'خیابان',
+                title: 'منطقه و خیابان',
                 subtitle: street,
                 icon: Icons.location_on,
                 controller: streetField,
-                hint: 'خیابان را وارد کنید',
+                hint: 'مثال: منطقه 3، خیابان امام خمینی'.toPersianDigit(),
                 onPressed: () => setState(() => street = streetField.text),
               ),
               info(
-                title: 'پلاک',
-                subtitle: number,
+                title: 'کوچه و پلاک',
+                subtitle: numberAlley,
                 icon: Icons.location_on,
                 controller: numberField,
-                hint: 'پلاک را وارد کنید',
-                onPressed: () => setState(() => number = numberField.text),
+                hint: 'مثال: کوچه بهار، پلاک 24'.toPersianDigit(),
+                onPressed: () => setState(() => numberAlley = numberField.text),
               ),
               info(
                 title: 'کد پستی',
@@ -189,7 +190,7 @@ class _AddressScreenState extends State<AddressScreen> {
                         state: state,
                         city: city,
                         street: street,
-                        number: number,
+                        number: numberAlley,
                         postcode: postcode,
                       );
                       if (jsonUpdateBilling != false) {
@@ -202,7 +203,7 @@ class _AddressScreenState extends State<AddressScreen> {
                           state: state,
                           city: city,
                           street: street,
-                          number: number,
+                          number: numberAlley,
                           postcode: postcode,
                         );
                         if (jsonUpdateShipping != false) if (context.mounted) SnackBarView.show(context, 'آدرس شما ذخیره شد');
@@ -262,7 +263,7 @@ class _AddressScreenState extends State<AddressScreen> {
         state != customer.billing!.state ||
         city != customer.billing!.city ||
         street != customer.billing!.address1 ||
-        number != customer.billing!.address2 ||
+        numberAlley != customer.billing!.address2 ||
         postcode != customer.billing!.postcode) return true;
     return false;
   }
