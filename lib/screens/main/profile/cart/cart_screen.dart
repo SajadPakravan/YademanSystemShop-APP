@@ -1,9 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/database/cart_model.dart';
+import 'package:yad_sys/screens/main/profile/cart/continue_payment_screen.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class CartScreen extends StatefulWidget {
@@ -15,6 +18,7 @@ class CartScreen extends StatefulWidget {
 
 class _CartScreenState extends State<CartScreen> {
   Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
+  int totalPrice = 0;
 
   increaseQuantity(int id) {
     final cart = cartBox.values.firstWhere((element) => element.id == id);
@@ -32,6 +36,19 @@ class _CartScreenState extends State<CartScreen> {
       cart.delete();
     }
     setState(() {});
+  }
+
+  setTotalPrice() {
+    for (int i = 0; i < cartBox.length; i++) {
+      CartModel cart = cartBox.getAt(i)!;
+      setState(() => totalPrice += cart.price);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setTotalPrice();
   }
 
   @override
@@ -108,6 +125,44 @@ class _CartScreenState extends State<CartScreen> {
               },
             );
           },
+        ),
+        bottomNavigationBar: cartPrice(),
+      ),
+    );
+  }
+
+  cartPrice() {
+    return Visibility(
+      visible: cartBox.isNotEmpty,
+      child: IntrinsicHeight(
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          decoration: const BoxDecoration(border: Border(top: BorderSide(color: Colors.black12, width: 3))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
+                onPressed: () => Get.to(
+                  const ContinuePaymentScreen(),
+                  transition: Transition.downToUp,
+                  duration: const Duration(milliseconds: 300),
+                ),
+                child: const TextBodyLargeView('ادامه پرداخت', color: Colors.white),
+              ),
+              Column(
+                children: [
+                  const TextBodyLargeView('جمع سبد خرید'),
+                  const SizedBox(height: 10),
+                  TextBodyLargeView(
+                    '${totalPrice.toString().toPersianDigit().seRagham()} تومان',
+                    textAlign: TextAlign.left,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

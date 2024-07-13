@@ -5,12 +5,13 @@ import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
-class ProductCardHorizontal extends StatelessWidget {
-  ProductCardHorizontal({super.key, this.physics = const AlwaysScrollableScrollPhysics(), required this.list});
+class RelatedProductCard extends StatelessWidget {
+  RelatedProductCard({super.key, this.physics = const AlwaysScrollableScrollPhysics(), required this.list, required this.loadContent});
 
   final AppFunction appFun = AppFunction();
   final ScrollPhysics physics;
   final List<ProductModel> list;
+  final Function({int? id}) loadContent;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,7 @@ class ProductCardHorizontal extends StatelessWidget {
               percent = (((price - regularPrice) / regularPrice) * 100).roundToDouble().toInt();
             }
             return InkWell(
+              onTap: () => loadContent(id: product.id!),
               child: Container(
                 width: width * 0.45,
                 padding: const EdgeInsets.all(10),
@@ -131,7 +133,6 @@ class ProductCardHorizontal extends StatelessWidget {
                   ],
                 ),
               ),
-              onTap: () => appFun.onTapProduct(id: product.id!),
             );
           },
         ),

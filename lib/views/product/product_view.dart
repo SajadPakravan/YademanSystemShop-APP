@@ -6,7 +6,7 @@ import 'package:yad_sys/models/review_model.dart';
 import 'package:yad_sys/screens/main/profile/cart/cart_screen.dart';
 import 'package:yad_sys/screens/product/product_info_screen.dart';
 import 'package:yad_sys/tools/to_page.dart';
-import 'package:yad_sys/widgets/cards/product_card_horizontal.dart';
+import 'package:yad_sys/widgets/cards/related_product_card.dart';
 import 'package:yad_sys/widgets/image_slides/product_slide.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
@@ -27,6 +27,8 @@ class ProductView extends StatelessWidget {
     required this.authError,
     required this.addCart,
     required this.quantity,
+    required this.loadContent,
+    required this.checkCart,
   });
 
   final BuildContext context;
@@ -40,6 +42,8 @@ class ProductView extends StatelessWidget {
   final bool authError;
   final int quantity;
   final void Function() addCart;
+  final Function() checkCart;
+  final Function({int? id}) loadContent;
   final IconData favoriteIcon = Icons.favorite;
   final Color favoriteIconColor = Colors.red;
   final bool favorite = false;
@@ -133,7 +137,7 @@ class ProductView extends StatelessWidget {
       children: [
         const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: TextBodyMediumView('محصولات مرتبط')),
         const SizedBox(height: 10),
-        ProductCardHorizontal(list: relatedProductsLst),
+        RelatedProductCard(list: relatedProductsLst, loadContent: loadContent),
       ],
     );
   }
@@ -176,11 +180,14 @@ class ProductView extends StatelessWidget {
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         ),
-                        onPressed: () => Get.to(
-                          const CartScreen(),
-                          transition: Transition.downToUp,
-                          duration: const Duration(milliseconds: 300),
-                        ),
+                        onPressed: () async {
+                          await Get.to(
+                            const CartScreen(),
+                            transition: Transition.downToUp,
+                            duration: const Duration(milliseconds: 300),
+                          );
+                          checkCart();
+                        },
                         child: const TextBodyMediumView('رفتن به سبد خرید', color: Colors.white),
                       ),
                     ),

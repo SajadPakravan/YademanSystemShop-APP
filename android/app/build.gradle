@@ -41,7 +41,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "ir.YademanSystem.shop.yademan_system_shop"
+        applicationId "ir.YademanSystem.shop"
         minSdkVersion flutter.minSdkVersion
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

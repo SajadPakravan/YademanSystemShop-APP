@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/cart_model.dart';
@@ -32,8 +33,8 @@ class _ProductScreenState extends State<ProductScreen> {
 
   onSlideChange(index) => setState(() => slideIndex = index);
 
-  getProduct() async {
-    dynamic jsonProduct = await httpRequest.getProduct();
+  getProduct(int id) async {
+    dynamic jsonProduct = await httpRequest.getProduct(id: id);
     setState(() => product = ProductModel.fromJson(jsonProduct));
     dataNumber++;
     loadContent();
@@ -47,6 +48,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   getRelatedProducts() async {
+    setState(() => relatedProductsLst.clear());
     ProductCategory category = product.categories![0];
     dynamic jsonRelatedProducts = await httpRequest.getProducts(perPage: 11, category: category.id.toString());
     jsonRelatedProducts.forEach((p) => setState(() => relatedProductsLst.add(ProductModel.fromJson(p))));
@@ -55,12 +57,13 @@ class _ProductScreenState extends State<ProductScreen> {
     loadContent();
   }
 
-  loadContent() {
+  loadContent({int? id}) {
+    if (id != null) setState(() => dataNumber = 0);
     switch (dataNumber) {
       case 0:
         {
           setState(() => loading = true);
-          getProduct();
+          getProduct(id!);
           break;
         }
       case 1:
@@ -105,6 +108,8 @@ class _ProductScreenState extends State<ProductScreen> {
             quantity = cart.quantity;
             existCart = true;
           });
+        } else {
+          setState(() => existCart = false);
         }
       }
     }
@@ -113,7 +118,7 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    loadContent();
+    loadContent(id: Get.arguments['id']);
   }
 
   @override
@@ -130,6 +135,8 @@ class _ProductScreenState extends State<ProductScreen> {
       authError: authError,
       addCart: addCart,
       quantity: quantity,
+      checkCart: checkCart,
+      loadContent: loadContent,
     );
   }
 }

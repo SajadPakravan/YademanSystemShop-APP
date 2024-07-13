@@ -141,7 +141,7 @@ class HttpRequest {
     return getRequest(url: urlProducts, details: details);
   }
 
-  getProduct() async => getRequest(url: urlProducts, id: Get.arguments['id'].toString());
+  getProduct({required int id}) async => getRequest(url: urlProducts, id: id.toString());
 
   getCategories({int parent = 0, int perPage = 10, String include = ''}) async {
     String addInclude = "";
