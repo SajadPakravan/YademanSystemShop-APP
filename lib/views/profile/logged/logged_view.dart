@@ -22,11 +22,13 @@ class LoggedView extends StatelessWidget {
     required this.addressAlert,
     required this.cartAlert,
     required this.cartNumber,
+    required this.checkCart,
   });
 
   final CustomerModel customer;
   final Function() getCustomer;
   final void Function() signOut;
+  final void Function() checkCart;
   final bool personalInfoAlert;
   final bool addressAlert;
   final bool cartAlert;
@@ -95,7 +97,10 @@ class LoggedView extends StatelessWidget {
                           ),
                         )
                       : null,
-                  onTap: () => toPage(const CartScreen()),
+                  onTap: () async {
+                    await toPage(const CartScreen());
+                    checkCart();
+                  },
                 ),
                 option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () {}),
                 option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () {}),

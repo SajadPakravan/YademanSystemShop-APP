@@ -25,6 +25,7 @@ class _CartScreenState extends State<CartScreen> {
     cart.quantity++;
     cart.save();
     setState(() {});
+    setTotalPrice();
   }
 
   decreaseQuantity(int id) {
@@ -36,12 +37,14 @@ class _CartScreenState extends State<CartScreen> {
       cart.delete();
     }
     setState(() {});
+    setTotalPrice();
   }
 
   setTotalPrice() {
+    totalPrice = 0;
     for (int i = 0; i < cartBox.length; i++) {
       CartModel cart = cartBox.getAt(i)!;
-      setState(() => totalPrice += cart.price);
+      setState(() => totalPrice += cart.price * cart.quantity);
     }
   }
 
@@ -148,7 +151,7 @@ class _CartScreenState extends State<CartScreen> {
                   transition: Transition.downToUp,
                   duration: const Duration(milliseconds: 300),
                 ),
-                child: const TextBodyLargeView('ادامه پرداخت', color: Colors.white),
+                child: const TextBodyLargeView('ثبت سفارش', color: Colors.white),
               ),
               Column(
                 children: [

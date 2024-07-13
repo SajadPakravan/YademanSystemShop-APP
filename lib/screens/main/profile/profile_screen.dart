@@ -92,6 +92,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       addressAlert: addressAlert,
       cartAlert: cartAlert,
       cartNumber: cartNumber,
+      checkCart: checkCart,
     );
   }
 }

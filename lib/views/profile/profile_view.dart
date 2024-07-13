@@ -20,6 +20,7 @@ class ProfileView extends StatelessWidget {
     required this.addressAlert,
     required this.cartAlert,
     required this.cartNumber,
+    required this.checkCart,
   });
 
   final BuildContext context;
@@ -29,6 +30,7 @@ class ProfileView extends StatelessWidget {
   final PageController pageCtrl;
   final Function() checkLogged;
   final void Function() signOut;
+  final void Function() checkCart;
   final bool loading;
   final bool personalInfoAlert;
   final bool addressAlert;
@@ -48,6 +50,7 @@ class ProfileView extends StatelessWidget {
                 addressAlert: addressAlert,
                 cartAlert: cartAlert,
                 cartNumber: cartNumber,
+                checkCart: checkCart,
               )
             : Scaffold(
                 appBar: AppBar(
