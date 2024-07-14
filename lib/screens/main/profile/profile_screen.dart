@@ -68,6 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
         cartNumber = cartBox.length;
         cartAlert = true;
       });
+    } else {
+      setState(() => cartAlert = false);
     }
   }
 

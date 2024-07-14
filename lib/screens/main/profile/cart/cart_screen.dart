@@ -158,7 +158,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               Column(
                 children: [
-                  const TextBodyLargeView('جمع سبد خرید'),
+                  const TextBodyLargeView('جمع کل سبد خرید'),
                   const SizedBox(height: 10),
                   TextBodyLargeView(
                     '${totalPrice.toString().toPersianDigit().seRagham()} تومان',

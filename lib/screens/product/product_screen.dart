@@ -93,7 +93,14 @@ class _ProductScreenState extends State<ProductScreen> {
     } else {
       ProductImage img = product.images![0];
       setState(() {
-        cartBox.add(CartModel(id: product.id!, name: product.name!, image: img.src!, price: int.parse(product.price!), quantity: 1));
+        cartBox.add(CartModel(
+          id: product.id!,
+          name: product.name!,
+          image: img.src!,
+          price: int.parse(product.price!),
+          quantity: 1,
+          shippingClass: product.shippingClass!,
+        ));
       });
       checkCart();
     }

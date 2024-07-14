@@ -1,175 +1,145 @@
 class ProductModel {
+  int? id;
+  String? name;
+  String? description;
+  String? shortDescription;
+  String? price;
+  String? regularPrice;
+  bool? onSale;
+  int? quantity;
+  int? totalSales;
+  String? shippingClass;
+  String? averageRating;
+  int? ratingCount;
+  List<ProductCategory>? categories;
+  List<ProductImage>? images;
+  List<Attribute>? attributes;
+
   ProductModel({
-    int? id,
-    String? name,
-    String? description,
-    String? shortDescription,
-    String? price,
-    String? regularPrice,
-    bool? onSale,
-    int? quantity,
-    int? totalSales,
-    String? shippingClass,
-    String? averageRating,
-    int? ratingCount,
-    List<ProductCategory>? categories,
-    List<ProductImage>? images,
-    List<Attribute>? attributes,
-  }) {
-    _id = id;
-    _name = name;
-    _description = description;
-    _shortDescription = shortDescription;
-    _price = price;
-    _regularPrice = regularPrice;
-    _categories = categories;
-    _images = images;
-    _attributes = attributes;
-  }
-
-  int? _id;
-  String? _name;
-  String? _description;
-  String? _shortDescription;
-  String? _price;
-  String? _regularPrice;
-  bool? _onSale;
-  List<ProductCategory>? _categories;
-  List<ProductImage>? _images;
-  List<Attribute>? _attributes;
-
-  int? get id => _id;
-
-  String? get name => _name;
-
-  String? get description => _description;
-
-  String? get shortDescription => _shortDescription;
-
-  String? get price => _price;
-
-  String? get regularPrice => _regularPrice;
-
-  bool? get onSale => _onSale;
-
-  List<ProductCategory>? get categories => _categories;
-
-  List<ProductImage>? get images => _images;
-
-  List<Attribute>? get attributes => _attributes;
+    this.id,
+    this.name,
+    this.description,
+    this.shortDescription,
+    this.price,
+    this.regularPrice,
+    this.onSale,
+    this.quantity,
+    this.totalSales,
+    this.shippingClass,
+    this.averageRating,
+    this.ratingCount,
+    this.categories,
+    this.images,
+    this.attributes,
+  });
 
   ProductModel.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
-    _description = json['description'];
-    _shortDescription = json['short_description'];
-    _price = json['price'];
-    _regularPrice = json['regular_price'];
-    _onSale = json['on_sale'];
+    id = json['id'];
+    name = json['name'];
+    description = json['description'];
+    shortDescription = json['short_description'];
+    price = json['price'];
+    regularPrice = json['regular_price'];
+    onSale = json['on_sale'];
+    quantity = json['stock_quantity'];
+    totalSales = json['total_sales'];
+    shippingClass = json['shipping_class'];
+    averageRating = json['average_rating'];
+    ratingCount = json['rating_count'];
     if (json['categories'] != null) {
-      _categories = [];
-      json['categories'].forEach((v) => _categories?.add(ProductCategory.fromJson(v)));
+      categories = <ProductCategory>[];
+      json['categories'].forEach((v) {
+        categories!.add(ProductCategory.fromJson(v));
+      });
     }
     if (json['images'] != null) {
-      _images = [];
-      json['images'].forEach((v) => _images?.add(ProductImage.fromJson(v)));
+      images = <ProductImage>[];
+      json['images'].forEach((v) {
+        images!.add(ProductImage.fromJson(v));
+      });
     }
     if (json['attributes'] != null) {
-      _attributes = [];
-      json['attributes'].forEach((v) => _attributes?.add(Attribute.fromJson(v)));
+      attributes = <Attribute>[];
+      json['attributes'].forEach((v) {
+        attributes!.add(Attribute.fromJson(v));
+      });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    map['description'] = _description;
-    map['short_description'] = _shortDescription;
-    map['price'] = _price;
-    map['regular_price'] = _regularPrice;
-    map['on_sale'] = _onSale;
-    if (_categories != null) map['categories'] = _categories?.map((v) => v.toJson()).toList();
-    if (_images != null) map['images'] = _images?.map((v) => v.toJson()).toList();
-    if (_attributes != null) map['attributes'] = _attributes?.map((v) => v.toJson()).toList();
-    return map;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    data['description'] = description;
+    data['short_description'] = shortDescription;
+    data['price'] = price;
+    data['regular_price'] = regularPrice;
+    data['on_sale'] = onSale;
+    data['on_sale'] = quantity;
+    data['on_sale'] = totalSales;
+    data['on_sale'] = shippingClass;
+    data['on_sale'] = averageRating;
+    data['on_sale'] = ratingCount;
+    if (categories != null) data['categories'] = categories!.map((v) => v.toJson()).toList();
+    if (images != null) data['images'] = images!.map((v) => v.toJson()).toList();
+    if (attributes != null) data['attributes'] = attributes!.map((v) => v.toJson()).toList();
+    return data;
   }
 }
 
 class ProductCategory {
-  ProductCategory({int? id, String? name}) {
-    _id = id;
-    _name = name;
-  }
+  int? id;
+  String? name;
 
-  int? _id;
-  String? _name;
-
-  int? get id => _id;
-
-  String? get name => _name;
+  ProductCategory({this.id, this.name});
 
   ProductCategory.fromJson(dynamic json) {
-    _id = json['id'];
-    _name = json['name'];
+    id = json['id'];
+    name = json['name'];
   }
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['name'] = _name;
-    return map;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['name'] = name;
+    return data;
   }
 }
 
 class ProductImage {
-  ProductImage({int? id, String? src}) {
-    _id = id;
-    _src = src;
-  }
+  int? id;
+  String? src;
 
-  int? _id;
-  String? _src;
-
-  int? get id => _id;
-
-  String? get src => _src;
+  ProductImage({this.id, this.src});
 
   ProductImage.fromJson(dynamic json) {
-    _id = json['id'];
-    _src = json['src'];
+    id = json['id'];
+    src = json['src'];
   }
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['id'] = _id;
-    map['src'] = _src;
-    return map;
+    final data = <String, dynamic>{};
+    data['id'] = id;
+    data['src'] = src;
+    return data;
   }
 }
 
 class Attribute {
-  Attribute({String? name, List<String>? options}) {
-    _name = name;
-    _options = options;
-  }
+  String? name;
+  List<String>? options;
 
-  String? _name;
-  List<String>? _options;
-
-  String? get name => _name;
-
-  List<String>? get options => _options;
+  Attribute({this.name, this.options});
 
   Attribute.fromJson(dynamic json) {
-    _name = json['name'];
-    _options = json['options'] != null ? json['options'].cast<String>() : [];
+    name = json['name'];
+    options = json['options'] != null ? json['options'].cast<String>() : [];
   }
 
   Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    map['name'] = _name;
-    map['options'] = _options;
-    return map;
+    final data = <String, dynamic>{};
+    data['name'] = name;
+    data['options'] = options;
+    return data;
   }
 }

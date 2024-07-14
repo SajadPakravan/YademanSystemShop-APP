@@ -22,6 +22,7 @@ class HomeViewModel with ChangeNotifier {
 
   getProducts({String categoryId = '', String onSale = '', int perPage = 10, required List<ProductModel> list}) async {
     dynamic jsonProducts = await _httpRequest.getProducts(category: categoryId, onSale: onSale, perPage: perPage);
+    list.clear();
     jsonProducts.forEach((p) => list.add(ProductModel.fromJson(p)));
     _dataNumber++;
     loadData();
@@ -30,6 +31,7 @@ class HomeViewModel with ChangeNotifier {
 
   getParentCategories() async {
     dynamic jsonCategories = await _httpRequest.getCategories(perPage: 9, include: "57,1818,1809,54,153,158,67,1601,1773,51,1816,151");
+    categoriesLst.clear();
     jsonCategories.forEach((c) => categoriesLst.add(CategoryModel.fromJson(c)));
     _dataNumber++;
     loadData();

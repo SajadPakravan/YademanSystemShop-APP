@@ -28,8 +28,9 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
   CustomerModel customer = CustomerModel();
   bool loading = false;
   bool addressAlert = false;
-  int totalPrice = 0;
+  int totalCart = 0;
   int shippingTotal = 0;
+  int totalPrice = 0;
 
   getCustomer() async {
     setState(() => loading = true);
@@ -44,7 +45,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
     cart.quantity++;
     cart.save();
     setState(() {});
-    setTotalPrice();
+    setDetailPrice();
   }
 
   decreaseQuantity(int id) {
@@ -52,26 +53,37 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
     if (cart.quantity > 1) {
       cart.quantity--;
       cart.save();
-    } else {
-      cart.delete();
     }
     setState(() {});
-    setTotalPrice();
+    setDetailPrice();
   }
 
-  setTotalPrice() {
-    totalPrice = 0;
+  setDetailPrice() {
+    totalCart = 0;
     for (int i = 0; i < widget.cartBox.length; i++) {
       CartModel cart = widget.cartBox.getAt(i)!;
-      setState(() => totalPrice += cart.price * cart.quantity);
-    }
-  }
-
-  setShippingTotal() {
-    shippingTotal = 0;
-    for (int i = 0; i < widget.cartBox.length; i++) {
-      CartModel cart = widget.cartBox.getAt(i)!;
-      setState(() => shippingTotal += cart.price * cart.quantity);
+      switch (cart.shippingClass) {
+        case 'small':
+          {
+            setState(() => shippingTotal = 50000);
+            break;
+          }
+        case 'medium':
+          {
+            setState(() => shippingTotal = 70000);
+            break;
+          }
+        case 'big':
+          {
+            setState(() => shippingTotal = 90000);
+            break;
+          }
+      }
+      setState(() {
+        totalCart += cart.price * cart.quantity;
+        shippingTotal *= cart.quantity;
+        totalPrice = totalCart + shippingTotal;
+      });
     }
   }
 
@@ -79,7 +91,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
   void initState() {
     super.initState();
     getCustomer();
-    setTotalPrice();
+    setDetailPrice();
   }
 
   @override
@@ -110,7 +122,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                                     '${customer.shipping!.state!}، ${customer.shipping!.city!}، ${customer.shipping!.address1!}، ${customer.shipping!.address2!}',
                                     height: 2,
                                   ),
-                                  TextBodyMediumView(customer.shipping!.postcode!.toString().toPersianDigit(),height: 2),
+                                  TextBodyMediumView(customer.shipping!.postcode!.toString().toPersianDigit(), height: 2),
                                   TextBodyMediumView('${customer.shipping!.firstName!} ${customer.shipping!.lastName!}'),
                                   Align(
                                     alignment: Alignment.centerLeft,
@@ -170,12 +182,8 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                                               TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
                                               const SizedBox(width: 10),
                                               IconButton(
-                                                icon: Icon(
-                                                  cart.quantity == 1 ? Icons.delete : Icons.remove_circle,
-                                                  color: Colors.indigo,
-                                                  size: 30,
-                                                ),
-                                                onPressed: () => decreaseQuantity(cart.id),
+                                                icon: const Icon(Icons.remove_circle, color: Colors.indigo, size: 30),
+                                                onPressed: cart.quantity == 1 ? null : () => decreaseQuantity(cart.id),
                                               ),
                                             ],
                                           ),
@@ -210,15 +218,18 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                       child: ListTile(
                         title: const Padding(
                           padding: EdgeInsets.only(bottom: 20),
-                          child: TextBodyLargeView('جزئیات قیمت',fontWeight: FontWeight.bold),
+                          child: TextBodyLargeView('جزئیات قیمت', fontWeight: FontWeight.bold),
                         ),
                         subtitle: Column(
                           children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const TextBodyMediumView('جمع سبد خرید'),
-                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                                const TextBodyMediumView('جمع کل سبد خرید'),
+                                TextBodyMediumView(
+                                  '${totalCart.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -226,7 +237,10 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const TextBodyMediumView('هزینه ارسال'),
-                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                                TextBodyMediumView(
+                                  '${shippingTotal.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ],
                             ),
                             const SizedBox(height: 10),
@@ -234,7 +248,10 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 const TextBodyMediumView('مبلغ قابل پرداخت'),
-                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                                TextBodyMediumView(
+                                  '${totalPrice.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ],
                             )
                           ],
