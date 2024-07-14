@@ -102,9 +102,9 @@ class _CartScreenState extends State<CartScreen> {
                                           icon: const Icon(Icons.add_circle, color: Colors.indigo, size: 30),
                                           onPressed: () => increaseQuantity(cart.id),
                                         ),
-                                        const SizedBox(width: 20),
+                                        const SizedBox(width: 10),
                                         TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
-                                        const SizedBox(width: 20),
+                                        const SizedBox(width: 10),
                                         IconButton(
                                           icon: Icon(
                                             cart.quantity == 1 ? Icons.delete : Icons.remove_circle,

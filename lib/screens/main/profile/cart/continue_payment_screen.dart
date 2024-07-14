@@ -10,6 +10,7 @@ import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
+import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class ContinuePaymentScreen extends StatefulWidget {
@@ -28,6 +29,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
   bool loading = false;
   bool addressAlert = false;
   int totalPrice = 0;
+  int shippingTotal = 0;
 
   getCustomer() async {
     setState(() => loading = true);
@@ -65,10 +67,19 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
     }
   }
 
+  setShippingTotal() {
+    shippingTotal = 0;
+    for (int i = 0; i < widget.cartBox.length; i++) {
+      CartModel cart = widget.cartBox.getAt(i)!;
+      setState(() => shippingTotal += cart.price * cart.quantity);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getCustomer();
+    setTotalPrice();
   }
 
   @override
@@ -99,6 +110,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                                     '${customer.shipping!.state!}، ${customer.shipping!.city!}، ${customer.shipping!.address1!}، ${customer.shipping!.address2!}',
                                     height: 2,
                                   ),
+                                  TextBodyMediumView(customer.shipping!.postcode!.toString().toPersianDigit(),height: 2),
                                   TextBodyMediumView('${customer.shipping!.firstName!} ${customer.shipping!.lastName!}'),
                                   Align(
                                     alignment: Alignment.centerLeft,
@@ -124,7 +136,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                       child: ListTile(
                         contentPadding: EdgeInsets.zero,
                         title: Padding(
-                          padding: const EdgeInsets.fromLTRB(10,5,10,20),
+                          padding: const EdgeInsets.fromLTRB(10, 5, 10, 20),
                           child: TextBodyMediumView(
                             '${widget.cartBox.length.toString().toPersianDigit()} عدد کالا در سبد خرید شما',
                             fontWeight: FontWeight.bold,
@@ -189,6 +201,43 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                               );
                             },
                           ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        title: const Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: TextBodyLargeView('جزئیات قیمت',fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('جمع سبد خرید'),
+                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('هزینه ارسال'),
+                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('مبلغ قابل پرداخت'),
+                                TextBodyMediumView('${totalPrice.toString().toPersianDigit().seRagham()} تومان',fontWeight: FontWeight.bold),
+                              ],
+                            )
+                          ],
                         ),
                       ),
                     ),
