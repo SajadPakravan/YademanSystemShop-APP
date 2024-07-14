@@ -60,31 +60,38 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
 
   setDetailPrice() {
     totalCart = 0;
+    shippingTotal = 0;
     for (int i = 0; i < widget.cartBox.length; i++) {
       CartModel cart = widget.cartBox.getAt(i)!;
-      switch (cart.shippingClass) {
-        case 'small':
-          {
-            setState(() => shippingTotal = 50000);
-            break;
-          }
-        case 'medium':
-          {
-            setState(() => shippingTotal = 70000);
-            break;
-          }
-        case 'big':
-          {
-            setState(() => shippingTotal = 90000);
-            break;
-          }
-      }
+      setShippingTotal(cart);
       setState(() {
         totalCart += cart.price * cart.quantity;
-        shippingTotal *= cart.quantity;
         totalPrice = totalCart + shippingTotal;
       });
     }
+  }
+
+  setShippingTotal(CartModel cart) {
+    int shPrice = 0;
+    switch (cart.shippingClass) {
+      case 'small':
+        {
+          shPrice = 50000;
+          break;
+        }
+      case 'medium':
+        {
+          shPrice = 70000;
+          break;
+        }
+      case 'big':
+        {
+          shPrice = 90000;
+          break;
+        }
+    }
+    shPrice *= cart.quantity;
+    setState(() => shippingTotal += shPrice);
   }
 
   @override
