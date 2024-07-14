@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:yad_sys/models/customer_model.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/widgets/snack_bar_view.dart';
 
 class HttpRequest {
@@ -24,6 +25,8 @@ class HttpRequest {
   get urlSignIn => 'https://$urlMain/wp-json/jwt-auth/v1/token/';
 
   get urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register';
+
+  get urlUsers => 'https://$urlMain/wp-json/wp/v2/users/';
 
   get urlCustomers => 'https://$urlMain/wp-json/wc/v3/customers/';
 
@@ -60,13 +63,22 @@ class HttpRequest {
     }
   }
 
-  postRequest({required BuildContext context, required String url, required Map<String, dynamic> body, String? error}) async {
-    Map<String, String> headers = {
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+  postRequest({
+    required BuildContext context,
+    required String url,
+    String id = '',
+    required Map<String, dynamic> body,
+    Map<String, String> headers = const {},
+    String? error,
+  }) async {
+    if (headers.isEmpty) {
+      headers = {
+        'Content-Type': 'application/json; charset=UTF-8',
+      };
+    }
 
     try {
-      final postRequest = await http.post(Uri.parse(url), headers: headers, body: jsonEncode(body));
+      final postRequest = await http.post(Uri.parse(url + id.toString()), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       dynamic json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == 200) {
@@ -171,6 +183,19 @@ class HttpRequest {
     return getRequest(url: urlCustomers, details: '&email=$email');
   }
 
+  updateUser({required BuildContext context, required String firstname, required String lastname}) async {
+    AppCache cache = AppCache();
+    Map<String, String> headers = {'Authorization': 'Bearer ${await cache.getString('token')}'};
+    Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'name': '$firstname $lastname'};
+    return postRequest(
+      context: context.mounted ? context : context,
+      url: urlUsers,
+      id: (await cache.getInt('id')).toString(),
+      body: body,
+      headers: headers,
+    );
+  }
+
   updateCustomer({
     required String id,
     required String firstname,
@@ -260,33 +285,4 @@ class HttpRequest {
       return false;
     }
   }
-
-// getSearchProduct({
-//   required String search,
-//   int perPage = 100,
-//   int page = 1,
-// }) async {
-//   var more = "&&search=$search&per_page=$perPage&page=$page";
-//
-//   final requestGetSearchProducts = await http.get(
-//     Uri.parse(urlProducts + key + secret + more),
-//   );
-//
-//   dynamic jsonGetSearchProducts;
-//
-//   if (requestGetSearchProducts.statusCode == 200) {
-//     jsonGetSearchProducts = jsonDecode(requestGetSearchProducts.body);
-//
-//     if (jsonGetSearchProducts.toString() == "[]") {
-//       return "empty";
-//     } else {
-//       return jsonGetSearchProducts;
-//     }
-//   } else {
-//     print("requestGetProducts >>>: ${requestGetSearchProducts.request}");
-//     print("requestGetProducts_statusCode >>>:  ${requestGetSearchProducts.statusCode}");
-//     print("jsonGetProducts_error >>>:  $jsonGetSearchProducts");
-//     return false;
-//   }
-// }
 }
