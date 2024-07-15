@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/screens/connection_error.dart';
-import 'package:yad_sys/screens/main/main_screen.dart';
+import 'package:yad_sys/screens/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';
 import 'package:yad_sys/themes/theme.dart';
 import 'package:yad_sys/tools/app_texts.dart';

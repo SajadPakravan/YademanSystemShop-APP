@@ -5,7 +5,7 @@ import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/customer_model.dart';
-import 'package:yad_sys/screens/main/profile/address/address_screen.dart';
+import 'package:yad_sys/screens/profile/address/address_screen.dart';
 import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
@@ -260,7 +260,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),

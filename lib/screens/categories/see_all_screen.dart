@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/views/category_views/show_all_view.dart';
+import 'package:yad_sys/views/categories/show_all_view.dart';
 
 class ShowAllScreen extends StatefulWidget {
   const ShowAllScreen({super.key});

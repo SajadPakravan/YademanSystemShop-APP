@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:yad_sys/screens/main/categories/see_all_screen.dart';
+import 'package:yad_sys/screens/categories/see_all_screen.dart';
 import 'package:yad_sys/screens/product/product_screen.dart';
 
 class AppFunction {

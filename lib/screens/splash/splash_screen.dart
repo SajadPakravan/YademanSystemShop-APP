@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:simple_shadow/simple_shadow.dart';
 import 'package:yad_sys/connections/http_request.dart';
-import 'package:yad_sys/screens/main/main_screen.dart';
+import 'package:yad_sys/screens/main_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
 import 'package:yad_sys/widgets/loading.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yad_sys/models/customer_model.dart';
-import 'package:yad_sys/screens/main/profile/sign_in/sign_in_screen.dart';
-import 'package:yad_sys/screens/main/profile/sign_up/sign_up_screen.dart';
+import 'package:yad_sys/screens/profile/sign_in/sign_in_screen.dart';
+import 'package:yad_sys/screens/profile/sign_up/sign_up_screen.dart';
 import 'package:yad_sys/views/profile/logged/logged_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
 

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/database/cart_model.dart';
-import 'package:yad_sys/screens/main/profile/cart/continue_payment_screen.dart';
+import 'package:yad_sys/screens/profile/cart/continue_payment_screen.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';

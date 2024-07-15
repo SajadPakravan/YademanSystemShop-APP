@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:yad_sys/screens/main/categories/categories_screen.dart';
-import 'package:yad_sys/screens/main/home/home_screen.dart';
-import 'package:yad_sys/screens/main/profile/profile_screen.dart';
-import 'package:yad_sys/screens/main/shop/shop_screen.dart';
+import 'package:yad_sys/screens/categories/categories_screen.dart';
+import 'package:yad_sys/screens/home/home_screen.dart';
+import 'package:yad_sys/screens/profile/profile_screen.dart';
+import 'package:yad_sys/screens/shop/shop_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
