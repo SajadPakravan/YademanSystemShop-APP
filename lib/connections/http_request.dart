@@ -220,8 +220,8 @@ class HttpRequest {
     required String postcode,
   }) async {
     Billing billing = Billing();
-    billing.firstName = firstname;
-    billing.lastName = lastname;
+    billing.firstname = firstname;
+    billing.lastname = lastname;
     billing.email = email;
     billing.phone = phone;
     billing.company = company;
@@ -247,8 +247,8 @@ class HttpRequest {
     required String postcode,
   }) async {
     Shipping shipping = Shipping();
-    shipping.firstName = firstname;
-    shipping.lastName = lastname;
+    shipping.firstname = firstname;
+    shipping.lastname = lastname;
     shipping.phone = phone;
     shipping.company = company;
     shipping.country = 'IR';
@@ -284,5 +284,55 @@ class HttpRequest {
       if (context.mounted) SnackBarView.show(context, json['message']);
       return false;
     }
+  }
+
+  createOrder({
+    required BuildContext context,
+    required int customerId,
+    required String firstname,
+    required String lastname,
+    required String email,
+    required String phone,
+    required String company,
+    required String state,
+    required String city,
+    required String street,
+    required String number,
+    required String postcode,
+    required List products,
+    required int shippingTotal,
+  }) {
+    Map<String, dynamic> body = {
+      'customer_id': customerId,
+      'set_paid': false,
+      'billing': {
+        'first_name': firstname,
+        'last_name': lastname,
+        'address_1': street,
+        'address_2': number,
+        'city': city,
+        'state': state,
+        'postcode': postcode,
+        'country': 'IR',
+        'email': email,
+        'phone': phone
+      },
+      'shipping': {
+        'first_name': firstname,
+        'last_name': lastname,
+        'address_1': street,
+        'address_2': number,
+        'city': city,
+        'state': state,
+        'postcode': postcode,
+        'country': 'IR',
+        'phone': phone
+      },
+      'line_items': products,
+      'shipping_lines': [
+        {'method_id': 'flat_rate', 'method_title': 'Flat Rate', 'total': shippingTotal}
+      ]
+    };
+    return postRequest(context: context, url: urlOrders, body: body);
   }
 }

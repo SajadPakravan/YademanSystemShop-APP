@@ -49,8 +49,8 @@ class CustomerModel {
 }
 
 class Billing {
-  String? firstName;
-  String? lastName;
+  String? firstname;
+  String? lastname;
   String? email;
   String? phone;
   String? company;
@@ -62,8 +62,8 @@ class Billing {
   String? postcode;
 
   Billing({
-    this.firstName,
-    this.lastName,
+    this.firstname,
+    this.lastname,
     this.email,
     this.phone,
     this.company,
@@ -76,8 +76,8 @@ class Billing {
   });
 
   Billing.fromJson(Map<String, dynamic> json) {
-    firstName = json['first_name'];
-    lastName = json['last_name'];
+    firstname = json['first_name'];
+    lastname = json['last_name'];
     email = json['email'];
     phone = json['phone'];
     company = json['company'];
@@ -91,8 +91,8 @@ class Billing {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
+    data['first_name'] = firstname;
+    data['last_name'] = lastname;
     data['email'] = email;
     data['phone'] = phone;
     data['company'] = company;
@@ -107,8 +107,8 @@ class Billing {
 }
 
 class Shipping {
-  String? firstName;
-  String? lastName;
+  String? firstname;
+  String? lastname;
   String? phone;
   String? company;
   String? country;
@@ -119,8 +119,8 @@ class Shipping {
   String? postcode;
 
   Shipping({
-    this.firstName,
-    this.lastName,
+    this.firstname,
+    this.lastname,
     this.phone,
     this.company,
     this.country,
@@ -132,8 +132,8 @@ class Shipping {
   });
 
   Shipping.fromJson(Map<String, dynamic> json) {
-    firstName = json['first_name'];
-    lastName = json['last_name'];
+    firstname = json['first_name'];
+    lastname = json['last_name'];
     phone = json['phone'];
     company = json['company'];
     country = json['country'];
@@ -146,8 +146,8 @@ class Shipping {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['first_name'] = firstName;
-    data['last_name'] = lastName;
+    data['first_name'] = firstname;
+    data['last_name'] = lastname;
     data['phone'] = phone;
     data['company'] = company;
     data['country'] = country;

@@ -49,8 +49,8 @@ class _AddressScreenState extends State<AddressScreen> {
     super.initState();
     setState(() {
       customer = Get.arguments;
-      firstname = customer.billing!.firstName!;
-      lastname = customer.billing!.lastName!;
+      firstname = customer.billing!.firstname!;
+      lastname = customer.billing!.lastname!;
       email = customer.billing!.email!;
       phone = customer.billing!.phone!;
       company = customer.billing!.company!;
@@ -255,8 +255,8 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   formValidation() {
-    if (firstname != customer.billing!.firstName! ||
-        lastname != customer.billing!.lastName ||
+    if (firstname != customer.billing!.firstname! ||
+        lastname != customer.billing!.lastname ||
         email != customer.billing!.email ||
         phone != customer.billing!.phone ||
         company != customer.billing!.company ||
