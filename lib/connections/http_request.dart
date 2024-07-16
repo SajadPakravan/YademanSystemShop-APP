@@ -69,6 +69,7 @@ class HttpRequest {
     String id = '',
     required Map<String, dynamic> body,
     Map<String, String> headers = const {},
+    int statusCode = 200,
     String? error,
   }) async {
     if (headers.isEmpty) {
@@ -78,10 +79,10 @@ class HttpRequest {
     }
 
     try {
-      final postRequest = await http.post(Uri.parse(url + id.toString()), headers: headers, body: jsonEncode(body));
+      final postRequest = await http.post(Uri.parse(url + id.toString() + key + secret), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       dynamic json = jsonDecode(postRequest.body);
-      if (postRequest.statusCode == 200) {
+      if (postRequest.statusCode == statusCode) {
         if (kDebugMode) print("JSON >>>> $json");
         return json;
       } else {
@@ -330,9 +331,9 @@ class HttpRequest {
       },
       'line_items': products,
       'shipping_lines': [
-        {'method_id': 'flat_rate', 'method_title': 'Flat Rate', 'total': shippingTotal}
+        {'method_id': 'flat_rate', 'method_title': 'Flat Rate', 'total': shippingTotal.toString()}
       ]
     };
-    return postRequest(context: context, url: urlOrders, body: body);
+    return postRequest(context: context, url: urlOrders, body: body, statusCode: 201);
   }
 }

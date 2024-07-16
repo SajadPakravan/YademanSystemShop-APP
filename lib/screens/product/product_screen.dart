@@ -119,6 +119,8 @@ class _ProductScreenState extends State<ProductScreen> {
           setState(() => existCart = false);
         }
       }
+    } else {
+      setState(() => existCart = false);
     }
   }
 

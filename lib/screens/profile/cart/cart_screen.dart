@@ -41,7 +41,8 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   setTotalPrice() {
-    totalPrice = 0;
+    print(888888888888);
+    setState(() => totalPrice = 0);
     for (int i = 0; i < cartBox.length; i++) {
       CartModel cart = cartBox.getAt(i)!;
       setState(() => totalPrice += cart.price * cart.quantity);
@@ -129,7 +130,7 @@ class _CartScreenState extends State<CartScreen> {
             );
           },
         ),
-        bottomNavigationBar: cartPrice(),
+        bottomNavigationBar: totalPrice != 0 ? cartPrice() : null,
       ),
     );
   }

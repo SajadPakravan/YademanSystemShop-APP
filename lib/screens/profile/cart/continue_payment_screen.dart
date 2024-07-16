@@ -1,11 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/profile/address/address_screen.dart';
+import 'package:yad_sys/screens/profile/orders/order_screen.dart';
+import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/tools/to_page.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
@@ -27,6 +31,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
   HttpRequest httpRequest = HttpRequest();
   AppCache cache = AppCache();
   CustomerModel customer = CustomerModel();
+  Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
   bool loading = false;
   bool addressAlert = false;
   int totalCart = 0;
@@ -283,32 +288,44 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            ElevatedButton(
-              style: ButtonStyle(shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)))),
-              onPressed: () async {
-                dynamic jsonOrder = await httpRequest.createOrder(
-                  context: context,
-                  customerId: customer.id!,
-                  firstname: customer.billing!.firstname!,
-                  lastname: customer.billing!.lastname!,
-                  email: customer.billing!.email!,
-                  phone: customer.billing!.phone!,
-                  company: customer.billing!.company!,
-                  state: customer.billing!.state!,
-                  city: customer.billing!.city!,
-                  street: customer.billing!.address1!,
-                  number: customer.billing!.address2!,
-                  postcode: customer.billing!.postcode!,
-                  products: products,
-                  shippingTotal: shippingTotal,
-                );
-                if (jsonOrder != false) {
-                  if (mounted) SnackBarView.show(context, 'سفارش شما ثبت شد');
-                }
-              },
-              child: const TextBodyLargeView('پرداخت و ثبت سفارش', color: Colors.white),
+            IntrinsicWidth(
+              child: EasyButton(
+                idleStateWidget: const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: TextBodyLargeView('پرداخت و ثبت سفارش', color: Colors.white),
+                ),
+                loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                buttonColor: ColorStyle.blueFav,
+                borderRadius: 10,
+                onPressed: () async {
+                  dynamic jsonOrder = await httpRequest.createOrder(
+                    context: context,
+                    customerId: customer.id!,
+                    firstname: customer.billing!.firstname!,
+                    lastname: customer.billing!.lastname!,
+                    email: customer.billing!.email!,
+                    phone: customer.billing!.phone!,
+                    company: customer.billing!.company!,
+                    state: customer.billing!.state!,
+                    city: customer.billing!.city!,
+                    street: customer.billing!.address1!,
+                    number: customer.billing!.address2!,
+                    postcode: customer.billing!.postcode!,
+                    products: products,
+                    shippingTotal: shippingTotal,
+                  );
+                  if (jsonOrder != false) {
+                    if (mounted) SnackBarView.show(context, 'سفارش شما ثبت شد');
+                    cartBox.clear();
+                    Get.back();
+                    Get.back();
+                    Get.to(const OrderScreen());
+                  }
+                },
+              ),
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 const TextBodyLargeView('مبلغ قابل پرداخت'),
                 const SizedBox(height: 10),
