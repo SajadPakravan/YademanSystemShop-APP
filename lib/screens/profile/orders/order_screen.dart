@@ -9,7 +9,9 @@ class OrderScreen extends StatefulWidget {
 }
 
 class _OrderScreenState extends State<OrderScreen> {
-  getOrders() {}
+  getOrders() {
+
+  }
 
   @override
   void initState() {

@@ -36,8 +36,8 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
     setState(() => loading = true);
     String email = await cache.getString('email') ?? '';
     if (email.isNotEmpty) {
-      getCustomer();
       checkCart();
+      getCustomer();
     } else {
       setState(() {
         logged = false;

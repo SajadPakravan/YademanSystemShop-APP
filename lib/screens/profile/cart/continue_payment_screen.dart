@@ -318,7 +318,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                   );
                   if (jsonOrder != false) {
                     if (mounted) SnackBarView.show(context, 'سفارش شما ثبت شد');
-                    cartBox.clear();
+                    await cartBox.clear();
                     Get.offAll(const MainScreen(pageIndex: 3), transition: Transition.zoom, duration: const Duration(milliseconds: 300));
                     WidgetsBinding.instance.addPostFrameCallback((_) => toPage(() => const OrderScreen()));
                   }
