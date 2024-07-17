@@ -6,7 +6,9 @@ import 'package:yad_sys/screens/profile/profile_screen.dart';
 import 'package:yad_sys/screens/shop/shop_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({super.key, this.pageIndex = 0});
+
+  final int pageIndex;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -32,6 +34,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       systemNavigationBarContrastEnforced: false,
       systemNavigationBarDividerColor: Colors.black,
     ));
+    pageCtrl = PageController(initialPage: widget.pageIndex);
+    pageIndex = widget.pageIndex;
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => onTapMenu(index: widget.pageIndex)));
   }
 
   @override

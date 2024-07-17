@@ -336,4 +336,8 @@ class HttpRequest {
     };
     return postRequest(context: context, url: urlOrders, body: body, statusCode: 201);
   }
+
+  getOrders({required int customerId}) {
+    return getRequest(url: urlOrders, id: customerId.toString());
+  }
 }

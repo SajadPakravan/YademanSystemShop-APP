@@ -41,7 +41,6 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   setTotalPrice() {
-    print(888888888888);
     setState(() => totalPrice = 0);
     for (int i = 0; i < cartBox.length; i++) {
       CartModel cart = cartBox.getAt(i)!;
@@ -152,6 +151,7 @@ class _CartScreenState extends State<CartScreen> {
                     ContinuePaymentScreen(cartBox: cartBox),
                     transition: Transition.downToUp,
                     duration: const Duration(milliseconds: 300),
+                    arguments: Get.arguments,
                   );
                   setTotalPrice();
                 },

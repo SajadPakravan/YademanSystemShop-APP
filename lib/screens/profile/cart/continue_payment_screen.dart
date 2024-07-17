@@ -7,6 +7,7 @@ import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/models/customer_model.dart';
+import 'package:yad_sys/screens/main_screen.dart';
 import 'package:yad_sys/screens/profile/address/address_screen.dart';
 import 'package:yad_sys/screens/profile/orders/order_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
@@ -114,169 +115,170 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-          appBar: const AppBarView(title: 'تاید آدرس و فاکتور'),
-          body: loading
-              ? const Loading()
-              : SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-                        child: ListTile(
-                          title: Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: TextBodyMediumView('ارسال به', color: Colors.grey.shade700),
-                          ),
-                          subtitle: addressAlert
-                              ? const TextBodyMediumView('لطفاآدرس را در صفحه پروفایل تکمیل کنید')
-                              : Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    TextBodyMediumView(
-                                      '${customer.shipping!.state!}، ${customer.shipping!.city!}، ${customer.shipping!.address1!}، ${customer.shipping!.address2!}',
-                                      height: 2,
-                                    ),
-                                    TextBodyMediumView(customer.shipping!.postcode!.toString().toPersianDigit(), height: 2),
-                                    TextBodyMediumView('${customer.shipping!.firstname!} ${customer.shipping!.lastname!}'),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Directionality(
-                                        textDirection: TextDirection.ltr,
-                                        child: TextButton.icon(
-                                          label: const TextBodyMediumView('تغییر آدرس و مشخصات', color: Colors.indigo),
-                                          icon: const Icon(Icons.keyboard_arrow_left),
-                                          onPressed: () async {
-                                            await toPage(const AddressScreen(), arguments: customer);
-                                            getCustomer();
-                                          },
-                                        ),
+        appBar: const AppBarView(title: 'تاید آدرس و فاکتور'),
+        body: loading
+            ? const Loading()
+            : SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        title: Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: TextBodyMediumView('ارسال به', color: Colors.grey.shade700),
+                        ),
+                        subtitle: addressAlert
+                            ? const TextBodyMediumView('لطفاآدرس را در صفحه پروفایل تکمیل کنید')
+                            : Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  TextBodyMediumView(
+                                    '${customer.shipping!.state!}، ${customer.shipping!.city!}، ${customer.shipping!.address1!}، ${customer.shipping!.address2!}',
+                                    height: 2,
+                                  ),
+                                  TextBodyMediumView(customer.shipping!.postcode!.toString().toPersianDigit(), height: 2),
+                                  TextBodyMediumView('${customer.shipping!.firstname!} ${customer.shipping!.lastname!}'),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Directionality(
+                                      textDirection: TextDirection.ltr,
+                                      child: TextButton.icon(
+                                        label: const TextBodyMediumView('تغییر آدرس و مشخصات', color: Colors.indigo),
+                                        icon: const Icon(Icons.keyboard_arrow_left),
+                                        onPressed: () async {
+                                          await toPage(const AddressScreen(), arguments: customer);
+                                          getCustomer();
+                                        },
                                       ),
                                     ),
-                                  ],
-                                ),
-                        ),
+                                  ),
+                                ],
+                              ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-                        child: ListTile(
-                          contentPadding: EdgeInsets.zero,
-                          title: Padding(
-                            padding: const EdgeInsets.fromLTRB(10, 5, 10, 20),
-                            child: TextBodyMediumView(
-                              '${widget.cartBox.length.toString().toPersianDigit()} عدد کالا در سبد خرید شما',
-                              fontWeight: FontWeight.bold,
-                            ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        title: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 5, 10, 20),
+                          child: TextBodyMediumView(
+                            '${widget.cartBox.length.toString().toPersianDigit()} عدد کالا در سبد خرید شما',
+                            fontWeight: FontWeight.bold,
                           ),
-                          subtitle: SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.23,
-                            child: ValueListenableBuilder(
-                              valueListenable: widget.cartBox.listenable(),
-                              builder: (context, Box<CartModel> box, _) {
-                                return ListView.builder(
-                                  itemCount: box.length,
-                                  scrollDirection: Axis.horizontal,
-                                  itemBuilder: (context, index) {
-                                    CartModel cart = box.getAt(index)!;
-                                    return Row(
-                                      children: [
-                                        Column(
-                                          children: [
-                                            Expanded(child: CachedNetworkImage(imageUrl: cart.image, fit: BoxFit.contain)),
-                                            const SizedBox(height: 20),
-                                            Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              mainAxisAlignment: MainAxisAlignment.center,
-                                              children: [
-                                                IconButton(
-                                                  icon: const Icon(Icons.add_circle, color: Colors.indigo, size: 30),
-                                                  onPressed: () => increaseQuantity(cart.id),
-                                                ),
-                                                const SizedBox(width: 10),
-                                                TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
-                                                const SizedBox(width: 10),
-                                                IconButton(
-                                                  icon: const Icon(Icons.remove_circle, color: Colors.indigo, size: 30),
-                                                  onPressed: cart.quantity == 1 ? null : () => decreaseQuantity(cart.id),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                        Visibility(
-                                          visible: index + 1 != widget.cartBox.length,
-                                          child: Row(
+                        ),
+                        subtitle: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.23,
+                          child: ValueListenableBuilder(
+                            valueListenable: widget.cartBox.listenable(),
+                            builder: (context, Box<CartModel> box, _) {
+                              return ListView.builder(
+                                itemCount: box.length,
+                                scrollDirection: Axis.horizontal,
+                                itemBuilder: (context, index) {
+                                  CartModel cart = box.getAt(index)!;
+                                  return Row(
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Expanded(child: CachedNetworkImage(imageUrl: cart.image, fit: BoxFit.contain)),
+                                          const SizedBox(height: 20),
+                                          Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment: MainAxisAlignment.center,
                                             children: [
-                                              const SizedBox(width: 10),
-                                              Container(
-                                                height: MediaQuery.of(context).size.height * 0.26,
-                                                width: 1,
-                                                decoration: const BoxDecoration(border: Border(right: BorderSide(color: Colors.black38))),
+                                              IconButton(
+                                                icon: const Icon(Icons.add_circle, color: Colors.indigo, size: 30),
+                                                onPressed: () => increaseQuantity(cart.id),
                                               ),
                                               const SizedBox(width: 10),
+                                              TextBodyMediumView(cart.quantity.toString().toPersianDigit(), fontSize: 18),
+                                              const SizedBox(width: 10),
+                                              IconButton(
+                                                icon: const Icon(Icons.remove_circle, color: Colors.indigo, size: 30),
+                                                onPressed: cart.quantity == 1 ? null : () => decreaseQuantity(cart.id),
+                                              ),
                                             ],
                                           ),
+                                        ],
+                                      ),
+                                      Visibility(
+                                        visible: index + 1 != widget.cartBox.length,
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 10),
+                                            Container(
+                                              height: MediaQuery.of(context).size.height * 0.26,
+                                              width: 1,
+                                              decoration: const BoxDecoration(border: Border(right: BorderSide(color: Colors.black38))),
+                                            ),
+                                            const SizedBox(width: 10),
+                                          ],
                                         ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                      child: ListTile(
+                        title: const Padding(
+                          padding: EdgeInsets.only(bottom: 20),
+                          child: TextBodyLargeView('جزئیات قیمت', fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('جمع کل سبد خرید'),
+                                TextBodyMediumView(
+                                  '${totalCart.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ],
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('هزینه ارسال'),
+                                TextBodyMediumView(
+                                  '${shippingTotal.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                const TextBodyMediumView('مبلغ قابل پرداخت'),
+                                TextBodyMediumView(
+                                  '${totalPrice.toString().toPersianDigit().seRagham()} تومان',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-                        child: ListTile(
-                          title: const Padding(
-                            padding: EdgeInsets.only(bottom: 20),
-                            child: TextBodyLargeView('جزئیات قیمت', fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const TextBodyMediumView('جمع کل سبد خرید'),
-                                  TextBodyMediumView(
-                                    '${totalCart.toString().toPersianDigit().seRagham()} تومان',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const TextBodyMediumView('هزینه ارسال'),
-                                  TextBodyMediumView(
-                                    '${shippingTotal.toString().toPersianDigit().seRagham()} تومان',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const TextBodyMediumView('مبلغ قابل پرداخت'),
-                                  TextBodyMediumView(
-                                    '${totalPrice.toString().toPersianDigit().seRagham()} تومان',
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-          bottomNavigationBar: Visibility(visible: !loading, child: cartPrice())),
+              ),
+        bottomNavigationBar: Visibility(visible: !loading, child: cartPrice()),
+      ),
     );
   }
 
@@ -317,9 +319,8 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                   if (jsonOrder != false) {
                     if (mounted) SnackBarView.show(context, 'سفارش شما ثبت شد');
                     cartBox.clear();
-                    Get.back();
-                    Get.back();
-                    Get.to(const OrderScreen());
+                    Get.offAll(const MainScreen(pageIndex: 3), transition: Transition.zoom, duration: const Duration(milliseconds: 300));
+                    WidgetsBinding.instance.addPostFrameCallback((_) => toPage(() => const OrderScreen()));
                   }
                 },
               ),

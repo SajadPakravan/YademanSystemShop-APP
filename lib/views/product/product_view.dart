@@ -185,6 +185,7 @@ class ProductView extends StatelessWidget {
                             const CartScreen(),
                             transition: Transition.downToUp,
                             duration: const Duration(milliseconds: 300),
+                            arguments: 5,
                           );
                           checkCart();
                         },
