@@ -54,6 +54,7 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       personalInfoAlert = false;
       addressAlert = false;
     });
+    await cache.setInt('id', customer.id!);
     if (customer.firstname!.isEmpty) setState(() => personalInfoAlert = true);
     if (customer.billing!.city!.isEmpty) setState(() => addressAlert = true);
     setState(() {

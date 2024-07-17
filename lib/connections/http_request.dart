@@ -337,7 +337,8 @@ class HttpRequest {
     return postRequest(context: context, url: urlOrders, body: body, statusCode: 201);
   }
 
-  getOrders({required int customerId}) {
-    return getRequest(url: urlOrders, id: customerId.toString());
+  getOrders() async {
+    AppCache cache = AppCache();
+    return getRequest(url: urlOrders, details: '&customer=${await cache.getInt('id')}');
   }
 }

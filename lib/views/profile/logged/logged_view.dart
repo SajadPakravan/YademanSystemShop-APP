@@ -108,7 +108,6 @@ class LoggedView extends StatelessWidget {
                     icon: Icons.shopping_bag,
                     onTap: () async {
                       await toPage(const OrderScreen());
-                      print(3636363);
                     }),
                 option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () {}),
                 option(title: 'تماس با پشتیبانی', icon: Icons.headphones, onTap: () {}),
