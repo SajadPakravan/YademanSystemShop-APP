@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/themes/app_themes.dart';
+import 'package:yad_sys/widgets/cards/product_card_grid.dart';
+import 'package:yad_sys/widgets/loading.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -12,89 +14,45 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   HttpRequest httpRequest = HttpRequest();
-  List<ProductModel> productDetailList = [];
-  List<ProductImage> productImageList = [];
+  List<ProductModel> productsLst = [];
+  bool loading = false;
 
-  // getSearchProducts(String search) async {
-  //   dynamic jsonGetSearchProducts = await httpRequest.getSearchProduct(
-  //     search: search,
-  //   );
-  //   switch (jsonGetSearchProducts) {
-  //     case false:
-  //       {
-  //         break;
-  //       }
-  //     case "empty":
-  //       {
-  //
-  //         break;
-  //       }
-  //     default:
-  //       {
-  //         setState(() {
-  //           productImageList.clear();
-  //           productDetailList.clear();
-  //         });
-  //         List jsonProductsImages = [];
-  //
-  //         jsonGetSearchProducts.forEach((i) {
-  //           setState(() {
-  //             jsonProductsImages.add(i['images'][0]);
-  //           });
-  //         });
-  //
-  //         print("jsonProductsImages >>>: $jsonProductsImages");
-  //
-  //         for (var image in jsonProductsImages) {
-  //           setState(() {
-  //             productImageList.add(Images(src: image['src']));
-  //           });
-  //         }
-  //
-  //         jsonGetSearchProducts.forEach((p) {
-  //           setState(() {
-  //             productDetailList.add(
-  //               ProductModel(
-  //                 id: p['id'],
-  //                 name: p['name'],
-  //                 regularPrice: p['regular_price'],
-  //                 price: p['sale_price'],
-  //               ),
-  //             );
-  //           });
-  //         });
-  //         break;
-  //       }
-  //   }
-  // }
+  getProducts({required String search}) async {
+    setState(() => loading = true);
+    dynamic jsonProducts = await httpRequest.getProducts(search: search);
+    jsonProducts.forEach((p) => setState(() => productsLst.add(ProductModel.fromJson(p))));
+    setState(() => loading = false);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
+      body: loading ? const Loading() : Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: ProductCardGrid(list: productsLst),
+      ),
     );
   }
 
   appBar() {
     return AppBar(
       backgroundColor: Colors.white,
-      iconTheme: const IconThemeData(
-        color: Colors.black54,
-      ),
+      iconTheme: const IconThemeData(color: Colors.black54),
+      centerTitle: true,
+
       title: Directionality(
         textDirection: TextDirection.rtl,
-        child: TextField(
-          decoration: InputDecoration(
-            hintText: "محصول مورد نظر را جستجو کنید ...",
-            prefixIcon: const Icon(Icons.search_rounded),
-            hintStyle: Theme.of(context).textTheme.hintText,
-          ),
+        child: SearchBar(
+          textInputAction: TextInputAction.search,
+          leading: const Icon(Icons.search),
+          hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black54)),
+          hintText: 'محصول مورد نظر خود را جستجو کنید...',
+          elevation: MaterialStateProperty.all(0),
+          textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
+          autoFocus: true,
           onChanged: (value) {
-            if (value.length > 3) {
-              // getSearchProducts(value);
-            } else if (value.isEmpty) {
-              // getSearchProducts(value);
-            }
+            if (value.length > 3) getProducts(search: value);
           },
         ),
       ),

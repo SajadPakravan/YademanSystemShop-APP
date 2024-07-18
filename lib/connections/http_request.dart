@@ -145,12 +145,15 @@ class HttpRequest {
     String orderBy = 'date',
     String category = '',
     String onSale = '',
+    String search = '',
   }) async {
     String addCategory = '';
     String addOnSale = '';
+    String addSearch = '';
     if (category.isNotEmpty) addCategory = '&category=$category';
     if (onSale.isNotEmpty) addOnSale = '&on_sale=$onSale';
-    String details = "&per_page=$perPage&page=$page&order=$order&orderby=$orderBy$addCategory$addOnSale";
+    if (search.isNotEmpty) addSearch = '&search=$search';
+    String details = "&per_page=$perPage&page=$page&order=$order&orderby=$orderBy$addCategory$addOnSale$addSearch";
     return getRequest(url: urlProducts, details: details);
   }
 
