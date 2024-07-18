@@ -65,7 +65,7 @@ class ShowAllView extends StatelessWidget {
       floating: true,
       snap: true,
       backgroundColor: Colors.white,
-      title: TextTitleMediumView(Get.arguments[0]),
+      title: TextTitleMediumView(Get.arguments['title']),
       centerTitle: true,
       iconTheme: const IconThemeData(color: Colors.black54),
     );

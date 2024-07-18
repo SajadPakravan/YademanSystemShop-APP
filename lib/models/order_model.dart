@@ -100,7 +100,7 @@ class LineItems {
   String? subtotal;
   String? total;
   int? price;
-  Image? image;
+  OrderItemsImage? image;
 
   LineItems({
     this.id,
@@ -120,6 +120,8 @@ class LineItems {
     quantity = json['quantity'];
     subtotal = json['subtotal'];
     total = json['total'];
+    price = json['price'];
+    image = json['image'] != null ? OrderItemsImage.fromJson(json['image']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -131,19 +133,17 @@ class LineItems {
     data['subtotal'] = subtotal;
     data['total'] = total;
     data['price'] = price;
-    if (image != null) {
-      data['image'] = image!.toJson();
-    }
+    if (image != null) data['image'] = image!.toJson();
     return data;
   }
 }
 
-class Image {
+class OrderItemsImage {
   String? src;
 
-  Image({this.src});
+  OrderItemsImage({this.src});
 
-  Image.fromJson(Map<String, dynamic> json) {
+  OrderItemsImage.fromJson(Map<String, dynamic> json) {
     src = json['src'];
   }
 

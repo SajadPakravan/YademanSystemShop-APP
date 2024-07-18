@@ -75,8 +75,8 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
       setState(() {
         totalCart += cart.price * cart.quantity;
         totalPrice = totalCart + shippingTotal;
+        products.add({'product_id': cart.id, 'quantity': cart.quantity});
       });
-      products.add({'product_id': cart.id, 'quantity': cart.quantity});
     }
   }
 

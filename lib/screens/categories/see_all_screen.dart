@@ -14,8 +14,8 @@ class ShowAllScreen extends StatefulWidget {
 class _ShowAllScreenState extends State<ShowAllScreen> {
   HttpRequest httpRequest = HttpRequest();
   List<ProductModel> productsLst = [];
-  String category = Get.arguments[1];
-  String onSale = Get.arguments[2];
+  String category = Get.arguments['category'];
+  String onSale = Get.arguments['onSale'];
   int page = 1;
   bool moreProduct = false;
   int productCount = 0;

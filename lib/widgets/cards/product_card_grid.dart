@@ -30,8 +30,8 @@ class ProductCardGrid extends StatelessWidget {
           ProductModel product = list[index];
           ProductImage img = product.images![0];
 
-          double price = double.parse(product.price!);
-          double regularPrice = double.parse(product.regularPrice!);
+          int price = int.parse(product.price!);
+          int regularPrice = int.parse(product.regularPrice!);
           int percent = 0;
           String toman = 'تومان';
           Color textColor = Colors.black87;
