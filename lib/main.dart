@@ -5,6 +5,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:yad_sys/database/cart_model.dart';
+import 'package:yad_sys/database/favorite_model.dart';
 import 'package:yad_sys/models/category_model.dart';
 import 'package:yad_sys/screens/connection_error.dart';
 import 'package:yad_sys/screens/main_screen.dart';
@@ -21,6 +22,8 @@ Future<void> main() async {
   await Hive.initFlutter(directory.path);
   Hive.registerAdapter(CartModelAdapter());
   await Hive.openBox<CartModel>('cartBox');
+  Hive.registerAdapter(FavoriteModelAdapter());
+  await Hive.openBox<FavoriteModel>('favoritesBox');
   runApp(
     MultiProvider(
       providers: [

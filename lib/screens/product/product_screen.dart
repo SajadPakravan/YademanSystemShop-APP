@@ -3,10 +3,12 @@ import 'package:get/get.dart';
 import 'package:hive/hive.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/database/cart_model.dart';
+import 'package:yad_sys/database/favorite_model.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/models/review_model.dart';
 import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/views/product/product_view.dart';
+import 'package:yad_sys/widgets/snack_bar_view.dart';
 
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
@@ -19,6 +21,7 @@ class _ProductScreenState extends State<ProductScreen> {
   HttpRequest httpRequest = HttpRequest();
   ProductModel product = ProductModel();
   Box<CartModel> cartBox = Hive.box<CartModel>('cartBox');
+  Box<FavoriteModel> favoritesBox = Hive.box<FavoriteModel>('favoritesBox');
   List<ReviewModel> reviewsLst = [];
   List<ProductModel> relatedProductsLst = [];
   bool existCart = false;
@@ -26,8 +29,8 @@ class _ProductScreenState extends State<ProductScreen> {
   bool authError = false;
   int quantity = 0;
   int dataNumber = 0;
-  IconData favoriteIcon = Icons.favorite;
-  Color favoriteIconColor = Colors.red;
+  IconData favoriteIcon = Icons.favorite_border;
+  Color favoriteIconColor = Colors.black87;
   bool favorite = false;
   int slideIndex = 0;
 
@@ -79,6 +82,7 @@ class _ProductScreenState extends State<ProductScreen> {
       default:
         {
           checkCart();
+          checkFavorites();
           setState(() => loading = false);
           break;
         }
@@ -115,12 +119,55 @@ class _ProductScreenState extends State<ProductScreen> {
             quantity = cart.quantity;
             existCart = true;
           });
-        } else {
-          setState(() => existCart = false);
         }
       }
     } else {
       setState(() => existCart = false);
+    }
+  }
+
+  addRemoveFavorite() async {
+    AppCache cache = AppCache();
+    String email = await cache.getString('email') ?? '';
+    if (email.isEmpty) {
+      if (mounted) SnackBarView.show(context, 'لطفا وارد حساب کاربری خود شوید');
+    } else if (favoriteIconColor == Colors.red) {
+      final fav = favoritesBox.values.firstWhere((element) => element.id == product.id);
+      fav.delete();
+      setState(() {
+        favoriteIcon = Icons.favorite_border;
+        favoriteIconColor = Colors.black87;
+      });
+    } else {
+      ProductImage img = product.images![0];
+      setState(() {
+        favoritesBox.add(FavoriteModel(
+          id: product.id!,
+          name: product.name!,
+          image: img.src!,
+          price: int.parse(product.price!),
+          regularPrice: int.parse(product.regularPrice!),
+          onSale: product.onSale!,
+        ));
+      });
+      setState(() {
+        favoriteIcon = Icons.favorite;
+        favoriteIconColor = Colors.red;
+      });
+    }
+  }
+
+  checkFavorites() {
+    if (favoritesBox.isNotEmpty) {
+      for (int i = 0; i < favoritesBox.length; i++) {
+        FavoriteModel favorite = favoritesBox.getAt(i)!;
+        if (favorite.id == product.id) {
+          setState(() {
+            favoriteIcon = Icons.favorite;
+            favoriteIconColor = Colors.red;
+          });
+        }
+      }
     }
   }
 
@@ -145,7 +192,10 @@ class _ProductScreenState extends State<ProductScreen> {
       addCart: addCart,
       quantity: quantity,
       checkCart: checkCart,
+      addRemoveFavorite: addRemoveFavorite,
       loadContent: loadContent,
+      favoriteIcon: favoriteIcon,
+      favoriteIconColor: favoriteIconColor,
     );
   }
 }
