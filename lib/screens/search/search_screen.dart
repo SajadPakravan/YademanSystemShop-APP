@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/product_model.dart';
-import 'package:yad_sys/themes/app_themes.dart';
 import 'package:yad_sys/widgets/cards/product_card_grid.dart';
 import 'package:yad_sys/widgets/loading.dart';
 
@@ -18,7 +17,10 @@ class _SearchScreenState extends State<SearchScreen> {
   bool loading = false;
 
   getProducts({required String search}) async {
-    setState(() => loading = true);
+    setState(() {
+      loading = true;
+      productsLst.clear();
+    });
     dynamic jsonProducts = await httpRequest.getProducts(search: search);
     jsonProducts.forEach((p) => setState(() => productsLst.add(ProductModel.fromJson(p))));
     setState(() => loading = false);
@@ -28,10 +30,12 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(),
-      body: loading ? const Loading() : Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: ProductCardGrid(list: productsLst),
-      ),
+      body: loading
+          ? const Loading()
+          : Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: ProductCardGrid(list: productsLst),
+            ),
     );
   }
 
@@ -40,7 +44,6 @@ class _SearchScreenState extends State<SearchScreen> {
       backgroundColor: Colors.white,
       iconTheme: const IconThemeData(color: Colors.black54),
       centerTitle: true,
-
       title: Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
