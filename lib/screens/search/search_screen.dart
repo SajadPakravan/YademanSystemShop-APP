@@ -17,13 +17,14 @@ class _SearchScreenState extends State<SearchScreen> {
   bool loading = false;
 
   getProducts({required String search}) async {
-    setState(() {
-      loading = true;
-      productsLst.clear();
-    });
+    setState(() => loading = true);
     dynamic jsonProducts = await httpRequest.getProducts(search: search);
-    jsonProducts.forEach((p) => setState(() => productsLst.add(ProductModel.fromJson(p))));
-    setState(() => loading = false);
+    List<ProductModel> products = [];
+    jsonProducts.forEach((p) => products.add(ProductModel.fromJson(p)));
+    setState(() {
+      productsLst = products;
+      loading = false;
+    });
   }
 
   @override
@@ -47,7 +48,6 @@ class _SearchScreenState extends State<SearchScreen> {
       title: Directionality(
         textDirection: TextDirection.rtl,
         child: SearchBar(
-          textInputAction: TextInputAction.search,
           leading: const Icon(Icons.search),
           hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black54)),
           hintText: 'محصول مورد نظر خود را جستجو کنید...',
@@ -55,6 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
           textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
           autoFocus: true,
           onChanged: (value) {
+            if (value.isEmpty) setState(() => productsLst.clear());
             if (value.length > 3) getProducts(search: value);
           },
         ),
