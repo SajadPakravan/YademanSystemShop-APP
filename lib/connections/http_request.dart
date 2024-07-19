@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
@@ -12,36 +13,36 @@ import 'package:yad_sys/widgets/snack_bar_view.dart';
 class HttpRequest {
   HttpRequest();
 
-  String urlMain = 'yademansystem.ir';
-  String key = '?consumer_key=ck_87e5e9071398235f51b9302d4d092254927b7d78';
-  String secret = '&consumer_secret=cs_fb67b105c68da2be1592e8dd6dc1b56d29d67e84';
+  final String _urlMain = 'yademansystem.ir';
+  final String _key = '?consumer_key=ck_87e5e9071398235f51b9302d4d092254927b7d78';
+  final String _secret = '&consumer_secret=cs_fb67b105c68da2be1592e8dd6dc1b56d29d67e84';
 
-  get urlProducts => 'https://$urlMain/wp-json/wc/v3/products/';
+  get _urlProducts => 'https://$_urlMain/wp-json/wc/v3/products/';
 
-  get urlCategories => 'https://$urlMain/wp-json/wc/v3/products/categories/';
+  get _urlCategories => 'https://$_urlMain/wp-json/wc/v3/products/categories/';
 
-  get urlProductReviews => 'https://$urlMain/wp-json/wc/v3/products/reviews/';
+  get _urlProductReviews => 'https://$_urlMain/wp-json/wc/v3/products/reviews/';
 
-  get urlSignIn => 'https://$urlMain/wp-json/jwt-auth/v1/token/';
+  get _urlSignIn => 'https://$_urlMain/wp-json/jwt-auth/v1/token/';
 
-  get urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register';
+  get _urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register/';
 
-  get urlUsers => 'https://$urlMain/wp-json/wp/v2/users/';
+  get _urlUsers => 'https://$_urlMain/wp-json/wp/v2/users/';
 
-  get urlCustomers => 'https://$urlMain/wp-json/wc/v3/customers/';
+  get _urlCustomers => 'https://$_urlMain/wp-json/wc/v3/customers/';
 
-  get urlUpload => 'https://$urlMain/wp-content/app-uploads/';
+  get _urlUpload => 'https://$_urlMain/wp-content/app-uploads/';
 
-  get urlOrders => 'https://$urlMain/wp-json/wc/v3/orders/';
+  get _urlOrders => 'https://$_urlMain/wp-json/wc/v3/orders/';
 
-  getRequest({required String url, String id = '', String details = ''}) async {
+  _getRequest({required String url, String id = '', String details = ''}) async {
     Map<String, String> headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };
 
     try {
-      final getRequest = await http.get(Uri.parse(url + id + key + secret + details), headers: headers);
+      final getRequest = await http.get(Uri.parse(url + id + _key + _secret + details), headers: headers);
       if (kDebugMode) print("Get Request >>>> ${getRequest.request}");
 
       dynamic json = jsonDecode(getRequest.body);
@@ -58,12 +59,11 @@ class HttpRequest {
       }
     } catch (e) {
       if (kDebugMode) print("ERROR >>>> $e");
-      // Get.offAll(const ConnectionError(), transition: Transition.fade, duration: const Duration(seconds: 1));
       return false;
     }
   }
 
-  postRequest({
+  _postRequest({
     required BuildContext context,
     required String url,
     String id = '',
@@ -79,7 +79,7 @@ class HttpRequest {
     }
 
     try {
-      final postRequest = await http.post(Uri.parse(url + id.toString() + key + secret), headers: headers, body: jsonEncode(body));
+      final postRequest = await http.post(Uri.parse(url + id.toString() + _key + _secret), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       dynamic json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == statusCode) {
@@ -98,25 +98,18 @@ class HttpRequest {
         return false;
       }
     } catch (e) {
-      if (kDebugMode) {
-        print("ERROR >>>> $e");
-      }
-      // Get.off(
-      //   const ConnectionError(),
-      //   transition: Transition.fade,
-      //   duration: const Duration(seconds: 1),
-      // );
+      if (kDebugMode) print("ERROR >>>> $e");
     }
   }
 
-  putRequest({required String url, String id = '', String details = '', required Map<String, dynamic> body}) async {
+  _putRequest({required String url, String id = '', String details = '', required Map<String, dynamic> body}) async {
     Map<String, String> headers = {
       'accept': 'application/json',
       'Content-Type': 'application/json',
     };
 
     try {
-      final putRequest = await http.put(Uri.parse(url + id + key + secret + details), headers: headers, body: jsonEncode(body));
+      final putRequest = await http.put(Uri.parse(url + id + _key + _secret + details), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("Put Request >>>> ${putRequest.request}");
 
       dynamic json = jsonDecode(putRequest.body);
@@ -133,7 +126,6 @@ class HttpRequest {
       }
     } catch (e) {
       if (kDebugMode) print("ERROR >>>> $e");
-      // Get.offAll(const ConnectionError(), transition: Transition.fade, duration: const Duration(seconds: 1));
       return false;
     }
   }
@@ -154,10 +146,10 @@ class HttpRequest {
     if (onSale.isNotEmpty) addOnSale = '&on_sale=$onSale';
     if (search.isNotEmpty) addSearch = '&search=$search';
     String details = "&per_page=$perPage&page=$page&order=$order&orderby=$orderBy$addCategory$addOnSale$addSearch";
-    return getRequest(url: urlProducts, details: details);
+    return _getRequest(url: _urlProducts, details: details);
   }
 
-  getProduct({required int id}) async => getRequest(url: urlProducts, id: id.toString());
+  getProduct({required int id}) async => _getRequest(url: _urlProducts, id: id.toString());
 
   getCategories({int parent = 0, int perPage = 10, String include = ''}) async {
     String addInclude = "";
@@ -165,35 +157,54 @@ class HttpRequest {
       addInclude = "&include=$include";
     }
     String details = "&parent=$parent&per_page=$perPage$addInclude&orderby=include";
-    return getRequest(url: urlCategories, details: details);
+    return _getRequest(url: _urlCategories, details: details);
   }
 
   getProductReviews({String status = 'approved', int perPage = 10}) async {
     String details = '&product=${Get.arguments['id']}&status=$status&per_page=$perPage';
-    return getRequest(url: urlProductReviews, details: details);
+    return _getRequest(url: _urlProductReviews, details: details);
+  }
+
+  createProductReview({
+    required BuildContext context,
+    required int id,
+    required String review,
+    required String reviewer,
+    required String email,
+    required int rating,
+  }) {
+    Map<String, dynamic> body = {
+      'product_id': id,
+      'review': review,
+      'reviewer': reviewer,
+      'reviewer_email': email,
+      'rating': rating,
+      'status': 'hold',
+    };
+    return _postRequest(context: context, url: _urlProductReviews, body: body);
   }
 
   signUp({required BuildContext context, required String email, required String password}) async {
     Map<String, String> body = {'username': email, 'email': email, 'password': password};
-    return postRequest(context: context, url: urlSignUp, body: body, error: 'ایمیل وارد شده قبلا ثبت شده است');
+    return _postRequest(context: context, url: _urlSignUp, body: body, error: 'ایمیل وارد شده قبلا ثبت شده است');
   }
 
   signIn({required BuildContext context, required String email, required String password}) async {
     Map<String, String> body = {'username': email, 'password': password};
-    return postRequest(context: context, url: urlSignIn, body: body, error: 'اطلاعات ورود صحیح نمی‌باشد');
+    return _postRequest(context: context, url: _urlSignIn, body: body, error: 'اطلاعات ورود صحیح نمی‌باشد');
   }
 
   getCustomer({required String email}) async {
-    return getRequest(url: urlCustomers, details: '&email=$email');
+    return _getRequest(url: _urlCustomers, details: '&email=$email');
   }
 
   updateUser({required BuildContext context, required String firstname, required String lastname}) async {
     AppCache cache = AppCache();
     Map<String, String> headers = {'Authorization': 'Bearer ${await cache.getString('token')}'};
     Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'name': '$firstname $lastname'};
-    return postRequest(
+    return _postRequest(
       context: context.mounted ? context : context,
-      url: urlUsers,
+      url: _urlUsers,
       id: (await cache.getInt('id')).toString(),
       body: body,
       headers: headers,
@@ -207,7 +218,7 @@ class HttpRequest {
     required String email,
   }) async {
     Map<String, String> body = {'first_name': firstname, 'last_name': lastname, 'email': email};
-    return putRequest(url: urlCustomers, id: id, body: body);
+    return _putRequest(url: _urlCustomers, id: id, body: body);
   }
 
   updateBillingAddress({
@@ -235,7 +246,7 @@ class HttpRequest {
     billing.address1 = street;
     billing.address2 = number;
     billing.postcode = postcode;
-    return putRequest(url: urlCustomers, id: id, body: {'billing': billing.toJson()});
+    return _putRequest(url: _urlCustomers, id: id, body: {'billing': billing.toJson()});
   }
 
   updateShippingAddress({
@@ -261,11 +272,11 @@ class HttpRequest {
     shipping.address1 = street;
     shipping.address2 = number;
     shipping.postcode = postcode;
-    return putRequest(url: urlCustomers, id: id, body: {'shipping': shipping.toJson()});
+    return _putRequest(url: _urlCustomers, id: id, body: {'shipping': shipping.toJson()});
   }
 
   uploadAvatar({required BuildContext context, required String userId, required File avatar}) async {
-    final request = http.MultipartRequest('POST', Uri.parse(urlUpload));
+    final request = http.MultipartRequest('POST', Uri.parse(_urlUpload));
     request.fields['user_id'] = userId;
     request.files.add(
       http.MultipartFile(
@@ -337,11 +348,11 @@ class HttpRequest {
         {'method_id': 'flat_rate', 'method_title': 'Flat Rate', 'total': shippingTotal.toString()}
       ]
     };
-    return postRequest(context: context, url: urlOrders, body: body, statusCode: 201);
+    return _postRequest(context: context, url: _urlOrders, body: body, statusCode: 201);
   }
 
   getOrders() async {
     AppCache cache = AppCache();
-    return getRequest(url: urlOrders, details: '&customer=${await cache.getInt('id')}');
+    return _getRequest(url: _urlOrders, details: '&customer=${await cache.getInt('id')}');
   }
 }
