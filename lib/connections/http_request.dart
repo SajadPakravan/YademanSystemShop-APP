@@ -181,7 +181,7 @@ class HttpRequest {
       'rating': rating,
       'status': 'hold',
     };
-    return _postRequest(context: context, url: _urlProductReviews, body: body);
+    return _postRequest(context: context, url: _urlProductReviews, body: body,statusCode: 201);
   }
 
   signUp({required BuildContext context, required String email, required String password}) async {

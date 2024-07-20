@@ -112,6 +112,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           if (jsonUpdateUser != false) {
                             AppCache cache = AppCache();
                             await cache.setString('email', email);
+                            await cache.setString('name', '$firstname $lastname');
                             if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
                           }
                         }
