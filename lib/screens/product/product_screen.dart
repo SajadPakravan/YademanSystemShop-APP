@@ -43,8 +43,9 @@ class _ProductScreenState extends State<ProductScreen> {
     loadContent();
   }
 
-  getProductReviews() async {
-    dynamic jsonReviews = await httpRequest.getProductReviews();
+  getProductReviews(int? id) async {
+    setState(() => reviewsLst.clear());
+    dynamic jsonReviews = await httpRequest.getProductReviews(id: id ?? Get.arguments['id']);
     jsonReviews.forEach((r) => setState(() => reviewsLst.add(ReviewModel.fromJson(r))));
     dataNumber++;
     loadContent();
@@ -71,7 +72,7 @@ class _ProductScreenState extends State<ProductScreen> {
         }
       case 1:
         {
-          getProductReviews();
+          getProductReviews(id);
           break;
         }
       case 2:
@@ -111,6 +112,7 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   checkCart() {
+    setState(() => existCart = false);
     if (cartBox.isNotEmpty) {
       for (int i = 0; i < cartBox.length; i++) {
         CartModel cart = cartBox.getAt(i)!;
@@ -158,6 +160,10 @@ class _ProductScreenState extends State<ProductScreen> {
   }
 
   checkFavorites() {
+    setState(() {
+      favoriteIcon = Icons.favorite_border;
+      favoriteIconColor = Colors.black87;
+    });
     if (favoritesBox.isNotEmpty) {
       for (int i = 0; i < favoritesBox.length; i++) {
         FavoriteModel favorite = favoritesBox.getAt(i)!;

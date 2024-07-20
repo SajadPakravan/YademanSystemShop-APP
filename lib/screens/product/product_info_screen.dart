@@ -199,7 +199,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
               ReviewerAvatarUrls avatar = review.avatarUrls!;
               productId = review.productId!;
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
+                padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black26))),
                 child: Row(
                   children: [
@@ -216,21 +216,29 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                     Expanded(
                       flex: 2,
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           HtmlWidget(
                             review.review!,
                             textStyle: ThemeData.light().textTheme.bodyMedium!.copyWith(color: Colors.black87, fontSize: 16),
                           ),
-                          RatingBar.builder(
-                            initialRating: review.rating!.toDouble(),
-                            minRating: 1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemCount: 5,
-                            itemPadding: const EdgeInsets.fromLTRB(5,10,5,0),
-                            ignoreGestures: true,
-                            itemBuilder: (context, _) => const SizedBox(width: 5, child: Icon(Icons.star, color: Colors.amber)),
-                            onRatingUpdate: (double value) {},
+                          Container(
+                            height: MediaQuery.of(context).size.height * 0.03,
+                            margin: const EdgeInsets.only(top: 10),
+                            alignment: Alignment.bottomLeft,
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: RatingBar.builder(
+                                initialRating: review.rating!.toDouble(),
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: false,
+                                itemCount: 5,
+                                ignoreGestures: true,
+                                itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
+                                onRatingUpdate: (double value) {},
+                              ),
+                            ),
                           ),
                         ],
                       ),

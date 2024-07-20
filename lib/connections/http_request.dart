@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:yad_sys/models/customer_model.dart';
@@ -160,8 +159,8 @@ class HttpRequest {
     return _getRequest(url: _urlCategories, details: details);
   }
 
-  getProductReviews({String status = 'approved', int perPage = 10}) async {
-    String details = '&product=${Get.arguments['id']}&status=$status&per_page=$perPage';
+  getProductReviews({required int id, String status = 'approved', int perPage = 10}) async {
+    String details = '&product=$id&status=$status&per_page=$perPage';
     return _getRequest(url: _urlProductReviews, details: details);
   }
 
@@ -181,7 +180,7 @@ class HttpRequest {
       'rating': rating,
       'status': 'hold',
     };
-    return _postRequest(context: context, url: _urlProductReviews, body: body,statusCode: 201);
+    return _postRequest(context: context, url: _urlProductReviews, body: body, statusCode: 201);
   }
 
   signUp({required BuildContext context, required String email, required String password}) async {
