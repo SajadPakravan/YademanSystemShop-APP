@@ -88,7 +88,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       if (mounted) {
         dynamic jsonSignUp = await httpRequest.signUp(context: context, email: emailCtrl.text, password: passCtrl.text);
         if (jsonSignUp != false) {
-          await cache.setInt('id', jsonSignUp['id']);
           if (mounted) {
             dynamic jsonSignIn = await httpRequest.signIn(context: context, email: emailCtrl.text, password: passCtrl.text);
             if (jsonSignIn != false) {

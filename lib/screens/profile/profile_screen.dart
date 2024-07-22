@@ -27,7 +27,6 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   int cartNumber = 0;
 
   signOut() async {
-    AppCache cache = AppCache();
     await cache.clearCache();
     checkLogged();
   }
@@ -55,7 +54,11 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
       addressAlert = false;
     });
     await cache.setInt('id', customer.id!);
-    if (customer.firstname!.isEmpty) setState(() => personalInfoAlert = true);
+    if (customer.firstname!.isEmpty) {
+      setState(() => personalInfoAlert = true);
+    } else {
+      await cache.setString('name', '${customer.firstname} ${customer.lastname}');
+    }
     if (customer.billing!.city!.isEmpty) setState(() => addressAlert = true);
     setState(() {
       logged = true;
@@ -64,13 +67,12 @@ class _ProfileScreenState extends State<ProfileScreen> with TickerProviderStateM
   }
 
   checkCart() {
+    setState(() => cartAlert = false);
     if (cartBox.isNotEmpty) {
       setState(() {
         cartNumber = cartBox.length;
         cartAlert = true;
       });
-    } else {
-      setState(() => cartAlert = false);
     }
   }
 

@@ -296,7 +296,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                   padding: EdgeInsets.symmetric(horizontal: 10),
                   child: TextBodyLargeView('پرداخت و ثبت سفارش', color: Colors.white),
                 ),
-                loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
                 buttonColor: ColorStyle.blueFav,
                 borderRadius: 10,
                 onPressed: () async {

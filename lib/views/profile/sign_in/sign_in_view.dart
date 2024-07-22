@@ -87,7 +87,7 @@ class SignInView extends StatelessWidget {
                 const SizedBox(height: 20),
                 EasyButton(
                   idleStateWidget: const TextBodyMediumView('ورود', color: Colors.white),
-                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
                   buttonColor: ColorStyle.blueFav,
                   width: width,
                   height: 50,

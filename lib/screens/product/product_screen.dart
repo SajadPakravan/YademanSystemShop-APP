@@ -24,15 +24,19 @@ class _ProductScreenState extends State<ProductScreen> {
   Box<FavoriteModel> favoritesBox = Hive.box<FavoriteModel>('favoritesBox');
   List<ReviewModel> reviewsLst = [];
   List<ProductModel> relatedProductsLst = [];
-  bool existCart = false;
   bool loading = false;
-  bool authError = false;
-  int quantity = 0;
   int dataNumber = 0;
+  String name = '';
+  String email = '';
+  bool authError = false;
+  bool personalInfoError = false;
+  bool existCart = false;
+  int quantity = 0;
   IconData favoriteIcon = Icons.favorite_border;
   Color favoriteIconColor = Colors.black87;
-  bool favorite = false;
   int slideIndex = 0;
+  TextEditingController review = TextEditingController();
+  int rating = 0;
 
   loadContent({int? id}) {
     switch (dataNumber) {
@@ -49,6 +53,7 @@ class _ProductScreenState extends State<ProductScreen> {
         }
       default:
         {
+          checkLogged();
           checkCart();
           checkFavorites();
           setState(() => loading = false);
@@ -75,9 +80,18 @@ class _ProductScreenState extends State<ProductScreen> {
     loadContent();
   }
 
+  checkLogged() async {
+    AppCache cache = AppCache();
+    name = await cache.getString('name') ?? '';
+    email = await cache.getString('email') ?? '';
+    authError = email.toString().isEmpty;
+    personalInfoError = name.toString().isEmpty;
+    setState(() {});
+  }
+
   checkCart() {
     setState(() => existCart = false);
-    if (cartBox.isNotEmpty) {
+    if (!authError && cartBox.isNotEmpty) {
       for (int i = 0; i < cartBox.length; i++) {
         CartModel cart = cartBox.getAt(i)!;
         if (cart.id == product.id) {
@@ -87,8 +101,6 @@ class _ProductScreenState extends State<ProductScreen> {
           });
         }
       }
-    } else {
-      setState(() => existCart = false);
     }
   }
 
@@ -97,7 +109,7 @@ class _ProductScreenState extends State<ProductScreen> {
       favoriteIcon = Icons.favorite_border;
       favoriteIconColor = Colors.black87;
     });
-    if (favoritesBox.isNotEmpty) {
+    if (!authError && favoritesBox.isNotEmpty) {
       for (int i = 0; i < favoritesBox.length; i++) {
         FavoriteModel favorite = favoritesBox.getAt(i)!;
         if (favorite.id == product.id) {
@@ -113,11 +125,7 @@ class _ProductScreenState extends State<ProductScreen> {
   onSlideChange(index) => setState(() => slideIndex = index);
 
   addCart() async {
-    AppCache cache = AppCache();
-    String email = await cache.getString('email') ?? '';
-    if (email.isEmpty) {
-      setState(() => authError = true);
-    } else {
+    if (!authError) {
       ProductImage img = product.images![0];
       setState(() {
         cartBox.add(CartModel(
@@ -130,37 +138,32 @@ class _ProductScreenState extends State<ProductScreen> {
         ));
       });
       checkCart();
+    } else {
+      if (mounted) SnackBarView.show(context, 'بر افزودن محصول به سبد خرید لطفا وارد حساب کاربری شوید');
     }
   }
 
   addRemoveFavorite() async {
-    AppCache cache = AppCache();
-    String email = await cache.getString('email') ?? '';
-    if (email.isEmpty) {
-      if (mounted) SnackBarView.show(context, 'لطفا وارد حساب کاربری خود شوید');
-    } else if (favoriteIconColor == Colors.red) {
-      final fav = favoritesBox.values.firstWhere((element) => element.id == product.id);
-      fav.delete();
-      setState(() {
-        favoriteIcon = Icons.favorite_border;
-        favoriteIconColor = Colors.black87;
-      });
+    if (!authError) {
+      if (favoriteIconColor == Colors.red) {
+        final fav = favoritesBox.values.firstWhere((element) => element.id == product.id);
+        fav.delete();
+      } else {
+        ProductImage img = product.images![0];
+        setState(() {
+          favoritesBox.add(FavoriteModel(
+            id: product.id!,
+            name: product.name!,
+            image: img.src!,
+            price: int.parse(product.price!),
+            regularPrice: int.parse(product.regularPrice!),
+            onSale: product.onSale!,
+          ));
+        });
+      }
+      checkFavorites();
     } else {
-      ProductImage img = product.images![0];
-      setState(() {
-        favoritesBox.add(FavoriteModel(
-          id: product.id!,
-          name: product.name!,
-          image: img.src!,
-          price: int.parse(product.price!),
-          regularPrice: int.parse(product.regularPrice!),
-          onSale: product.onSale!,
-        ));
-      });
-      setState(() {
-        favoriteIcon = Icons.favorite;
-        favoriteIconColor = Colors.red;
-      });
+      if (mounted) SnackBarView.show(context, 'بر افزودن محصول به لیست علاقه‌مندی‌ها لطفا وارد حساب کاربری شوید');
     }
   }
 
@@ -168,8 +171,39 @@ class _ProductScreenState extends State<ProductScreen> {
     setState(() {
       dataNumber = 0;
       product = p;
+      review.clear();
     });
     loadContent(id: p.id);
+  }
+
+  onRatingUpdate(double value) => setState(() => rating = value.toInt());
+
+  createReview() async {
+    if (authError) {
+      SnackBarView.show(context, 'برای ثبت دیدگاه خود لطفا وارد حساب کاربری شوید و مشخصات فردی را تکمیل کنید');
+    } else if (personalInfoError) {
+      SnackBarView.show(context, 'برای ثبت دیدگاه خود لطفا مشخصات فردی را تکمیل کنید');
+    } else {
+      if (review.text.isEmpty || rating == 0) {
+        SnackBarView.show(context, 'لطفا دیدگاه و امتیاز خود را وارد کنید');
+      } else {
+        dynamic jsonReview = await httpRequest.createProductReview(
+          context: context,
+          id: product.id!,
+          review: review.text,
+          reviewer: name,
+          email: email,
+          rating: rating,
+        );
+        if (jsonReview != false) {
+          if (mounted) SnackBarView.show(context, 'دیدگاه شما ثبت شد و در حال بررسی است');
+          setState(() {
+            review.clear();
+            rating = 0;
+          });
+        }
+      }
+    }
   }
 
   @override
@@ -186,18 +220,23 @@ class _ProductScreenState extends State<ProductScreen> {
       product: product,
       reviewsLst: reviewsLst,
       relatedProductsLst: relatedProductsLst,
-      slideIndex: slideIndex,
-      onSlideChange: onSlideChange,
       loading: loading,
-      existCart: existCart,
       authError: authError,
-      addCart: addCart,
+      personalInfoError: personalInfoError,
+      existCart: existCart,
       quantity: quantity,
-      checkCart: checkCart,
-      addRemoveFavorite: addRemoveFavorite,
-      relatedProductOnTap: relatedProductOnTap,
       favoriteIcon: favoriteIcon,
       favoriteIconColor: favoriteIconColor,
+      slideIndex: slideIndex,
+      onSlideChange: onSlideChange,
+      addCart: addCart,
+      checkCart: checkCart,
+      addRemoveFavorite: addRemoveFavorite,
+      review: review,
+      rating: rating,
+      onRatingUpdate: onRatingUpdate,
+      createReview: createReview,
+      relatedProductOnTap: relatedProductOnTap,
     );
   }
 }
