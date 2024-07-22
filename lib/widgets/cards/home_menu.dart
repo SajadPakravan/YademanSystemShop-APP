@@ -9,7 +9,7 @@ class HomeMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.03),
       child: const Column(
         children: [
           Row(

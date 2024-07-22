@@ -18,7 +18,10 @@ class _WebScreenState extends State<WebScreen> {
   @override
   void initState() {
     super.initState();
-    controller = WebViewController()..loadRequest(Uri.parse(widget.url));
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setBackgroundColor(Colors.white)
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override
