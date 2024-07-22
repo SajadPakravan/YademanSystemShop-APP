@@ -29,9 +29,7 @@ class ShowAllView extends StatelessWidget {
       child: Scaffold(
         body: NestedScrollView(
           floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [
-            appBar(),
-          ],
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [appBar()],
           body: RefreshIndicator(
             onRefresh: () => onRefresh(),
             child: productsLst.isEmpty

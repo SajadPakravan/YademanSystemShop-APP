@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
@@ -95,7 +96,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
         physics: const BouncingScrollPhysics(),
         child: HtmlWidget(
           Get.arguments['description'].toString().toPersianDigit(),
-          textStyle: ThemeData.light().textTheme.bodyMedium!.copyWith(height: 2),
+          textStyle: ThemeData.light().textTheme.bodyMedium!.copyWith(height: 2,fontSize: 16),
         ),
       ),
     );
@@ -112,8 +113,8 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
           decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: Colors.black26))),
           child: Row(
             children: [
-              Expanded(flex: 1, child: TextBodyMediumView(name, color: Colors.black54)),
-              Expanded(flex: 2, child: TextBodyMediumView(attribute.options![0].toString().toPersianDigit())),
+              Expanded(child: TextBodyMediumView(name, color: Colors.black54)),
+              Expanded(child: TextBodyMediumView(attribute.options![0].toString().toPersianDigit())),
             ],
           ),
         );
@@ -125,71 +126,77 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(10),
-            child: !logged
-                ? const TextBodyMediumView('برای ثبت نظر لطفا وارد حساب کاربری خود شوید')
-                : !personalInfo
-                    ? const TextBodyMediumView('برای ثبت نظر لطفا بخش مشخصات فردی خود را تکمیل کنید')
-                    : Container(
-                        padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              controller: review,
-                              style: ThemeData.light().textTheme.bodyMedium,
-                              maxLines: 3,
-                              minLines: 1,
-                              decoration: InputDecoration(
-                                hintText: 'دیدگاه خود را بنویسید',
-                                hintStyle: ThemeData.light().textTheme.bodyMedium!.copyWith(color: Colors.black54),
-                              ),
+          !logged
+              ? Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(color: Colors.red.shade200),
+                  child: const TextBodyMediumView('برای ثبت نظر لطفا وارد حساب کاربری خود شوید'),
+                )
+              : !personalInfo
+                  ? Container(
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(color: Colors.red.shade200),
+                      child: const TextBodyMediumView('برای ثبت نظر لطفا بخش مشخصات فردی خود را تکمیل کنید'),
+                    )
+                  : Container(
+                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
+                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                      child: Column(
+                        children: [
+                          TextFormField(
+                            controller: review,
+                            style: ThemeData.light().textTheme.bodyMedium,
+                            maxLines: 3,
+                            minLines: 1,
+                            decoration: InputDecoration(
+                              hintText: 'دیدگاه خود را بنویسید',
+                              hintStyle: ThemeData.light().textTheme.bodyMedium!.copyWith(color: Colors.black54),
                             ),
-                            const SizedBox(height: 20),
-                            const TextBodyMediumView('لطفا به محصول امتیاز دهید:'),
-                            const SizedBox(height: 5),
-                            RatingBar.builder(
-                              initialRating: rating.toDouble(),
-                              minRating: 1,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemCount: 5,
-                              itemPadding: const EdgeInsets.symmetric(horizontal: 5),
-                              itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
-                              onRatingUpdate: (double value) => setState(() => rating = value.toInt()),
-                            ),
-                            const SizedBox(height: 20),
-                            EasyButton(
-                              idleStateWidget: const TextBodyMediumView('ثبت دیدگاه', color: Colors.white),
-                              loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
-                              buttonColor: ColorStyle.blueFav,
-                              onPressed: () async {
-                                if (review.text.isEmpty || rating == 0) {
-                                  SnackBarView.show(context, 'لطفا دیدگاه و امتیاز خود را وارد کنید');
-                                } else {
-                                  dynamic jsonReview = await httpRequest.createProductReview(
-                                    context: context,
-                                    id: productId,
-                                    review: review.text,
-                                    reviewer: name,
-                                    email: email,
-                                    rating: rating,
-                                  );
-                                  if (jsonReview != false) {
-                                    if (mounted) SnackBarView.show(context, 'دیدگاه شما ثبت شد و بعد از تایید شدن منتشر می‌شود');
-                                    setState(() {
-                                      review.clear();
-                                      rating = 0;
-                                    });
-                                  }
+                          ),
+                          const SizedBox(height: 20),
+                          const TextBodyMediumView('لطفا به محصول امتیاز دهید:'),
+                          const SizedBox(height: 5),
+                          RatingBar.builder(
+                            initialRating: rating.toDouble(),
+                            minRating: 1,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemCount: 5,
+                            itemPadding: const EdgeInsets.symmetric(horizontal: 5),
+                            itemBuilder: (context, _) => const Icon(Icons.star, color: Colors.amber),
+                            onRatingUpdate: (double value) => setState(() => rating = value.toInt()),
+                          ),
+                          const SizedBox(height: 20),
+                          EasyButton(
+                            idleStateWidget: const TextBodyMediumView('ثبت دیدگاه', color: Colors.white),
+                            loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
+                            buttonColor: ColorStyle.blueFav,
+                            onPressed: () async {
+                              if (review.text.isEmpty || rating == 0) {
+                                SnackBarView.show(context, 'لطفا دیدگاه و امتیاز خود را وارد کنید');
+                              } else {
+                                dynamic jsonReview = await httpRequest.createProductReview(
+                                  context: context,
+                                  id: productId,
+                                  review: review.text,
+                                  reviewer: name,
+                                  email: email,
+                                  rating: rating,
+                                );
+                                if (jsonReview != false) {
+                                  if (mounted) SnackBarView.show(context, 'دیدگاه شما ثبت شد و بعد از تایید شدن منتشر می‌شود');
+                                  setState(() {
+                                    review.clear();
+                                    rating = 0;
+                                  });
                                 }
-                              },
-                            )
-                          ],
-                        ),
+                              }
+                            },
+                          )
+                        ],
                       ),
-          ),
+                    ),
+          const SizedBox(height: 20),
           ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -209,7 +216,7 @@ class _ProductInfoScreenState extends State<ProductInfoScreen> {
                         children: [
                           CachedNetworkImage(imageUrl: avatar.s48!),
                           const SizedBox(width: 10),
-                          TextBodyMediumView(review.reviewer!)
+                          Expanded(child: TextBodyMediumView(review.reviewer!))
                         ],
                       ),
                     ),

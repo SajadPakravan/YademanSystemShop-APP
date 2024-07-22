@@ -6,7 +6,7 @@ import 'package:yad_sys/models/review_model.dart';
 import 'package:yad_sys/screens/product/product_info_screen.dart';
 import 'package:yad_sys/screens/profile/cart/cart_screen.dart';
 import 'package:yad_sys/tools/app_cache.dart';
-import 'package:yad_sys/tools/to_page.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/cards/related_product_card.dart';
 import 'package:yad_sys/widgets/image_slides/product_slide.dart';
 import 'package:yad_sys/widgets/loading.dart';
@@ -29,7 +29,7 @@ class ProductView extends StatelessWidget {
     required this.authError,
     required this.addCart,
     required this.quantity,
-    required this.loadContent,
+    required this.relatedProductOnTap,
     required this.checkCart,
     required this.addRemoveFavorite,
     required this.favoriteIcon,
@@ -49,7 +49,7 @@ class ProductView extends StatelessWidget {
   final void Function() addCart;
   final Function() checkCart;
   final Function() addRemoveFavorite;
-  final Function({int? id}) loadContent;
+  final Function(ProductModel) relatedProductOnTap;
   final IconData favoriteIcon;
   final Color favoriteIconColor;
 
@@ -99,7 +99,7 @@ class ProductView extends StatelessWidget {
                   if (email.isEmpty) {
                     if (context.mounted) SnackBarView.show(context, 'لطفا وارد حساب کاربری خود شوید');
                   } else {
-                    toPage(const CartScreen());
+                    zoomToPage(const CartScreen());
                   }
                 }),
             IconButton(icon: Icon(favoriteIcon, color: favoriteIconColor), onPressed: () => addRemoveFavorite()),
@@ -138,7 +138,7 @@ class ProductView extends StatelessWidget {
           children: [TextBodyMediumView(title), const Icon(Icons.arrow_forward_ios, color: Colors.black54, size: 20)],
         ),
       ),
-      onTap: () => toPage(
+      onTap: () => rightToPage(
         const ProductInfoScreen(),
         arguments: {'content': content, 'description': product.description!, 'attributes': product.attributes!, 'reviews': reviewsLst},
       ),
@@ -151,7 +151,7 @@ class ProductView extends StatelessWidget {
       children: [
         const Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: TextBodyMediumView('محصولات مرتبط')),
         const SizedBox(height: 10),
-        RelatedProductCard(list: relatedProductsLst, loadContent: loadContent),
+        RelatedProductCard(list: relatedProductsLst, onTap: relatedProductOnTap),
       ],
     );
   }

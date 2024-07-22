@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class ProductCardGrid extends StatelessWidget {
@@ -44,6 +45,7 @@ class ProductCardGrid extends StatelessWidget {
             percent = (((price - regularPrice) / regularPrice) * 100).roundToDouble().toInt();
           }
           return InkWell(
+            onTap: () => toProduct(product),
             child: Container(
               width: width * 0.45,
               height: height,
@@ -135,7 +137,6 @@ class ProductCardGrid extends StatelessWidget {
                 ],
               ),
             ),
-            onTap: () => appFun.onTapProduct(id: product.id!),
           );
         },
       ),

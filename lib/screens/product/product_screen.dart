@@ -34,18 +34,32 @@ class _ProductScreenState extends State<ProductScreen> {
   bool favorite = false;
   int slideIndex = 0;
 
-  onSlideChange(index) => setState(() => slideIndex = index);
-
-  getProduct(int id) async {
-    dynamic jsonProduct = await httpRequest.getProduct(id: id);
-    setState(() => product = ProductModel.fromJson(jsonProduct));
-    dataNumber++;
-    loadContent();
+  loadContent({int? id}) {
+    switch (dataNumber) {
+      case 0:
+        {
+          setState(() => loading = true);
+          getProductReviews(id!);
+          break;
+        }
+      case 1:
+        {
+          getRelatedProducts();
+          break;
+        }
+      default:
+        {
+          checkCart();
+          checkFavorites();
+          setState(() => loading = false);
+          break;
+        }
+    }
   }
 
-  getProductReviews(int? id) async {
+  getProductReviews(int id) async {
     setState(() => reviewsLst.clear());
-    dynamic jsonReviews = await httpRequest.getProductReviews(id: id ?? Get.arguments['id']);
+    dynamic jsonReviews = await httpRequest.getProductReviews(id: id);
     jsonReviews.forEach((r) => setState(() => reviewsLst.add(ReviewModel.fromJson(r))));
     dataNumber++;
     loadContent();
@@ -61,34 +75,42 @@ class _ProductScreenState extends State<ProductScreen> {
     loadContent();
   }
 
-  loadContent({int? id}) {
-    if (id != null) setState(() => dataNumber = 0);
-    switch (dataNumber) {
-      case 0:
-        {
-          setState(() => loading = true);
-          getProduct(id!);
-          break;
+  checkCart() {
+    setState(() => existCart = false);
+    if (cartBox.isNotEmpty) {
+      for (int i = 0; i < cartBox.length; i++) {
+        CartModel cart = cartBox.getAt(i)!;
+        if (cart.id == product.id) {
+          setState(() {
+            quantity = cart.quantity;
+            existCart = true;
+          });
         }
-      case 1:
-        {
-          getProductReviews(id);
-          break;
-        }
-      case 2:
-        {
-          getRelatedProducts();
-          break;
-        }
-      default:
-        {
-          checkCart();
-          checkFavorites();
-          setState(() => loading = false);
-          break;
-        }
+      }
+    } else {
+      setState(() => existCart = false);
     }
   }
+
+  checkFavorites() {
+    setState(() {
+      favoriteIcon = Icons.favorite_border;
+      favoriteIconColor = Colors.black87;
+    });
+    if (favoritesBox.isNotEmpty) {
+      for (int i = 0; i < favoritesBox.length; i++) {
+        FavoriteModel favorite = favoritesBox.getAt(i)!;
+        if (favorite.id == product.id) {
+          setState(() {
+            favoriteIcon = Icons.favorite;
+            favoriteIconColor = Colors.red;
+          });
+        }
+      }
+    }
+  }
+
+  onSlideChange(index) => setState(() => slideIndex = index);
 
   addCart() async {
     AppCache cache = AppCache();
@@ -108,23 +130,6 @@ class _ProductScreenState extends State<ProductScreen> {
         ));
       });
       checkCart();
-    }
-  }
-
-  checkCart() {
-    setState(() => existCart = false);
-    if (cartBox.isNotEmpty) {
-      for (int i = 0; i < cartBox.length; i++) {
-        CartModel cart = cartBox.getAt(i)!;
-        if (cart.id == product.id) {
-          setState(() {
-            quantity = cart.quantity;
-            existCart = true;
-          });
-        }
-      }
-    } else {
-      setState(() => existCart = false);
     }
   }
 
@@ -159,28 +164,19 @@ class _ProductScreenState extends State<ProductScreen> {
     }
   }
 
-  checkFavorites() {
+  relatedProductOnTap(ProductModel p) {
     setState(() {
-      favoriteIcon = Icons.favorite_border;
-      favoriteIconColor = Colors.black87;
+      dataNumber = 0;
+      product = p;
     });
-    if (favoritesBox.isNotEmpty) {
-      for (int i = 0; i < favoritesBox.length; i++) {
-        FavoriteModel favorite = favoritesBox.getAt(i)!;
-        if (favorite.id == product.id) {
-          setState(() {
-            favoriteIcon = Icons.favorite;
-            favoriteIconColor = Colors.red;
-          });
-        }
-      }
-    }
+    loadContent(id: p.id);
   }
 
   @override
   void initState() {
     super.initState();
-    loadContent(id: Get.arguments['id']);
+    setState(() => product = Get.arguments);
+    loadContent(id: product.id);
   }
 
   @override
@@ -199,7 +195,7 @@ class _ProductScreenState extends State<ProductScreen> {
       quantity: quantity,
       checkCart: checkCart,
       addRemoveFavorite: addRemoveFavorite,
-      loadContent: loadContent,
+      relatedProductOnTap: relatedProductOnTap,
       favoriteIcon: favoriteIcon,
       favoriteIconColor: favoriteIconColor,
     );

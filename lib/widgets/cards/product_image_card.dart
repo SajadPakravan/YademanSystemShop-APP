@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:yad_sys/models/product_model.dart';
 import 'package:yad_sys/tools/app_function.dart';
+import 'package:yad_sys/tools/go_page.dart';
 
 class ProductImageCard extends StatefulWidget {
   const ProductImageCard({super.key, required this.list, this.physics = const AlwaysScrollableScrollPhysics()});
@@ -68,6 +69,7 @@ class _ProductImageCardState extends State<ProductImageCard> {
             }
         }
         return InkWell(
+          onTap: () => toProduct(product),
           child: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(
@@ -84,7 +86,6 @@ class _ProductImageCardState extends State<ProductImageCard> {
               errorWidget: (context, str, dyn) => const Icon(Icons.image, color: Colors.black26, size: 100),
             ),
           ),
-          onTap: () => appFun.onTapProduct(id: product.id!),
         );
       },
     );

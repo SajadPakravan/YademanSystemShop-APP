@@ -12,7 +12,7 @@ import 'package:yad_sys/screens/profile/address/address_screen.dart';
 import 'package:yad_sys/screens/profile/orders/order_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_cache.dart';
-import 'package:yad_sys/tools/to_page.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/snack_bar_view.dart';
@@ -148,7 +148,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                                         label: const TextBodyMediumView('تغییر آدرس و مشخصات', color: Colors.indigo),
                                         icon: const Icon(Icons.keyboard_arrow_left),
                                         onPressed: () async {
-                                          await toPage(const AddressScreen(), arguments: customer);
+                                          await zoomToPage(const AddressScreen(), arguments: customer);
                                           getCustomer();
                                         },
                                       ),
@@ -320,7 +320,7 @@ class _ContinuePaymentScreenState extends State<ContinuePaymentScreen> {
                     if (mounted) SnackBarView.show(context, 'سفارش شما ثبت شد');
                     await cartBox.clear();
                     Get.offAll(const MainScreen(pageIndex: 3), transition: Transition.zoom, duration: const Duration(milliseconds: 300));
-                    WidgetsBinding.instance.addPostFrameCallback((_) => toPage(() => const OrderScreen()));
+                    WidgetsBinding.instance.addPostFrameCallback((_) => zoomToPage(() => const OrderScreen()));
                   }
                 },
               ),
