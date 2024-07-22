@@ -7,8 +7,6 @@ import 'package:provider/provider.dart';
 import 'package:yad_sys/database/cart_model.dart';
 import 'package:yad_sys/database/favorite_model.dart';
 import 'package:yad_sys/models/category_model.dart';
-import 'package:yad_sys/screens/connection_error.dart';
-import 'package:yad_sys/screens/main_screen.dart';
 import 'package:yad_sys/screens/splash/splash_screen.dart';
 import 'package:yad_sys/themes/theme.dart';
 import 'package:yad_sys/tools/app_texts.dart';
@@ -55,14 +53,7 @@ class _YademanSystemShop extends State<YademanSystemShop> {
       title: appTextStrings.appTitle,
       useInheritedMediaQuery: true,
       theme: appTheme,
-      routes: routes,
       home: const SplashScreen(),
     );
   }
-
-  final Map<String, Widget Function(BuildContext)> routes = {
-    'ConnectionError': (context) => const ConnectionError(),
-    'SplashScreen': (context) => const SplashScreen(),
-    'MainScreen': (context) => const MainScreen(),
-  };
 }
