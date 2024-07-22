@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:yad_sys/screens/web_screen.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
 class HomeMenu extends StatelessWidget {
@@ -6,29 +8,39 @@ class HomeMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 4,
-      shrinkWrap: true,
-      primary: false,
-      physics: const NeverScrollableScrollPhysics(),
-      childAspectRatio: 0.9,
-      padding: EdgeInsets.zero,
-      children: [
-        HomeMenuItem(icon: Icons.info_rounded, title: "درباره ما", onTap: () {}),
-        HomeMenuItem(icon: Icons.phone, title: "تماس با ما", onTap: () {}),
-        HomeMenuItem(icon: Icons.question_mark_rounded, title: "پرسش‌های متداول", onTap: () {}),
-        HomeMenuItem(icon: Icons.shopping_bag, title: "سفارش خاص", onTap: () {}),
-      ],
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.04),
+      child: const Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeMenuItem(icon: Icons.info_outline, title: 'درباره ما', url: 'https://yademansystem.ir/about-us/'),
+              HomeMenuItem(icon: Icons.phone, title: 'تماس باما', url: 'https://yademansystem.ir/contact-us/'),
+              HomeMenuItem(icon: Icons.question_mark_rounded, title: 'مجله یادمان ‌سیستم', url: 'https://yademansystem.ir/journal/'),
+            ],
+          ),
+          SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              HomeMenuItem(icon: Icons.question_mark_rounded, title: 'پرسش‌های متداول', url: 'https://yademansystem.ir/questions/'),
+              HomeMenuItem(icon: Icons.headset_mic, title: 'مشاوره خرید', url: 'https://yademansystem.ir/buy-advisor/'),
+              HomeMenuItem(icon: Icons.question_mark_rounded, title: 'ثبت سفارش ویژه', url: 'https://yademansystem.ir/place-order/'),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
 
 class HomeMenuItem extends StatefulWidget {
-  const HomeMenuItem({super.key, required this.title, required this.icon, this.onTap});
+  const HomeMenuItem({super.key, required this.title, required this.icon, required this.url});
 
   final String title;
   final IconData icon;
-  final void Function()? onTap;
+  final String url;
 
   @override
   State<HomeMenuItem> createState() => _HomeMenuItemState();
@@ -40,32 +52,36 @@ class _HomeMenuItemState extends State<HomeMenuItem> {
   void _handleTap() {
     setState(() => _isTapped = true);
     Future.delayed(const Duration(milliseconds: 100), () => setState(() => _isTapped = false));
-    widget.onTap!();
+    zoomToPage(WebScreen(url: widget.url, title: widget.title));
   }
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: _handleTap,
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(5),
-            decoration: BoxDecoration(
-              color: _isTapped ? Colors.black26 : const Color(0xff0353a4),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
+    return Flexible(
+      fit: FlexFit.tight,
+      child: InkWell(
+        onTap: _handleTap,
+        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: _isTapped ? Colors.black26 : const Color(0xff0353a4),
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              child: Icon(widget.icon, color: Colors.white, size: 35),
             ),
-            child: Icon(widget.icon, color: Colors.white, size: 40),
-          ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-              child: TextBodyMediumView(widget.title, textAlign: TextAlign.center, maxLines: 2),
+            Flexible(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 5, 10, 0),
+                child: TextBodyMediumView(widget.title, textAlign: TextAlign.center, maxLines: 2),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

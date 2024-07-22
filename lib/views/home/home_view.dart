@@ -78,7 +78,7 @@ class HomeView extends StatelessWidget {
             HomeSlide(slideIndex: slideIndex, onSlideChange: onSlideChange),
             const SizedBox(height: 20),
             const HomeMenu(),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             discountProducts(list: discountLst),
             parentCategories(),
             const SizedBox(height: 10),

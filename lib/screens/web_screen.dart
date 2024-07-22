@@ -25,10 +25,7 @@ class _WebScreenState extends State<WebScreen> {
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBarView(title: widget.title),
-        body: WebViewWidget(controller: controller),
-      ),
+      child: Scaffold(appBar: AppBarView(title: widget.title), body: WebViewWidget(controller: controller)),
     );
   }
 }
