@@ -5,7 +5,7 @@ class SnackBarView {
   static void show(BuildContext context, String content) {
     final snackBar = SnackBar(
       backgroundColor: Colors.black,
-      content: Center(child: TextBodyMediumView(content, color: Colors.white)),
+      content: Center(child: TextBodyMediumView(content, color: Colors.white,height: 2)),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

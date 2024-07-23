@@ -21,13 +21,9 @@ class OrderTabScreen extends StatelessWidget {
               List<LineItems> itemsLst = order.lineItems!;
               String date = order.dateCreated.toString().toPersianDate();
               List<String> t = order.dateCreated.toString().split('T');
-              int h = int.parse(t[1].split(':')[0]) - 1;
-              int m = int.parse(t[1].split(':')[1]);
-              String strH = h.toString();
-              String strM = m.toString();
-              if (h < 10) strH = '0$strH';
-              if (m < 10) strM = '0$strM';
-              String time = '$strH:$strM'.toPersianDigit();
+              String h = t[1].split(':')[0];
+              String m = t[1].split(':')[1];
+              String time = '$h:$m'.toPersianDigit();
               return Container(
                 decoration: BoxDecoration(border: Border.all(color: Colors.black87), borderRadius: BorderRadius.circular(10)),
                 margin: const EdgeInsets.all(10),

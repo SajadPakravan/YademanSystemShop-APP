@@ -24,6 +24,7 @@ class _ProductScreenState extends State<ProductScreen> {
   Box<FavoriteModel> favoritesBox = Hive.box<FavoriteModel>('favoritesBox');
   List<ReviewModel> reviewsLst = [];
   List<ProductModel> relatedProductsLst = [];
+  int? id;
   bool loading = false;
   int dataNumber = 0;
   String name = '';
@@ -38,28 +39,43 @@ class _ProductScreenState extends State<ProductScreen> {
   TextEditingController review = TextEditingController();
   int rating = 0;
 
-  loadContent({int? id}) {
+  loadContent({int? id}) async {
     switch (dataNumber) {
       case 0:
+        {
+          setState(() => loading = true);
+          getProduct(id!);
+          break;
+        }
+      case 1:
         {
           setState(() => loading = true);
           getProductReviews(id!);
           break;
         }
-      case 1:
+      case 2:
         {
           getRelatedProducts();
           break;
         }
       default:
         {
-          checkLogged();
+          await checkLogged();
           checkCart();
           checkFavorites();
           setState(() => loading = false);
           break;
         }
     }
+  }
+
+  getProduct(int id) async {
+    if (product.id == null) {
+      dynamic jsonProduct = await httpRequest.getProduct(id: id);
+      setState(() => product = ProductModel.fromJson(jsonProduct));
+    }
+    dataNumber++;
+    loadContent(id: id);
   }
 
   getProductReviews(int id) async {
@@ -84,9 +100,10 @@ class _ProductScreenState extends State<ProductScreen> {
     AppCache cache = AppCache();
     name = await cache.getString('name') ?? '';
     email = await cache.getString('email') ?? '';
-    authError = email.toString().isEmpty;
-    personalInfoError = name.toString().isEmpty;
-    setState(() {});
+    setState(() {
+      authError = email.toString().isEmpty;
+      personalInfoError = name.toString().isEmpty;
+    });
   }
 
   checkCart() {
@@ -209,8 +226,11 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() => product = Get.arguments);
-    loadContent(id: product.id);
+    setState(() {
+      product = Get.arguments['product'] ?? ProductModel();
+      id = Get.arguments['id'];
+    });
+    loadContent(id: product.id ?? id);
   }
 
   @override

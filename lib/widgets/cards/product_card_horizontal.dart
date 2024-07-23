@@ -44,7 +44,7 @@ class ProductCardHorizontal extends StatelessWidget {
               percent = (((price - regularPrice) / regularPrice) * 100).roundToDouble().toInt();
             }
             return InkWell(
-              onTap: () => toProduct(product),
+              onTap: () => toProduct(product: product),
               child: Container(
                 width: width * 0.45,
                 padding: const EdgeInsets.all(10),

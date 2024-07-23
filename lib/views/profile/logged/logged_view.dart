@@ -18,6 +18,7 @@ import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
 class LoggedView extends StatelessWidget {
   const LoggedView({
     super.key,
+    required this.context,
     required this.customer,
     required this.getCustomer,
     required this.signOut,
@@ -28,6 +29,7 @@ class LoggedView extends StatelessWidget {
     required this.checkCart,
   });
 
+  final BuildContext context;
   final CustomerModel customer;
   final Function() getCustomer;
   final void Function() signOut;
@@ -106,7 +108,7 @@ class LoggedView extends StatelessWidget {
                   },
                 ),
                 option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () => zoomToPage(const OrderScreen())),
-                option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () =>zoomToPage(const FavoritesScreen())),
+                option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () => zoomToPage(const FavoritesScreen())),
                 option(
                   title: 'تماس با پشتیبانی',
                   icon: Icons.headphones,
@@ -123,9 +125,10 @@ class LoggedView extends StatelessWidget {
 
   option({required String title, required IconData icon, Widget? subtitle, required void Function() onTap}) {
     return Card(
-      margin: const EdgeInsets.all(10),
-      elevation: 4,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      margin: EdgeInsets.symmetric(horizontal: MediaQuery.of(context).size.width * 0.05, vertical: 10),
+      elevation: 0,
+      color: Colors.indigo.shade50,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         title: TextBodyMediumView(title),
         leading: Icon(icon),

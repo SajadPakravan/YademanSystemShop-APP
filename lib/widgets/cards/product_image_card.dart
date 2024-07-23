@@ -69,7 +69,7 @@ class _ProductImageCardState extends State<ProductImageCard> {
             }
         }
         return InkWell(
-          onTap: () => toProduct(product),
+          onTap: () => toProduct(product: product),
           child: Container(
             padding: const EdgeInsets.all(5),
             decoration: BoxDecoration(

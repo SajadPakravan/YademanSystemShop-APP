@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/database/favorite_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
@@ -50,91 +51,98 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   toman = '';
                   percent = (((price - regularPrice) / regularPrice) * 100).roundToDouble().toInt();
                 }
-                return Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
-                      child: Row(
-                        children: [
-                          Flexible(flex: 1, child: CachedNetworkImage(imageUrl: favorite.image, fit: BoxFit.contain)),
-                          Flexible(
-                            flex: 2,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
+                return Container(
+                  margin: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(border: Border.all(), borderRadius: BorderRadius.circular(10)),
+                  child: Row(
+                    children: [
+                      Flexible(flex: 1, child: CachedNetworkImage(imageUrl: favorite.image, fit: BoxFit.contain)),
+                      Flexible(
+                        flex: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextBodyMediumView(favorite.name, fontWeight: FontWeight.bold, textAlign: TextAlign.center, maxLines: 1),
+                              const SizedBox(height: 10),
+                              Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  TextBodyMediumView(favorite.name, fontWeight: FontWeight.bold, textAlign: TextAlign.center, maxLines: 1),
-                                  const SizedBox(height: 10),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                  Visibility(
+                                    visible: favorite.onSale,
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      padding: const EdgeInsets.all(5),
+                                      decoration: BoxDecoration(color: Colors.red.shade600),
+                                      child: TextBodyMediumView(
+                                        "${percent.toString().replaceAll('-', '').toPersianDigit()}%",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Column(
                                     children: [
                                       Visibility(
                                         visible: favorite.onSale,
                                         child: Container(
-                                          alignment: Alignment.center,
-                                          padding: const EdgeInsets.all(5),
-                                          decoration: BoxDecoration(color: Colors.red.shade600),
-                                          child: TextBodyMediumView(
-                                            "${percent.toString().replaceAll('-', '').toPersianDigit()}%",
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
+                                          alignment: Alignment.centerLeft,
+                                          margin: const EdgeInsets.only(bottom: 5),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.end,
+                                            children: [
+                                              TextBodyMediumView(
+                                                '${price.toString().toPersianDigit().seRagham()} تومان',
+                                                textAlign: TextAlign.left,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ],
                                           ),
                                         ),
                                       ),
-                                      const SizedBox(width: 10),
-                                      Column(
-                                        children: [
-                                          Visibility(
-                                            visible: favorite.onSale,
-                                            child: Container(
-                                              alignment: Alignment.centerLeft,
-                                              margin: const EdgeInsets.only(bottom: 5),
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.end,
-                                                children: [
-                                                  TextBodyMediumView(
-                                                    '${price.toString().toPersianDigit().seRagham()} تومان',
-                                                    textAlign: TextAlign.left,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ],
-                                              ),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.end,
+                                          children: [
+                                            TextBodyMediumView(
+                                              regularPrice.toString().toPersianDigit().seRagham(),
+                                              textAlign: TextAlign.left,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: fontSize,
+                                              color: textColor,
                                             ),
-                                          ),
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Row(
-                                              mainAxisAlignment: MainAxisAlignment.end,
-                                              children: [
-                                                TextBodyMediumView(
-                                                  regularPrice.toString().toPersianDigit().seRagham(),
-                                                  textAlign: TextAlign.left,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: fontSize,
-                                                  color: textColor,
-                                                ),
-                                                TextBodyMediumView(toman, fontWeight: FontWeight.bold),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
+                                            TextBodyMediumView(toman, fontWeight: FontWeight.bold),
+                                          ],
+                                        ),
                                       ),
+                                      const SizedBox(height: 10),
                                     ],
                                   ),
-                                  const SizedBox(height: 10),
                                 ],
                               ),
-                            ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.open_in_browser, color: ColorStyle.blueFav, size: 40),
+                                    onPressed: () => toProduct(id: favorite.id),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.delete, color: ColorStyle.blueFav, size: 40),
+                                    onPressed: () => deleteFavorite(id: favorite.id),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
-                    ),
-                    IconButton(icon: const Icon(Icons.delete_forever,color: ColorStyle.blueFav,size: 40,), onPressed: () => deleteFavorite(id: favorite.id)),
-                  ],
+                    ],
+                  ),
                 );
               },
             );

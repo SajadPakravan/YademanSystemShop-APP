@@ -43,6 +43,7 @@ class ProfileView extends StatelessWidget {
         ? const Loading()
         : logged
             ? LoggedView(
+                context: context,
                 customer: customer,
                 getCustomer: getCustomer,
                 signOut: signOut,
