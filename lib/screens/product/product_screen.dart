@@ -180,7 +180,7 @@ class _ProductScreenState extends State<ProductScreen> {
       }
       checkFavorites();
     } else {
-      if (mounted) SnackBarView.show(context, 'بر افزودن محصول به لیست علاقه‌مندی‌ها لطفا وارد حساب کاربری شوید');
+      if (mounted) SnackBarView.show(context, 'برای افزودن محصول به لیست علاقه‌مندی‌ها لطفا وارد حساب کاربری شوید');
     }
   }
 
