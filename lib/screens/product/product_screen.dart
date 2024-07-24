@@ -156,7 +156,7 @@ class _ProductScreenState extends State<ProductScreen> {
       });
       checkCart();
     } else {
-      if (mounted) SnackBarView.show(context, 'بر افزودن محصول به سبد خرید لطفا وارد حساب کاربری شوید');
+      if (mounted) SnackBarView.show(context, 'برای افزودن محصول به سبد خرید لطفا وارد حساب کاربری شوید');
     }
   }
 
