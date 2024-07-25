@@ -81,6 +81,7 @@ class AppDialogs {
                           ElevatedButton(
                             child: const TextBodyMediumView('ثبت', color: Colors.white),
                             onPressed: () {
+                              controller.text.trim();
                               onPressed();
                               Navigator.pop(context);
                             },

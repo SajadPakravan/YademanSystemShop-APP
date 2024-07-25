@@ -119,7 +119,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 onPressed: () => setState(() => phone = phoneField.text),
               ),
               info(
-                title: 'شرکت / سازمان',
+                title: 'شرکت / سازمان (اختیاری)',
                 subtitle: company,
                 icon: Icons.business,
                 controller: companyField,
@@ -160,7 +160,7 @@ class _AddressScreenState extends State<AddressScreen> {
               ),
               info(
                 title: 'کد پستی',
-                subtitle: postcode,
+                subtitle: postcode.toPersianDigit(),
                 icon: Icons.location_on,
                 controller: postcodeField,
                 hint: 'کد پستی را وارد کنید',
@@ -173,7 +173,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 30),
                 child: EasyButton(
                   idleStateWidget: const TextBodyMediumView('ثبت', color: Colors.white),
-                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
                   buttonColor: ColorStyle.blueFav,
                   width: width,
                   height: 50,
@@ -206,7 +206,7 @@ class _AddressScreenState extends State<AddressScreen> {
                           number: numberAlley,
                           postcode: postcode,
                         );
-                        if (jsonUpdateShipping != false) if (context.mounted) SnackBarView.show(context, 'آدرس شما ذخیره شد');
+                        if (jsonUpdateShipping != false) if (context.mounted) SnackBarView.show(context, 'آدرس شما با موفقیت ذخیره شد');
                       }
                     }
                   },
@@ -255,16 +255,16 @@ class _AddressScreenState extends State<AddressScreen> {
   }
 
   formValidation() {
-    if (firstname != customer.billing!.firstname! ||
-        lastname != customer.billing!.lastname ||
-        email != customer.billing!.email ||
-        phone != customer.billing!.phone ||
-        company != customer.billing!.company ||
-        state != customer.billing!.state ||
-        city != customer.billing!.city ||
-        street != customer.billing!.address1 ||
-        numberAlley != customer.billing!.address2 ||
-        postcode != customer.billing!.postcode) return true;
+    if (firstname.isNotEmpty &&
+        lastname.isNotEmpty &&
+        email.isNotEmpty &&
+        phone.isNotEmpty &&
+        state.isNotEmpty &&
+        city.isNotEmpty &&
+        street.isNotEmpty &&
+        numberAlley.isNotEmpty &&
+        postcode.isNotEmpty) return true;
+    SnackBarView.show(context, 'لطفا همه موارد را وارد کنید');
     return false;
   }
 }

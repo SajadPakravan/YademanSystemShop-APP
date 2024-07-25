@@ -34,7 +34,7 @@ class ProductCardGrid extends StatelessWidget {
           int price = int.parse(product.price!);
           int regularPrice = int.parse(product.regularPrice!);
           int percent = 0;
-          String toman = 'تومان';
+          String toman = ' تومان';
           Color textColor = Colors.black87;
           double fontSize = 14;
 
@@ -75,7 +75,7 @@ class ProductCardGrid extends StatelessWidget {
                     child: TextBodyMediumView(product.name!, maxLines: 2),
                   ),
                   price == 0
-                      ? const TextBodyMediumView("تماس بگیرید", textAlign: TextAlign.center, maxLines: 2)
+                      ? const TextBodyMediumView('تماس بگیرید', textAlign: TextAlign.center, maxLines: 2)
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
