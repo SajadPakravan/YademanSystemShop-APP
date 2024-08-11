@@ -72,18 +72,10 @@ class _SplashScreenState extends State<SplashScreen> {
   urlCheckConnection() async {
     dynamic result = await httpRequest.getProducts();
     if (result != false) {
-      setState(() {
-        confirm = true;
-      });
+      setState(() => confirm = true);
       Timer(
         const Duration(seconds: 2),
-        () {
-          Get.offAll(
-            const MainScreen(),
-            transition: Transition.fade,
-            duration: const Duration(seconds: 1),
-          );
-        },
+        () => Get.offAll(const MainScreen(), transition: Transition.fade, duration: const Duration(seconds: 1)),
       );
     } else {
       setState(() {

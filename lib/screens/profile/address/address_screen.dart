@@ -153,7 +153,7 @@ class _AddressScreenState extends State<AddressScreen> {
               info(
                 title: 'کوچه و پلاک',
                 subtitle: numberAlley,
-                icon: Icons.location_on,
+                icon: Icons.signpost,
                 controller: numberField,
                 hint: 'مثال: کوچه بهار، پلاک 24'.toPersianDigit(),
                 onPressed: () => setState(() => numberAlley = numberField.text),
@@ -168,16 +168,14 @@ class _AddressScreenState extends State<AddressScreen> {
                 textInputType: TextInputType.number,
                 onPressed: () => setState(() => postcode = postcodeField.text),
               ),
-              const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1, vertical: 20),
                 child: EasyButton(
-                  idleStateWidget: const TextBodyMediumView('ثبت', color: Colors.white),
+                  idleStateWidget: const TextBodyMediumView('ذخیره', color: Colors.white, fontWeight: FontWeight.bold),
                   loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
                   buttonColor: ColorStyle.blueFav,
-                  width: width,
-                  height: 50,
-                  borderRadius: width,
+                  height: width * 0.13,
+                  borderRadius: 10,
                   onPressed: () async {
                     if (formValidation()) {
                       dynamic jsonUpdateBilling = await httpRequest.updateBillingAddress(
@@ -231,14 +229,13 @@ class _AddressScreenState extends State<AddressScreen> {
   }) {
     return Card(
       margin: const EdgeInsets.all(10),
-      elevation: 4,
-      color: Colors.blue.shade300,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide()),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         title: TextBodyMediumView(title),
         subtitle: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyLargeView(subtitle, fontWeight: FontWeight.bold)),
-        leading: Icon(icon),
+        leading: Icon(icon, color: Colors.indigo),
         trailing: const Icon(Icons.edit),
         onTap: () => appDialogs.editeValue(
           context: context,

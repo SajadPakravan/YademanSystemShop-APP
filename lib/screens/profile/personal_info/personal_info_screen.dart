@@ -35,7 +35,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   TextEditingController firstnameField = TextEditingController();
   TextEditingController lastnameField = TextEditingController();
   TextEditingController emailField = TextEditingController();
-  dynamic avatarFile;
+  File? avatarFile;
   ImagePicker imagePicker = ImagePicker();
 
   @override
@@ -89,31 +89,51 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                 onPressed: () => setState(() => email = emailField.text),
               ),
               const SizedBox(height: 20),
+              profileChangeView(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 30),
+                padding: EdgeInsets.symmetric(horizontal: width * 0.1, vertical: 20),
                 child: EasyButton(
-                  idleStateWidget: const TextBodyMediumView('ثبت', color: Colors.white),
-                  loadingStateWidget: const Padding(padding: EdgeInsets.all(10), child: Loading(color: Colors.white)),
+                  idleStateWidget: const TextBodyMediumView('ذخیره', color: Colors.white, fontWeight: FontWeight.bold),
+                  loadingStateWidget: const Padding(padding: EdgeInsets.all(5), child: Loading(color: Colors.white)),
                   buttonColor: ColorStyle.blueFav,
-                  width: width,
-                  height: 50,
-                  borderRadius: width,
+                  borderRadius: 10,
+                  height: width * 0.13,
                   onPressed: () async {
-                    if (firstname != customer.firstname! || lastname != customer.lastname || email != customer.email) {
-                      dynamic jsonUpdate = await httpRequest.updateCustomer(
+                    if (formValidation()) {
+                      dynamic jsonUpdateCustomer = await httpRequest.updateCustomer(
                         id: customer.id.toString(),
                         firstname: firstname,
                         lastname: lastname,
                         email: email,
                       );
-                      if (jsonUpdate != false) {
+                      if (jsonUpdateCustomer != false) {
                         if (context.mounted) {
                           dynamic jsonUpdateUser = await httpRequest.updateUser(context: context, firstname: firstname, lastname: lastname);
                           if (jsonUpdateUser != false) {
                             AppCache cache = AppCache();
                             await cache.setString('email', email);
                             await cache.setString('name', '$firstname $lastname');
-                            if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                            if (avatarFile != null) {
+                              if (context.mounted) {
+                                dynamic jsonUploadAvatar = await httpRequest.uploadAvatar(
+                                  context: context,
+                                  userId: customer.id.toString(),
+                                  avatar: avatarFile!,
+                                );
+                                if (jsonUploadAvatar != false) {
+                                  if (context.mounted) {
+                                    dynamic jsonUpdateAvatar = await httpRequest.updateAvatar(
+                                      context: context,
+                                      userId: customer.id!,
+                                      avatarUrl: jsonUploadAvatar['image'],
+                                    );
+                                    if (jsonUpdateAvatar != false) if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                                  }
+                                }
+                              }
+                            } else {
+                              if (jsonUpdateUser != false) if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                            }
                           }
                         }
                       }
@@ -141,14 +161,13 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   }) {
     return Card(
       margin: const EdgeInsets.all(10),
-      elevation: 4,
-      color: Colors.blue.shade300,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5), side: const BorderSide()),
       child: ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
         title: TextBodyMediumView(title),
         subtitle: Padding(padding: const EdgeInsets.only(top: 10), child: TextBodyLargeView(subtitle, fontWeight: FontWeight.bold)),
-        leading: Icon(icon),
+        leading: Icon(icon, color: Colors.indigo),
         trailing: trailing,
         onTap: () => appDialogs.editeValue(
           context: context,
@@ -167,7 +186,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   profileChangeView() {
     return CircleAvatar(
       radius: 140 / 2,
-      backgroundImage: avatarFile == null ? CachedNetworkImageProvider(customer.avatarUrl!) : Image.file(File(avatarFile.path)).image,
+      backgroundImage: avatarFile == null ? CachedNetworkImageProvider(customer.avatarUrl!) : Image.file(File(avatarFile!.path)).image,
+      backgroundColor: Colors.grey,
       child: Align(
         alignment: Alignment.bottomCenter,
         child: IconButton(
@@ -189,5 +209,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
       Navigator.pop(context);
       cropImageView(context: context, imageFile: image!.path).then((value) => setState(() => avatarFile = File(value.path)));
     }
+  }
+
+  formValidation() {
+    if (firstname.isNotEmpty && lastname.isNotEmpty && email.isNotEmpty) return true;
+    SnackBarView.show(context, 'لطفا همه موارد را وارد کنید');
+    return false;
   }
 }

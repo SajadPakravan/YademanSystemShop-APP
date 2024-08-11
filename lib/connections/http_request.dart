@@ -30,6 +30,8 @@ class HttpRequest {
 
   get _urlCustomers => 'https://$_urlMain/wp-json/wc/v3/customers/';
 
+  get _urlUpdateAvatar => 'https://$_urlMain/wp-json/avatar/v1/update-avatar/';
+
   get _urlUpload => 'https://$_urlMain/wp-content/app-uploads/';
 
   get _urlOrders => 'https://$_urlMain/wp-json/wc/v3/orders/';
@@ -69,18 +71,14 @@ class HttpRequest {
     required Map<String, dynamic> body,
     Map<String, String> headers = const {},
     int statusCode = 200,
-    String? error,
+    String error = '',
   }) async {
-    if (headers.isEmpty) {
-      headers = {
-        'Content-Type': 'application/json; charset=UTF-8',
-      };
-    }
-
+    if (headers.isEmpty) headers = {'Content-Type': 'application/json; charset=UTF-8'};
+    dynamic json;
     try {
       final postRequest = await http.post(Uri.parse(url + id.toString() + _key + _secret), headers: headers, body: jsonEncode(body));
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
-      dynamic json = jsonDecode(postRequest.body);
+      json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == statusCode) {
         if (kDebugMode) print("JSON >>>> $json");
         return json;
@@ -89,7 +87,7 @@ class HttpRequest {
           print("Status Code >>>:  ${postRequest.statusCode}");
           print("Json ERROR >>>:  $json");
         }
-        if (error!.isEmpty) {
+        if (error.isEmpty) {
           if (context.mounted) SnackBarView.show(context, json['message']);
         } else {
           if (context.mounted) SnackBarView.show(context, error);
@@ -98,6 +96,7 @@ class HttpRequest {
       }
     } catch (e) {
       if (kDebugMode) print("ERROR >>>> $e");
+      return false;
     }
   }
 
@@ -298,6 +297,16 @@ class HttpRequest {
       if (context.mounted) SnackBarView.show(context, json['message']);
       return false;
     }
+  }
+
+  updateAvatar({required BuildContext context, required int userId, required String avatarUrl}) async {
+    AppCache cache = AppCache();
+    Map<String, String> headers = {
+      'Authorization': 'Bearer ${await cache.getString('token')}',
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    Map<String, dynamic> body = {'user_id': userId, 'avatar_url': avatarUrl};
+    return _postRequest(context: context.mounted ? context : context, url: _urlUpdateAvatar, headers: headers, body: body);
   }
 
   createOrder({
