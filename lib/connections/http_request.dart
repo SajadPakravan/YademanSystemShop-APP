@@ -32,6 +32,8 @@ class HttpRequest {
 
   get _urlUpdateAvatar => 'https://$_urlMain/wp-json/avatar/v1/update-avatar/';
 
+  get _urlUpdatePassword => 'https://$_urlMain/wp-json/user/v1/update-password/';
+
   get _urlUpload => 'https://$_urlMain/wp-content/app-uploads/';
 
   get _urlOrders => 'https://$_urlMain/wp-json/wc/v3/orders/';
@@ -73,10 +75,11 @@ class HttpRequest {
     int statusCode = 200,
     String error = '',
   }) async {
-    if (headers.isEmpty) headers = {'Content-Type': 'application/json; charset=UTF-8'};
+    final header = {...headers, 'Content-Type': 'application/json; charset=UTF-8'};
+
     dynamic json;
     try {
-      final postRequest = await http.post(Uri.parse(url + id.toString() + _key + _secret), headers: headers, body: jsonEncode(body));
+      final postRequest = await http.post(Uri.parse(url + id.toString() + _key + _secret), headers: header, body: jsonEncode(body));
       if (kDebugMode) print("postRequest.request >>>> ${postRequest.request}");
       json = jsonDecode(postRequest.body);
       if (postRequest.statusCode == statusCode) {
@@ -301,12 +304,16 @@ class HttpRequest {
 
   updateAvatar({required BuildContext context, required int userId, required String avatarUrl}) async {
     AppCache cache = AppCache();
-    Map<String, String> headers = {
-      'Authorization': 'Bearer ${await cache.getString('token')}',
-      'Content-Type': 'application/json; charset=UTF-8',
-    };
+    Map<String, String> headers = {'Authorization': 'Bearer ${await cache.getString('token')}'};
     Map<String, dynamic> body = {'user_id': userId, 'avatar_url': avatarUrl};
     return _postRequest(context: context.mounted ? context : context, url: _urlUpdateAvatar, headers: headers, body: body);
+  }
+
+  updatePassword({required BuildContext context, required int userId, required String currentPassword, required String newPassword}) async {
+    AppCache cache = AppCache();
+    Map<String, String> headers = {'Authorization': 'Bearer ${await cache.getString('token')}'};
+    Map<String, dynamic> body = {'user_id': userId, 'current_password': currentPassword, 'new_password': newPassword};
+    return _postRequest(context: context.mounted ? context : context, url: _urlUpdatePassword, headers: headers, body: body);
   }
 
   createOrder({

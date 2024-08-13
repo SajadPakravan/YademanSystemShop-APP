@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/profile/address/address_screen.dart';
 import 'package:yad_sys/screens/profile/cart/cart_screen.dart';
+import 'package:yad_sys/screens/profile/change_password/change_password_screen.dart';
 import 'package:yad_sys/screens/profile/favorites/favorites_screen.dart';
 import 'package:yad_sys/screens/profile/orders/order_screen.dart';
 import 'package:yad_sys/screens/profile/personal_info/personal_info_screen.dart';
@@ -48,7 +48,7 @@ class LoggedView extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircleAvatar(radius: 150 / 2, backgroundImage: CachedNetworkImageProvider(customer.avatarUrl!)),
+                CircleAvatar(radius: 150 / 2, backgroundImage: NetworkImage(customer.avatarUrl!)),
                 const SizedBox(height: 10),
                 TextBodyLargeView('${customer.firstname} ${customer.lastname}'),
                 const SizedBox(height: 10),
@@ -66,6 +66,21 @@ class LoggedView extends StatelessWidget {
                       arguments: customer,
                     );
                     getCustomer();
+                  },
+                ),
+                option(
+                  title: 'تغییر رمز عبور',
+                  icon: Icons.lock,
+                  onTap: () {
+                    Get.to(
+                      const ChangePasswordScreen(),
+                      transition: Transition.rightToLeft,
+                      duration: const Duration(milliseconds: 500),
+                      arguments: customer,
+                    )?.then((value) {
+                      print(value);
+                      if (value) signOut();
+                    });
                   },
                 ),
                 option(
