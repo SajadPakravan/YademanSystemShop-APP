@@ -27,6 +27,7 @@ class PersonalInfoScreen extends StatefulWidget {
 
 class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   HttpRequest httpRequest = HttpRequest();
+  AppCache cache = AppCache();
   CustomerModel customer = CustomerModel();
   AppDialogs appDialogs = AppDialogs();
   String firstname = '';
@@ -38,9 +39,12 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
   File? avatarFile;
   ImagePicker imagePicker = ImagePicker();
 
+  profileChanged(bool value) async => await cache.setBool('profileChanged', value);
+
   @override
   void initState() {
     super.initState();
+    profileChanged(false);
     setState(() {
       customer = Get.arguments;
       firstname = customer.firstname!;
@@ -127,12 +131,18 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                       userId: customer.id!,
                                       avatarUrl: jsonUploadAvatar['image'],
                                     );
-                                    if (jsonUpdateAvatar != false) if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                                    if (jsonUpdateAvatar != false) {
+                                      if (context.mounted) SnackBarView.show(context, 'اطلاعات شما با موفقیت ذخیره شد');
+                                      profileChanged(true);
+                                    }
                                   }
                                 }
                               }
                             } else {
-                              if (jsonUpdateUser != false) if (context.mounted) SnackBarView.show(context, 'اطلاعات شما ذخیره شد');
+                              if (jsonUpdateUser != false) {
+                                if (context.mounted) SnackBarView.show(context, 'اطلاعات شما با موفقیت ذخیره شد');
+                                profileChanged(true);
+                              }
                             }
                           }
                         }

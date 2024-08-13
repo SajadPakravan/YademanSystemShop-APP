@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:yad_sys/connections/http_request.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/themes/color_style.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/widgets/app_bar_view.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/snack_bar_view.dart';
@@ -18,14 +19,18 @@ class ChangePasswordScreen extends StatefulWidget {
 
 class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   HttpRequest httpRequest = HttpRequest();
+  AppCache cache = AppCache();
   CustomerModel customer = CustomerModel();
   TextEditingController currentPassword = TextEditingController();
   TextEditingController newPassword = TextEditingController();
   TextEditingController reNewPassword = TextEditingController();
 
+  profileChanged(bool value) async => await cache.setBool('profileChanged', value);
+
   @override
   void initState() {
     super.initState();
+    profileChanged(false);
     setState(() => customer = Get.arguments);
   }
 
@@ -61,7 +66,15 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                             currentPassword: currentPassword.text,
                             newPassword: newPassword.text,
                           );
-                          if (jsonUpdatePassword != false) if (context.mounted) SnackBarView.show(context, 'رمز عبور با موفقیت تغییر یافت');
+                          if (jsonUpdatePassword != false) {
+                            if (context.mounted) SnackBarView.show(context, 'رمز عبور با موفقیت تغییر یافت');
+                            setState((){
+                              currentPassword.clear();
+                              newPassword.clear();
+                              reNewPassword.clear();
+                            });
+                            profileChanged(true);
+                          }
                         }
                       },
                     ),
@@ -81,6 +94,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
       child: TextFormField(
         controller: controller,
         style: Theme.of(context).textTheme.bodyMedium,
+        textDirection: TextDirection.ltr,
         obscureText: true,
         textInputAction: textInputAction,
         decoration: InputDecoration(

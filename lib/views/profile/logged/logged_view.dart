@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:persian_number_utility/persian_number_utility.dart';
 import 'package:yad_sys/models/customer_model.dart';
 import 'package:yad_sys/screens/profile/address/address_screen.dart';
@@ -10,13 +9,14 @@ import 'package:yad_sys/screens/profile/orders/order_screen.dart';
 import 'package:yad_sys/screens/profile/personal_info/personal_info_screen.dart';
 import 'package:yad_sys/screens/web_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
+import 'package:yad_sys/tools/app_cache.dart';
 import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/text_views/text_body_large_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 import 'package:yad_sys/widgets/text_views/text_body_small_view.dart';
 
 class LoggedView extends StatelessWidget {
-  const LoggedView({
+  LoggedView({
     super.key,
     required this.context,
     required this.customer,
@@ -30,6 +30,7 @@ class LoggedView extends StatelessWidget {
   });
 
   final BuildContext context;
+  final AppCache cache = AppCache();
   final CustomerModel customer;
   final Function() getCustomer;
   final void Function() signOut;
@@ -59,43 +60,23 @@ class LoggedView extends StatelessWidget {
                   icon: Icons.person,
                   subtitle: personalInfoAlert ? const TextBodySmallView('لطفا مشخصات فردی خود را تکمیل کنید', color: Colors.red) : null,
                   onTap: () async {
-                    await Get.to(
-                      const PersonalInfoScreen(),
-                      transition: Transition.rightToLeft,
-                      duration: const Duration(milliseconds: 500),
-                      arguments: customer,
-                    );
-                    getCustomer();
+                    await rightToPage(const PersonalInfoScreen(), arguments: customer);
+                    if (await cache.getBool('profileChanged')) getCustomer();
                   },
                 ),
                 option(
                   title: 'تغییر رمز عبور',
                   icon: Icons.lock,
-                  onTap: () {
-                    Get.to(
-                      const ChangePasswordScreen(),
-                      transition: Transition.rightToLeft,
-                      duration: const Duration(milliseconds: 500),
-                      arguments: customer,
-                    )?.then((value) {
-                      print(value);
-                      if (value) signOut();
-                    });
+                  onTap: () async {
+                    await rightToPage(const ChangePasswordScreen(), arguments: customer);
+                    if (await cache.getBool('profileChanged')) signOut();
                   },
                 ),
                 option(
                   title: 'آدرس‌',
                   icon: Icons.location_on,
                   subtitle: addressAlert ? const TextBodySmallView('لطفا آدرس خود را وارد کنید', color: Colors.red) : null,
-                  onTap: () async {
-                    await Get.to(
-                      const AddressScreen(),
-                      transition: Transition.rightToLeft,
-                      duration: const Duration(milliseconds: 500),
-                      arguments: customer,
-                    );
-                    getCustomer();
-                  },
+                  onTap: () => rightToPage(const AddressScreen(), arguments: customer),
                 ),
                 option(
                   title: 'سبد خرید',
@@ -118,16 +99,16 @@ class LoggedView extends StatelessWidget {
                         )
                       : null,
                   onTap: () async {
-                    await zoomToPage(const CartScreen());
+                    await rightToPage(const CartScreen());
                     checkCart();
                   },
                 ),
-                option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () => zoomToPage(const OrderScreen())),
-                option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () => zoomToPage(const FavoritesScreen())),
+                option(title: 'سفارشات', icon: Icons.shopping_bag, onTap: () => rightToPage(const OrderScreen())),
+                option(title: 'علاقه‌مندی‌ها', icon: Icons.favorite, onTap: () => rightToPage(const FavoritesScreen())),
                 option(
                   title: 'تماس با پشتیبانی',
                   icon: Icons.headphones,
-                  onTap: () => zoomToPage(const WebScreen(title: 'تماس با پشتیبانی', url: 'https://yademansystem.ir/contact-us')),
+                  onTap: () => rightToPage(const WebScreen(title: 'تماس با پشتیبانی', url: 'https://yademansystem.ir/contact-us')),
                 ),
                 option(title: 'خروج از حساب کاربری', icon: Icons.logout, onTap: signOut),
               ],
