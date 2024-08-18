@@ -26,6 +26,8 @@ class HttpRequest {
 
   get _urlSignUp => 'https://yademansystem.ir/wp-json/wp/v2/users/register/';
 
+  get _urlPasswordRecovery => 'https://yademansystem.ir/wp-json/user/v1/password-recovery/';
+
   get _urlUsers => 'https://$_urlMain/wp-json/wp/v2/users/';
 
   get _urlCustomers => 'https://$_urlMain/wp-json/wc/v3/customers/';
@@ -193,6 +195,16 @@ class HttpRequest {
   signIn({required BuildContext context, required String email, required String password}) async {
     Map<String, String> body = {'username': email, 'password': password};
     return _postRequest(context: context, url: _urlSignIn, body: body, error: 'اطلاعات ورود صحیح نمی‌باشد');
+  }
+
+  sendVerifyCode({required BuildContext context, required String email}) {
+    Map<String, dynamic> body = {'email': email};
+    return _postRequest(context: context, url: _urlPasswordRecovery, body: body);
+  }
+
+  passwordRecovery({required BuildContext context, required String email, required String code, required int password}) {
+    Map<String, dynamic> body = {'email': email, 'code': code, 'password': password};
+    return _postRequest(context: context, url: _urlPasswordRecovery, body: body);
   }
 
   getCustomer({required String email}) async {

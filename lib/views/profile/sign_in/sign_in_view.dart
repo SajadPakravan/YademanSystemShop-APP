@@ -1,7 +1,9 @@
 import 'package:easy_loading_button/easy_loading_button.dart';
 import 'package:flutter/material.dart';
+import 'package:yad_sys/screens/profile/forget_password/forget_password_screen.dart';
 import 'package:yad_sys/themes/color_style.dart';
 import 'package:yad_sys/tools/app_texts.dart';
+import 'package:yad_sys/tools/go_page.dart';
 import 'package:yad_sys/widgets/loading.dart';
 import 'package:yad_sys/widgets/text_views/text_body_medium_view.dart';
 
@@ -80,7 +82,7 @@ class SignInView extends StatelessWidget {
                     const SizedBox(width: 10),
                     InkWell(
                       child: const TextBodyMediumView('فراموشی کلمه عبور', color: ColorStyle.blueFav),
-                      onTap: () {},
+                      onTap: () => zoomToPage(const ForgetPassword()),
                     ),
                   ],
                 ),
