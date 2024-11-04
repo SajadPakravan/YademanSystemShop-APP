@@ -30,6 +30,7 @@ class HomeView extends StatelessWidget {
     required this.speakerLst,
     required this.internalDetLst,
     required this.storageDetLst,
+    required this.bannerAd,
   });
 
   final AppFunction appFun = AppFunction();
@@ -45,6 +46,7 @@ class HomeView extends StatelessWidget {
   final List<ProductModel> speakerLst;
   final List<ProductModel> internalDetLst;
   final List<ProductModel> storageDetLst;
+  final Widget bannerAd;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,7 @@ class HomeView extends StatelessWidget {
             const HomeMenu(),
             const SizedBox(height: 20),
             discountProducts(list: discountLst),
+            bannerAd,
             parentCategories(),
             const SizedBox(height: 10),
             Container(
@@ -138,8 +141,8 @@ class HomeView extends StatelessWidget {
                   ProductCardHorizontal(physics: const NeverScrollableScrollPhysics(), list: discountLst),
                   ElevatedButton(
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav),
-                      elevation: MaterialStateProperty.all(10),
+                      backgroundColor: WidgetStateProperty.all(ColorStyle.blueFav),
+                      elevation: WidgetStateProperty.all(10),
                     ),
                     child: const TextBodyMediumView('مشاهده همه', color: Colors.white),
                     onPressed: () => appFun.onTapShowAll(title: 'پیشنهاد شگفت‌انگیز', onSale: 'true'),
@@ -205,8 +208,8 @@ class HomeView extends StatelessWidget {
             textDirection: TextDirection.ltr,
             child: ElevatedButton.icon(
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                elevation: MaterialStateProperty.all(0),
+                backgroundColor: WidgetStateProperty.all(Colors.white),
+                elevation: WidgetStateProperty.all(0),
               ),
               label: const TextBodyMediumView('مشاهده همه', color: Colors.red),
               icon: const Icon(Icons.keyboard_arrow_left, color: Colors.red),

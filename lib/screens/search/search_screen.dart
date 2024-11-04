@@ -49,10 +49,10 @@ class _SearchScreenState extends State<SearchScreen> {
         textDirection: TextDirection.rtl,
         child: SearchBar(
           leading: const Icon(Icons.search),
-          hintStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black54)),
+          hintStyle: WidgetStateProperty.all(Theme.of(context).textTheme.bodyMedium!.copyWith(color: Colors.black54)),
           hintText: 'محصول مورد نظر خود را جستجو کنید...',
-          elevation: MaterialStateProperty.all(0),
-          textStyle: MaterialStateProperty.all(Theme.of(context).textTheme.bodyMedium),
+          elevation: WidgetStateProperty.all(0),
+          textStyle: WidgetStateProperty.all(Theme.of(context).textTheme.bodyMedium),
           autoFocus: true,
           onChanged: (value) {
             if (value.isEmpty) setState(() => productsLst.clear());

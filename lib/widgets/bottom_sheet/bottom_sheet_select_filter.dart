@@ -55,10 +55,10 @@ selectFilter({required BuildContext context, required List<Map<String, dynamic>>
                 Navigator.pop(context);
               },
               style: ButtonStyle(
-                shape: MaterialStateProperty.all(const RoundedRectangleBorder()),
-                backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-                  (Set<MaterialState> states) {
-                    if (states.contains(MaterialState.disabled)) return Colors.grey;
+                shape: WidgetStateProperty.all(const RoundedRectangleBorder()),
+                backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+                  (Set<WidgetState> states) {
+                    if (states.contains(WidgetState.disabled)) return Colors.grey;
                     return ColorStyle.blueFav;
                   },
                 ),

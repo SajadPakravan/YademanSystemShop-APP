@@ -13,7 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   provider: ^6.1.2
   cached_network_image: ^3.3.1
-  carousel_slider: ^4.2.1
+  carousel_slider: ^5.0.0
   check_vpn_connection: ^0.0.2
   connectivity_plus: ^6.0.3
   get: ^4.6.6
@@ -27,7 +27,7 @@ dependencies:
   show_up_animation: ^2.0.0
   email_validator: ^3.0.0
   easy_loading_button: ^0.3.2
-  image_cropper: ^7.1.0
+  image_cropper: ^8.0.2
   flutter_widget_from_html: ^0.15.0
   flutter_staggered_animations: ^1.1.1
   hive: ^2.2.3
@@ -38,11 +38,12 @@ dependencies:
   smooth_page_indicator: ^1.2.0+3
   flutter_svg: ^2.0.10+1
   path: ^1.9.0
+  adivery: ^4.6.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^4.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

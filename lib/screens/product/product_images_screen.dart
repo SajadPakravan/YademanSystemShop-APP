@@ -13,7 +13,7 @@ class ProductImagesScreen extends StatefulWidget {
 
 class _ProductImagesScreenState extends State<ProductImagesScreen> {
   HttpRequest httpRequest = HttpRequest();
-  CarouselController slideCtrl = CarouselController();
+  CarouselSliderController slideCtrl = CarouselSliderController();
   int currentSlide = 0;
   bool getCurrentSlide = true;
   double slideWidth = 0;

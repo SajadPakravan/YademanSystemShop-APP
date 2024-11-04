@@ -61,7 +61,7 @@ class _HomeMenuItemState extends State<HomeMenuItem> {
       fit: FlexFit.tight,
       child: InkWell(
         onTap: _handleTap,
-        overlayColor: MaterialStateProperty.all(Colors.transparent),
+        overlayColor: WidgetStateProperty.all(Colors.transparent),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,

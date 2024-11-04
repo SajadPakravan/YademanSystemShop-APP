@@ -12,7 +12,7 @@ class ProductImagesSlide extends StatelessWidget {
     required this.json,
   });
 
-  CarouselController slideCtrl = CarouselController();
+  CarouselSliderController slideCtrl = CarouselSliderController();
   Function moveSlide;
   int currentSlide = 0;
   double circleSlideWidth = 0;

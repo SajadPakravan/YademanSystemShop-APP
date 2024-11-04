@@ -255,7 +255,7 @@ class ProductView extends StatelessWidget {
                       ),
                       subtitle: ElevatedButton(
                         style: ButtonStyle(
-                          shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                          shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                         ),
                         onPressed: () async {
                           await Get.to(
@@ -272,7 +272,7 @@ class ProductView extends StatelessWidget {
                   )
                 : ElevatedButton(
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
+                      shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))),
                     ),
                     onPressed: addCart,
                     child: const TextBodyLargeView('افزودن به سبد خرید', color: Colors.white),

@@ -30,7 +30,7 @@ ThemeData appTheme = ThemeData(
   appBarTheme: const AppBarTheme(backgroundColor: ColorStyle.colorPurple),
   iconTheme: const IconThemeData(color: ColorStyle.whiteF5),
   elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(ColorStyle.blueFav)),
+    style: ButtonStyle(backgroundColor: WidgetStateProperty.all(ColorStyle.blueFav)),
   ),
 );
 

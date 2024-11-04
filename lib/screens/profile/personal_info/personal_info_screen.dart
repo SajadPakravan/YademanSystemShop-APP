@@ -202,7 +202,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
         alignment: Alignment.bottomCenter,
         child: IconButton(
           icon: const Icon(Icons.edit),
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.black54)),
+          style: ButtonStyle(backgroundColor: WidgetStateProperty.all(Colors.black54)),
           onPressed: () => bottomSheetPickImage(
             context: context,
             onTapCamera: () => pickImage(context: context, gallery: false),
